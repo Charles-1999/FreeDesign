@@ -20,8 +20,12 @@ const routes: Array<RouteConfig> = [
   }
 ];
 
-const router = new VueRouter({
-  routes
-});
+export default (options:any = {}):any => {
+  const { pagesRouters } = options;
 
-export default router;
+  return new VueRouter({
+    routes: [
+      ...routes
+    ]
+  });
+};

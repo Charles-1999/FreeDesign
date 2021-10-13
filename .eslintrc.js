@@ -16,7 +16,25 @@ module.exports = {
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     // 强制句末分号
     'semi': [2, 'always'],
-    'quotes': [2, 'single']
+    // 单引号
+    'quotes': [2, 'single'],
+    // 标签关闭需要空格
+    'vue/html-closing-bracket-spacing': ['error', {
+      'startTag': 'never',
+      'endTag': 'never',
+      'selfClosingTag': 'always'
+    }],
+    // 结束标签不要换行
+    'vue/html-closing-bracket-newline': ['error', {
+      'singleline': 'never',
+      "multiline": 'never'
+    }],
+    // 可以使用v-html
+    'vue/no-v-html': 0,
+    // 不要mix
+    'vue/no-use-v-if-with-v-for': 'error',
+    "@typescript-eslint/no-explicit-any": ['off'],
+    "space-before-function-paren": {"anonymous": "never", "named": "never", "asyncArrow": "always"}
   },
   overrides: [
     {

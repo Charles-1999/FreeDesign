@@ -1,7 +1,13 @@
 import Vue from 'vue';
 import App from './App.vue';
-import router from './router';
+import routerFn from './router';
 import store from './store';
+
+const pagesRouters = require.context(
+  './views', true, /router\.ts$/
+);
+
+const router = routerFn({ pagesRouters });
 
 Vue.config.productionTip = false;
 
