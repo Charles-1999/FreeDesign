@@ -27,14 +27,18 @@ module.exports = {
     // 结束标签不要换行
     'vue/html-closing-bracket-newline': ['error', {
       'singleline': 'never',
-      "multiline": 'never'
+      'multiline': 'never'
     }],
     // 可以使用v-html
     'vue/no-v-html': 0,
     // 不要mix
     'vue/no-use-v-if-with-v-for': 'error',
-    "@typescript-eslint/no-explicit-any": ['off'],
-    "space-before-function-paren": {"anonymous": "never", "named": "never", "asyncArrow": "always"}
+    '@typescript-eslint/no-explicit-any': ['off'],
+    'space-before-function-paren': ['warn', {
+      'anonymous': 'never',
+      'named': 'never',
+      'asyncArrow': 'always'
+    }]
   },
   overrides: [
     {
