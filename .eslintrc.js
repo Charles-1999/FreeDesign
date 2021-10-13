@@ -13,7 +13,10 @@ module.exports = {
   },
   rules: {
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
-    'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off'
+    'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+    // 强制句末分号
+    'semi': [2, 'always'],
+    'quotes': [2, 'single']
   },
   overrides: [
     {

@@ -1,0 +1,16 @@
+{
+  "editor.formatOnSave": false,
+  "editor.tabSize": 2,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "eslint.enable": true,
+  "eslint.options": {
+    "plugins": ["vue"],
+    "extensions": [
+      ".js",
+      ".ts",
+      ".vue"
+    ]
+  },
+}
