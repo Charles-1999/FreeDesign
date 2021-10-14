@@ -38,7 +38,8 @@ module.exports = {
       'anonymous': 'never',
       'named': 'never',
       'asyncArrow': 'always'
-    }]
+    }],
+    '@typescript-eslint/explicit-module-boundary-types': 'off'
   },
   overrides: [
     {
