@@ -6,9 +6,13 @@
       width: data.width + 'px',
       height: data.height + 'px'
     }">
-      <lib-text text="123" />
-      <!-- <component
-        :is="1" /> -->
+      <component
+        class="canvas-comp"
+        :style="comp.style"
+        v-for="comp in schema"
+        :key="comp.uuid"
+        :is="'lib-text'"
+        v-bind="comp.props" />
     </div>
 </template>
 
@@ -18,11 +22,35 @@ export default {
 
   data() {
     return {
+      // 项目数据
       data: {
         width: 375,
         height: 650,
         scale: 1
-      }
+      },
+
+      // 页面元素数据
+      schema: [{
+        uuid: 1,
+        component: 'text',
+        props: {
+          text: '这是一段文字'
+        },
+        style: {
+          top: '0px',
+          left: '10px'
+        }
+      }, {
+        uuid: 2,
+        component: 'text',
+        props: {
+          text: '这是一段文字222'
+        },
+        style: {
+          top: '20px',
+          left: '20px'
+        }
+      }]
     };
   }
 };
@@ -30,7 +58,12 @@ export default {
 
 <style lang="less" scoped>
   .canvas-wrapper {
+    position: relative;
     box-shadow: 0 3px 10px #dcdcdc;
     background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABkAAAAZAgMAAAC5h23wAAAAAXNSR0IB2cksfwAAAAlQTFRF9fX18PDwAAAABQ8/pgAAAAN0Uk5T/yIA41y2EwAAABhJREFUeJxjYIAC0VAQcGCQWgUCDUONBgDH8Fwzu33LswAAAABJRU5ErkJggg==);
+  }
+
+  .canvas-comp {
+    position: absolute;
   }
 </style>
