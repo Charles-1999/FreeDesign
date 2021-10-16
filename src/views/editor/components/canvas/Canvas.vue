@@ -5,20 +5,24 @@
       transform: 'scale(' + data.scale + ')',
       width: data.width + 'px',
       height: data.height + 'px'
-    }">
-      <component
-        class="canvas-comp"
-        :style="comp.style"
+    }"
+    @click.self="handleCanvasClick">
+      <Element
         v-for="comp in schema"
         :key="comp.uuid"
-        :is="'lib-text'"
-        v-bind="comp.props" />
+        :data="comp"
+        :active="focusList.includes(comp.uuid)"
+        @click.native="handleElementClick(comp.uuid)" />
     </div>
 </template>
 
 <script>
+import Element from '../element/Element.vue';
+
 export default {
   name: 'Canvas',
+
+  components: { Element },
 
   data() {
     return {
@@ -50,8 +54,24 @@ export default {
           top: '20px',
           left: '20px'
         }
-      }]
+      }],
+
+      focusList: []
     };
+  },
+
+  methods: {
+    handleElementClick(uuid) {
+      if (this.focusList.includes(uuid)) {
+        this.focusList = [];
+      } else {
+        this.focusList = [uuid];
+      }
+    },
+
+    handleCanvasClick() {
+      this.focusList = [];
+    }
   }
 };
 </script>
@@ -61,9 +81,5 @@ export default {
     position: relative;
     box-shadow: 0 3px 10px #dcdcdc;
     background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABkAAAAZAgMAAAC5h23wAAAAAXNSR0IB2cksfwAAAAlQTFRF9fX18PDwAAAABQ8/pgAAAAN0Uk5T/yIA41y2EwAAABhJREFUeJxjYIAC0VAQcGCQWgUCDUONBgDH8Fwzu33LswAAAABJRU5ErkJggg==);
-  }
-
-  .canvas-comp {
-    position: absolute;
   }
 </style>
