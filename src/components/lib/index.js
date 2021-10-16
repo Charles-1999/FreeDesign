@@ -21,7 +21,6 @@ const libComponents = require.context(
  * @return {void}
  */
 const install = (Vue, opts = {}) => {
-  console.log(libComponents.keys());
   libComponents
     .keys()
     .forEach(fileName => {
