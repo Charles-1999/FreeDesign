@@ -1,6 +1,6 @@
 <template>
   <div class="editor-wrapper">
-    <EditorHeader />
+    <div />
     <div class="editor-canvas">
       <Canvas />
     </div>
@@ -8,14 +8,12 @@
 </template>
 
 <script>
-import EditorHeader from './components/Header.vue';
 import Canvas from './components/canvas/Canvas.vue';
 
 export default {
   name: 'Editor',
 
   components: {
-    EditorHeader,
     Canvas
   }
 };
