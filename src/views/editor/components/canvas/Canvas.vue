@@ -12,7 +12,8 @@
         :key="comp.uuid"
         :data="comp"
         :active="focusList.includes(comp.uuid)"
-        @click.native="handleElementClick(comp.uuid)" />
+        :ref="`ele_${comp.uuid}`"
+        @activeChange="onActiveChange" />
     </div>
 </template>
 
@@ -42,7 +43,9 @@ export default {
         },
         style: {
           top: '0px',
-          left: '10px'
+          left: '10px',
+          width: '300px',
+          height: '300px'
         }
       }, {
         uuid: 2,
@@ -51,7 +54,7 @@ export default {
           text: '这是一段文字222'
         },
         style: {
-          top: '20px',
+          top: '30px',
           left: '20px'
         }
       }],
@@ -69,8 +72,51 @@ export default {
       }
     },
 
+    onActiveChange(uuid) {
+      if (this.focusList.includes(uuid)) {
+        // this.focusList = [];
+      } else {
+        this.focusList = [uuid];
+      }
+    },
+
     handleCanvasClick() {
       this.focusList = [];
+    },
+
+    handleResize(e) {
+      console.log(e);
+    },
+
+    handleMouseDown(uuid, e) {
+      const ele = this.schema.find(_ => _.uuid === uuid);
+
+      let { left, top } = ele.style;
+      left = Number(left.split('px').shift());
+      top = Number(top.split('px').shift());
+
+      // 鼠标初始位置
+      const { clientX: startX, clientY: startY } = e;
+
+      const move = e => {
+        e.stopPropagation();
+        e.preventDefault();
+
+        // 鼠标移动后的位置
+        const { clientX: currX, clientY: currY } = e;
+
+        // curr - start = 鼠标移动距离
+        // 元素初始位置 + 鼠标移动距离 = 元素新位置
+        ele.style.left = `${currX - startX + left}px`;
+        ele.style.top = `${currY - startY + top}px`;
+      };
+
+      const up = e => {
+        document.removeEventListener('mousemove', move);
+      };
+
+      document.addEventListener('mousemove', move);
+      document.addEventListener('mouseup', up);
     }
   }
 };
