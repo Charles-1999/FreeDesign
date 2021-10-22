@@ -1,9 +1,9 @@
 import Vue from 'vue';
-import VueRouter, { RouteConfig } from 'vue-router';
+import VueRouter from 'vue-router';
 
 Vue.use(VueRouter);
 
-const routes: Array<RouteConfig> = [
+const routes = [
   // 首页
   // {
   //   path: '/',
@@ -54,7 +54,7 @@ const routes: Array<RouteConfig> = [
   }
 ];
 
-export default (options:any = {}):any => {
+export default (options) => {
   const { pagesRouters } = options;
   console.log(`pagesRouters: ${pagesRouters}`);
   return new VueRouter({
