@@ -2,12 +2,13 @@
   <div
     class="canvas-element"
     :class="{ active }"
-    :style="data.style"
+    :style="data.eleStyle"
     ref="element"
     @mousedown.stop="move"
     @click="handleElementClick">
     <component
       class="canvas-comp"
+      :style="data.compStyle"
       :is="`lib-${data.component}`"
       v-bind="data.props" />
 
@@ -55,7 +56,7 @@ export default {
      */
     move(e) {
       const { data } = this;
-      const { style } = data;
+      const { eleStyle } = data;
       // 鼠标初始位置
       const { clientX: startX, clientY: startY } = e;
 
@@ -63,9 +64,9 @@ export default {
         e.stopPropagation();
         e.preventDefault();
 
-        const newStyle = { ...style };
+        const newEleStyle = { ...eleStyle };
 
-        let { left, top } = style;
+        let { left, top } = eleStyle;
         left = Number(left.split('px').shift());
         top = Number(top.split('px').shift());
 
@@ -77,10 +78,10 @@ export default {
         const moveX = currX - startX;
         const moveY = currY - startY;
 
-        newStyle.left = `${moveX + left}px`;
-        newStyle.top = `${moveY + top}px`;
+        newEleStyle.left = `${moveX + left}px`;
+        newEleStyle.top = `${moveY + top}px`;
 
-        data.style = newStyle;
+        data.eleStyle = newEleStyle;
       };
 
       const up = e => {
@@ -105,7 +106,7 @@ export default {
      */
     resize(point, e) {
       const { data } = this;
-      const { style } = data;
+      const { eleStyle, compStyle } = data;
       // 鼠标初始位置
       const { clientX: startX, clientY: startY } = e;
 
@@ -119,9 +120,11 @@ export default {
         e.stopPropagation();
         e.preventDefault();
 
-        const newStyle = { ...style };
+        const newEleStyle = { ...eleStyle };
+        const newCompStyle = { ...compStyle };
 
-        let { left, top, height, width } = style;
+        let { left, top } = eleStyle;
+        let { height, width } = compStyle;
         left = Number(left.split('px').shift());
         top = Number(top.split('px').shift());
         width = Number(width.split('px').shift());
@@ -163,12 +166,13 @@ export default {
           deltaWidth = 0;
         }
 
-        newStyle.width = `${width + deltaWidth}px`;
-        newStyle.height = `${height + deltaHeight}px`;
-        newStyle.left = `${left + deltaLeft}px`;
-        newStyle.top = `${top + deltaTop}px`;
+        newCompStyle.width = `${width + deltaWidth}px`;
+        newCompStyle.height = `${height + deltaHeight}px`;
+        newEleStyle.left = `${left + deltaLeft}px`;
+        newEleStyle.top = `${top + deltaTop}px`;
 
-        data.style = newStyle;
+        data.eleStyle = newEleStyle;
+        data.compStyle = newCompStyle;
       };
 
       const up = e => {
