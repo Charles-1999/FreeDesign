@@ -56,7 +56,7 @@ export default {
      */
     move(e) {
       const { data } = this;
-      const { eleStyle } = data;
+      const { eleStyle, uuid } = data;
       // 鼠标初始位置
       const { clientX: startX, clientY: startY } = e;
 
@@ -81,7 +81,11 @@ export default {
         newEleStyle.left = `${moveX + left}px`;
         newEleStyle.top = `${moveY + top}px`;
 
-        data.eleStyle = newEleStyle;
+        this.$store.dispatch({
+          type: 'editor/updateStyle',
+          uuid,
+          eleStyle: newEleStyle
+        });
       };
 
       const up = e => {
@@ -106,7 +110,7 @@ export default {
      */
     resize(point, e) {
       const { data } = this;
-      const { eleStyle, compStyle } = data;
+      const { eleStyle, compStyle, uuid } = data;
       // 鼠标初始位置
       const { clientX: startX, clientY: startY } = e;
 
@@ -171,8 +175,12 @@ export default {
         newEleStyle.left = `${left + deltaLeft}px`;
         newEleStyle.top = `${top + deltaTop}px`;
 
-        data.eleStyle = newEleStyle;
-        data.compStyle = newCompStyle;
+        this.$store.dispatch({
+          type: 'editor/updateStyle',
+          uuid,
+          compStyle: newCompStyle,
+          eleStyle: newEleStyle
+        });
       };
 
       const up = e => {
@@ -237,6 +245,39 @@ export default {
       }
 
       return `${value}-resize`;
+    },
+
+    /**
+     * @return {object} 组件样式
+     */
+    getCompStyle() {
+      const { data } = this;
+      const { component, uuid } = data;
+
+      // 1. 获取组件的配置文件
+      const libComp = require.context(
+        // 其组件目录的相对路径
+        '../../../../components/lib',
+        // 是否查询其子目录
+        true,
+        // 匹配基础组件文件名的正则表达式
+        /\.\/(\w+\/config\.js$)/
+      );
+      const fileName = component.replace(component[0], component[0].toUpperCase());
+      const compConfig = libComp(`./${fileName}/config.js`);
+
+      const { defaultStyle } = compConfig;
+
+      const compStyle = {
+        ...(data.compStyle || {}),
+        ...defaultStyle
+      };
+
+      this.$store.dispatch({
+        type: 'editor/setCompStyle',
+        compStyle,
+        uuid
+      });
     }
   }
 };
@@ -251,6 +292,10 @@ export default {
 
 .canvas-element.active {
   border-color: blue;
+}
+
+.canvas-comp {
+  overflow: hidden;
 }
 
 .move-point {
