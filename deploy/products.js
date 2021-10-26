@@ -2,7 +2,7 @@
 /*
  * @Author: your name
  * @Date: 2021-10-26 10:47:53
- * @LastEditTime: 2021-10-26 11:29:21
+ * @LastEditTime: 2021-10-26 13:47:35
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /FreeDesign/deploy/product.js
@@ -14,7 +14,7 @@
 const fs = require('fs');
 const path = require('path');
 // env 文件 判断打包环境指定对应的服务器id
-const envfile = process.env.NODE_ENV === 'prod' ? '../.env.prod' : '../.env.dev';
+const envfile = process.env.NODE_ENV === 'prod' ? '../.env.prod' : '../.env.test';
 // env环境变量的路径
 const envPath = path.resolve(__dirname, envfile);
 // env对象
@@ -54,23 +54,23 @@ function parse(src) {
 const SERVER_LIST = [
   {
     id: 0,
-    name: 'A-生产环境',
-    domain: 'www.prod.com', // 域名
+    name: '生产环境',
+    domain: 'www.test.com', // 域名
     host: '39.97.3.27', // ip
     port: 22, // 端口
     username: 'root', // 登录服务器的账号
     password: 'Htc1382980123', // 登录服务器的账号
-    path: '/var/www/html'// 发布至静态服务器的项目路径
+    path: '/var/www/html/dist'// 发布至静态服务器的项目路径
   },
   {
     id: 1,
-    name: 'B-测试环境',
-    domain: 'test.xxx.com',
-    host: 'XX.XX.XX.XX',
+    name: '正式环境',
+    domain: 'prod.xxx.com',
+    host: '39.97.3.27',
     port: 22,
     username: 'root',
-    password: 'xxxxxxx',
-    path: '/usr/local/www/xxx_program_test/'
+    password: 'Htc1382980123',
+    path: '/var/www/html/dist'
   }
 ];
 

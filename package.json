@@ -7,7 +7,7 @@
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint",
-    "deploy:dev": "npm run build && cross-env NODE_ENV=dev node ./deploy",
+    "deploy:test": "npm run build && cross-env NODE_ENV=test node ./deploy",
     "deploy:prod": "npm run build && cross-env NODE_ENV=prod node ./deploy"
   },
   "dependencies": {
