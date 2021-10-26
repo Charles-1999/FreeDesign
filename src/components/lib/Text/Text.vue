@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <div
+    :style="defaultStyle">
     <span
       ref="span"
       @dblclick="handleDbClick"
@@ -10,20 +11,24 @@
 </template>
 
 <script>
+import { defaultStyle, defaultProps } from './config';
+
 export default {
   name: 'LibText',
 
   props: {
     text: {
       type: String,
-      required: true,
-      default: ''
+      required: false,
+      default: defaultProps.text
     }
   },
 
   data() {
     return {
-      innerText: this.text
+      innerText: this.text,
+
+      defaultStyle
     };
   },
 

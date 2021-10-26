@@ -36,7 +36,6 @@ export default {
     };
   },
   mounted() {
-    // eslint-disable-next-line @typescript-eslint/no-this-alias
     const _that = this;
     window.onresize = () => {
       return (() => {

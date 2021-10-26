@@ -2,12 +2,13 @@
   <div
     class="canvas-element"
     :class="{ active }"
-    :style="data.style"
+    :style="data.eleStyle"
     ref="element"
     @mousedown.stop="move"
     @click="handleElementClick">
     <component
       class="canvas-comp"
+      :style="data.compStyle"
       :is="`lib-${data.component}`"
       v-bind="data.props" />
 
@@ -55,7 +56,7 @@ export default {
      */
     move(e) {
       const { data } = this;
-      const { style } = data;
+      const { eleStyle, uuid } = data;
       // 鼠标初始位置
       const { clientX: startX, clientY: startY } = e;
 
@@ -63,9 +64,9 @@ export default {
         e.stopPropagation();
         e.preventDefault();
 
-        const newStyle = { ...style };
+        const newEleStyle = { ...eleStyle };
 
-        let { left, top } = style;
+        let { left, top } = eleStyle;
         left = Number(left.split('px').shift());
         top = Number(top.split('px').shift());
 
@@ -77,10 +78,14 @@ export default {
         const moveX = currX - startX;
         const moveY = currY - startY;
 
-        newStyle.left = `${moveX + left}px`;
-        newStyle.top = `${moveY + top}px`;
+        newEleStyle.left = `${moveX + left}px`;
+        newEleStyle.top = `${moveY + top}px`;
 
-        data.style = newStyle;
+        this.$store.dispatch({
+          type: 'editor/updateStyle',
+          uuid,
+          eleStyle: newEleStyle
+        });
       };
 
       const up = e => {
@@ -105,7 +110,7 @@ export default {
      */
     resize(point, e) {
       const { data } = this;
-      const { style } = data;
+      const { eleStyle, compStyle, uuid } = data;
       // 鼠标初始位置
       const { clientX: startX, clientY: startY } = e;
 
@@ -119,9 +124,11 @@ export default {
         e.stopPropagation();
         e.preventDefault();
 
-        const newStyle = { ...style };
+        const newEleStyle = { ...eleStyle };
+        const newCompStyle = { ...compStyle };
 
-        let { left, top, height, width } = style;
+        let { left, top } = eleStyle;
+        let { height, width } = compStyle;
         left = Number(left.split('px').shift());
         top = Number(top.split('px').shift());
         width = Number(width.split('px').shift());
@@ -163,12 +170,17 @@ export default {
           deltaWidth = 0;
         }
 
-        newStyle.width = `${width + deltaWidth}px`;
-        newStyle.height = `${height + deltaHeight}px`;
-        newStyle.left = `${left + deltaLeft}px`;
-        newStyle.top = `${top + deltaTop}px`;
+        newCompStyle.width = `${width + deltaWidth}px`;
+        newCompStyle.height = `${height + deltaHeight}px`;
+        newEleStyle.left = `${left + deltaLeft}px`;
+        newEleStyle.top = `${top + deltaTop}px`;
 
-        data.style = newStyle;
+        this.$store.dispatch({
+          type: 'editor/updateStyle',
+          uuid,
+          compStyle: newCompStyle,
+          eleStyle: newEleStyle
+        });
       };
 
       const up = e => {
@@ -233,6 +245,39 @@ export default {
       }
 
       return `${value}-resize`;
+    },
+
+    /**
+     * @return {object} 组件样式
+     */
+    getCompStyle() {
+      const { data } = this;
+      const { component, uuid } = data;
+
+      // 1. 获取组件的配置文件
+      const libComp = require.context(
+        // 其组件目录的相对路径
+        '../../../../components/lib',
+        // 是否查询其子目录
+        true,
+        // 匹配基础组件文件名的正则表达式
+        /\.\/(\w+\/config\.js$)/
+      );
+      const fileName = component.replace(component[0], component[0].toUpperCase());
+      const compConfig = libComp(`./${fileName}/config.js`);
+
+      const { defaultStyle } = compConfig;
+
+      const compStyle = {
+        ...(data.compStyle || {}),
+        ...defaultStyle
+      };
+
+      this.$store.dispatch({
+        type: 'editor/setCompStyle',
+        compStyle,
+        uuid
+      });
     }
   }
 };
@@ -247,6 +292,10 @@ export default {
 
 .canvas-element.active {
   border-color: blue;
+}
+
+.canvas-comp {
+  overflow: hidden;
 }
 
 .move-point {
