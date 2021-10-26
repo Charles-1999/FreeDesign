@@ -27,6 +27,10 @@
     color: #2c3e50;
   }
 
+  a {
+    text-decoration: none;
+  }
+
   // #nav {
   //   padding: 10px;
 

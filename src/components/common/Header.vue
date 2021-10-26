@@ -1,24 +1,25 @@
 <template>
-  <el-header
-    class="page-header-wrapper"
-    height="6rem">
+  <el-header class="page-header-wrapper" height="6rem">
     <!-- 头部左边logo -->
     <div class="page-header-left">
-      <router-link to='/home'>
+      <router-link to="/home">
         <div class="page-header-logo">
-          <img src="../assets/logo.png" alt="logo" />
+          <div class="page-header-logo-txt">FreeDesign</div>
+          <!-- <img src="../../assets/logo.png" alt="logo" /> -->
         </div>
       </router-link>
     </div>
     <!-- 头部中间插槽 -->
     <slot name="page-header-middle" />
     <!-- 头部右边用户头像或者名称 -->
-    <div class='page-header-right'>
+    <div class="page-header-right">
       <el-dropdown placement="bottom">
-        <el-button type="text" :style="{fontSize: '16px'}">
-          Hi, {{auth}}
+        <el-button type="text" :style="{ fontSize: '16px' }">
+          Hi, {{ auth }}
         </el-button>
-        <el-dropdown-menu slot="dropdown" class="page-header-dropdown">
+        <el-dropdown-menu
+          slot="dropdown"
+          class="page-header-dropdown">
           <el-dropdown-item>
             <el-button type="text">
               个人设置
@@ -37,16 +38,11 @@
 
 <script>
 export default {
-  name: 'PageHeader',
+  name: 'FdHeader',
   data() {
     return {
       auth: 'admin'
     };
-  },
-  methods: {
-    btnClick() {
-      console.log('click');
-    }
   }
 };
 </script>
@@ -65,13 +61,20 @@ export default {
     display: flex;
     align-items: center;
     .page-header-logo {
-      line-height: 4rem;
-      width: 3.6rem;
-      img {
-        display: inline-block;
-        height: 3.6rem;
-        vertical-align: middle;
-        cursor: pointer;
+      // line-height: 4rem;
+      // width: 3.6rem;
+      // img {
+      //   display: inline-block;
+      //   height: 3.6rem;
+      //   vertical-align: middle;
+      //   cursor: pointer;
+      // }
+      .page-header-logo-txt {
+        color: #32ca99;
+        font-size: 2.4rem;
+        font-family: "Noto Serif SC", "Source Han Serif SC", "Source Han Serif",
+          source-han-serif-sc, "PT Serif", "SongTi SC", "MicroSoft Yahei",
+          Georgia, serif;
       }
     }
   }
