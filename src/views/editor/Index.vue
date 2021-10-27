@@ -67,7 +67,7 @@ export default {
         }
       });
 
-      this.$store.dispatch('editor/history/record', JSON.parse(JSON.stringify(this.$store.state.editor.eleSchema)));
+      this.$store.dispatch('editor/history/record');
     },
 
     handleCanvasWrapperClick() {
