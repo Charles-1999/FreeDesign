@@ -11,6 +11,16 @@
         @click="addElement('rect')">
         矩形
       </el-button>
+      <el-button
+        type="primary"
+        @click="history('undo')">
+        undo
+      </el-button>
+      <el-button
+        type="primary"
+        @click="history('redo')">
+        redo
+      </el-button>
     </div>
     <div
       class="editor-canvas-wrapper"
@@ -56,6 +66,8 @@ export default {
           }
         }
       });
+
+      this.$store.dispatch('editor/history/record', JSON.parse(JSON.stringify(this.$store.state.editor.eleSchema)));
     },
 
     handleCanvasWrapperClick() {
@@ -63,6 +75,10 @@ export default {
         type: 'editor/setFocusList',
         focusList: []
       });
+    },
+
+    async history(type) {
+      await this.$store.dispatch(`editor/history/${type}`);
     }
   }
 };

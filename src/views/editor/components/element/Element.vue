@@ -89,11 +89,12 @@ export default {
       };
 
       const up = e => {
-        document.removeEventListener('mousemove', move);
+        document.querySelector('.editor-canvas-wrapper').removeEventListener('mousemove', move);
       };
+      this.$store.dispatch('editor/history/record', JSON.parse(JSON.stringify(this.$store.state.editor.eleSchema)));
 
-      document.addEventListener('mousemove', move);
-      document.addEventListener('mouseup', up);
+      document.querySelector('.editor-canvas-wrapper').addEventListener('mousemove', move);
+      document.querySelector('.editor-canvas-wrapper').addEventListener('mouseup', up);
     },
 
     /**
@@ -120,7 +121,7 @@ export default {
       const horizontalPoint = /^[w, e]$/.test(point);
       const verticalPoint = /^[n, s]$/.test(point);
 
-      const move = e => {
+      const move = async e => {
         e.stopPropagation();
         e.preventDefault();
 
@@ -184,11 +185,12 @@ export default {
       };
 
       const up = e => {
-        document.removeEventListener('mousemove', move);
+        document.querySelector('.editor-canvas-wrapper').removeEventListener('mousemove', move);
       };
+      this.$store.dispatch('editor/history/record', JSON.parse(JSON.stringify(this.$store.state.editor.eleSchema)));
 
-      document.addEventListener('mousemove', move);
-      document.addEventListener('mouseup', up);
+      document.querySelector('.editor-canvas-wrapper').addEventListener('mousemove', move);
+      document.querySelector('.editor-canvas-wrapper').addEventListener('mouseup', up);
     },
 
     /**

@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import history from './editor-history';
 
 export default {
   namespaced: true,
@@ -114,6 +115,16 @@ export default {
         compStyle,
         eleStyle
       });
+
+      // return context.getters.getElementByUUID(uuid);
     }
+  },
+
+  getters: {
+    getElementByUUID: (state, uuid) => state.eleSchema.find(_ => _.uuid === uuid)
+  },
+
+  modules: {
+    history
   }
 };
