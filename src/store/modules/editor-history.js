@@ -34,9 +34,16 @@ export default {
      * 记录快照
      * @param context context
      * @param payload payload
+     * @return 当前快照
      */
     record(context, snapshot) {
       const { cursor, snapshots } = context.state;
+      const { editor: { eleSchema } } = context.rootState;
+
+      // 默认在editor的state中取当前的eleSchema
+      if (!snapshot) {
+        snapshot = JSON.parse(JSON.stringify(eleSchema));
+      }
 
       // 1. 清空后面的快照
       while (cursor < snapshots.length - 1) {
@@ -54,6 +61,7 @@ export default {
      * 撤销
      * @param context context
      * @param payload payload
+     * @return 当前快照
      */
     undo(context, payload) {
       context.commit('SET_CURSOR', context.state.cursor - 1);
@@ -71,6 +79,7 @@ export default {
      * 重做
      * @param context context
      * @param payload payload
+     * @return 当前快照
      */
     redo(context, payload) {
       context.commit('SET_CURSOR', context.state.cursor + 1);

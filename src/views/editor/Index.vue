@@ -71,10 +71,7 @@ export default {
     },
 
     handleCanvasWrapperClick() {
-      this.$store.commit({
-        type: 'editor/setFocusList',
-        focusList: []
-      });
+      this.$store.commit('editor/SET_FOCUSLIST', []);
     },
 
     async history(type) {

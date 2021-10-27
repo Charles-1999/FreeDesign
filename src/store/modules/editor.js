@@ -12,16 +12,16 @@ export default {
   },
 
   mutations: {
-    setFocusList(state, payload) {
-      state.focusList = payload.focusList;
+    SET_FOCUSLIST(state, focusList) {
+      state.focusList = focusList;
     },
 
     setEleSchema(state, payload) {
       state.eleSchema = payload.eleSchema;
     },
 
-    addEleSchema(state, payloay) {
-      state.eleSchema.push(payloay.element);
+    ADD_ELEMENT(state, element) {
+      state.eleSchema.push(element);
     },
 
     updateElement(state, payload) {
@@ -36,7 +36,7 @@ export default {
       Vue.set(state.eleSchema, index, element);
     },
 
-    updateElementStyle(state, payload) {
+    UPDATE_ELEMENT_STYLE(state, payload) {
       const { uuid, compStyle, eleStyle } = payload;
       const index = state.eleSchema.findIndex(_ => _.uuid === uuid);
       const element = state.eleSchema[index];
@@ -81,10 +81,7 @@ export default {
       element.compStyle = defaultStyle;
 
       // 2. 添加元素
-      context.commit({
-        type: 'addEleSchema',
-        element
-      });
+      context.commit('ADD_ELEMENT', element);
     },
 
     /**
@@ -109,8 +106,7 @@ export default {
     updateStyle(context, payload) {
       const { uuid, compStyle = {}, eleStyle = {} } = payload;
 
-      context.commit({
-        type: 'updateElementStyle',
+      context.commit('UPDATE_ELEMENT_STYLE', {
         uuid,
         compStyle,
         eleStyle

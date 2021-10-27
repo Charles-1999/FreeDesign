@@ -52,10 +52,7 @@ export default {
         //   focusList: []
         // });
       } else {
-        this.$store.commit({
-          type: 'editor/setFocusList',
-          focusList: [uuid]
-        });
+        this.$store.commit('editor/SET_FOCUSLIST', [uuid]);
       }
     },
 
