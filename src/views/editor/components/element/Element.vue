@@ -226,18 +226,22 @@ export default {
      * @return {Object} 定位点的样式
      */
     getPointStyle(point) {
+      const { data } = this;
+      const { compStyle } = data;
+
+      let { height, width } = compStyle;
+      width = Number(width.split('px').shift());
+      height = Number(height.split('px').shift());
+
       const leftPoint = /w/.test(point);
       const topPoint = /n/.test(point);
 
-      // 页面元素实例
-      const container = this.$refs.element;
-
       const style = {
-        left: leftPoint ? '-5px' : `${container.clientWidth - 5}px`,
-        top: topPoint ? '-5px' : `${container.clientHeight - 5}px`,
+        left: leftPoint ? '-5px' : `${width - 5}px`,
+        top: topPoint ? '-5px' : `${height - 5}px`,
         marginLeft: ['n', 's'].includes(point) ? '-50%' : 0,
         marginTop: ['w', 'e'].includes(point)
-          ? `-${container.clientHeight / 2}px`
+          ? `-${height / 2}px`
           : 0,
         cursor: this.getCursor(point)
       };
