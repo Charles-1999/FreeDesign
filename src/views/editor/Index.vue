@@ -61,8 +61,8 @@ export default {
           uuid: new Date().getTime(),
           component: type,
           eleStyle: {
-            top: '50px',
-            left: '70px'
+            top: 50,
+            left: 70
           }
         }
       });

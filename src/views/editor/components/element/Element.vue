@@ -2,13 +2,13 @@
   <div
     class="canvas-element"
     :class="{ active }"
-    :style="data.eleStyle"
+    :style="formatStyle(data.eleStyle)"
     ref="element"
     @mousedown.stop="move"
     @click="handleElementClick">
     <component
       class="canvas-comp"
-      :style="data.compStyle"
+      :style="formatStyle(data.compStyle)"
       :is="`lib-${data.component}`"
       v-bind="data.props" />
 
@@ -72,9 +72,7 @@ export default {
 
         const newEleStyle = { ...eleStyle };
 
-        let { left, top } = eleStyle;
-        left = Number(left.split('px').shift());
-        top = Number(top.split('px').shift());
+        const { left, top } = eleStyle;
 
         // 鼠标移动后的位置
         const { clientX: currX, clientY: currY } = e;
@@ -84,8 +82,8 @@ export default {
         const moveX = currX - startX;
         const moveY = currY - startY;
 
-        newEleStyle.left = `${moveX + left}px`;
-        newEleStyle.top = `${moveY + top}px`;
+        newEleStyle.left = moveX + left;
+        newEleStyle.top = moveY + top;
 
         this.$store.dispatch('editor/updateStyle', {
           uuid,
@@ -148,12 +146,8 @@ export default {
         const newEleStyle = { ...eleStyle };
         const newCompStyle = { ...compStyle };
 
-        let { left, top } = eleStyle;
-        let { height, width } = compStyle;
-        left = Number(left.split('px').shift());
-        top = Number(top.split('px').shift());
-        width = Number(width.split('px').shift());
-        height = Number(height.split('px').shift());
+        const { left, top } = eleStyle;
+        const { height, width } = compStyle;
 
         // 鼠标移动后的位置
         const { clientX: currX, clientY: currY } = e;
@@ -191,10 +185,10 @@ export default {
           deltaWidth = 0;
         }
 
-        newCompStyle.width = `${width + deltaWidth}px`;
-        newCompStyle.height = `${height + deltaHeight}px`;
-        newEleStyle.left = `${left + deltaLeft}px`;
-        newEleStyle.top = `${top + deltaTop}px`;
+        newCompStyle.width = width + deltaWidth;
+        newCompStyle.height = height + deltaHeight;
+        newEleStyle.left = left + deltaLeft;
+        newEleStyle.top = top + deltaTop;
 
         this.$store.dispatch({
           type: 'editor/updateStyle',
@@ -222,6 +216,36 @@ export default {
     },
 
     /**
+     * 格式化样式对象
+     * @param {object} style style
+     * @return {object} 格式化后的样式对象
+     */
+    formatStyle(style) {
+      const unitKeys = [
+        'width', 'height', 'top', 'left',
+        'paddingTop', 'paddingBottom', 'paddingLeft', 'paddingRight',
+        'marginTop', 'marginBottom', 'marginLeft', 'marginRight',
+        'borderWidth', 'borderRadius',
+        'fontSize', 'letterSpacing'
+      ];
+
+      return Object
+        .keys(style)
+        .reduce((obj, key) => {
+          const val = style[key];
+
+          // 如果是数字类型的值，默认添加'px'后缀
+          if (unitKeys.includes(key) && typeof val === 'number') {
+            obj[key] = `${val}px`;
+          } else {
+            obj[key] = val;
+          }
+
+          return obj;
+        }, {});
+    },
+
+    /**
      * @param {string} point 定位点的方位
      * @return {Object} 定位点的样式
      */
@@ -229,24 +253,22 @@ export default {
       const { data } = this;
       const { compStyle } = data;
 
-      let { height, width } = compStyle;
-      width = Number(width.split('px').shift());
-      height = Number(height.split('px').shift());
+      const { height, width } = compStyle;
 
       const leftPoint = /w/.test(point);
       const topPoint = /n/.test(point);
 
       const style = {
-        left: leftPoint ? '-5px' : `${width - 5}px`,
-        top: topPoint ? '-5px' : `${height - 5}px`,
+        left: leftPoint ? -5 : width - 5,
+        top: topPoint ? -5 : height - 5,
         marginLeft: ['n', 's'].includes(point) ? '-50%' : 0,
         marginTop: ['w', 'e'].includes(point)
-          ? `-${height / 2}px`
+          ? -(height / 2)
           : 0,
         cursor: this.getCursor(point)
       };
 
-      return style;
+      return this.formatStyle(style);
     },
 
     /**
