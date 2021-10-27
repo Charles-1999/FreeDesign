@@ -98,6 +98,7 @@ export default {
        */
       const up = e => {
         document.querySelector('.editor-canvas-wrapper').removeEventListener('mousemove', move);
+        document.querySelector('.editor-canvas-wrapper').removeEventListener('mouseup', up);
 
         // 如果没有移动，不触发record操作记录
         if (!hasMove) return;
@@ -207,14 +208,15 @@ export default {
        * 处理鼠标按键弹起事件
        */
       const up = e => {
-        // TODO-1 把监听事件放到Canvas，这里emit事件出去
         document.querySelector('.editor-canvas-wrapper').removeEventListener('mousemove', move);
+        document.querySelector('.editor-canvas-wrapper').removeEventListener('mouseup', up);
 
         // 如果没有移动，不触发record操作记录
         if (!hasMove) return;
         this.$store.dispatch('editor/history/record');
       };
 
+      // TODO-1 把监听事件放到Canvas，这里emit事件出去
       document.querySelector('.editor-canvas-wrapper').addEventListener('mousemove', move);
       document.querySelector('.editor-canvas-wrapper').addEventListener('mouseup', up);
     },
