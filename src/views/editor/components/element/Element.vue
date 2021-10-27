@@ -59,10 +59,16 @@ export default {
       const { eleStyle, uuid } = data;
       // 鼠标初始位置
       const { clientX: startX, clientY: startY } = e;
+      let hasMove = false;
 
+      /**
+       * 处理鼠标移动事件
+       */
       const move = e => {
         e.stopPropagation();
         e.preventDefault();
+
+        hasMove = true;
 
         const newEleStyle = { ...eleStyle };
 
@@ -81,17 +87,22 @@ export default {
         newEleStyle.left = `${moveX + left}px`;
         newEleStyle.top = `${moveY + top}px`;
 
-        this.$store.dispatch({
-          type: 'editor/updateStyle',
+        this.$store.dispatch('editor/updateStyle', {
           uuid,
           eleStyle: newEleStyle
         });
       };
 
+      /**
+       * 处理鼠标按键弹起事件
+       */
       const up = e => {
         document.querySelector('.editor-canvas-wrapper').removeEventListener('mousemove', move);
+
+        // 如果没有移动，不触发record操作记录
+        if (!hasMove) return;
+        this.$store.dispatch('editor/history/record');
       };
-      this.$store.dispatch('editor/history/record', JSON.parse(JSON.stringify(this.$store.state.editor.eleSchema)));
 
       document.querySelector('.editor-canvas-wrapper').addEventListener('mousemove', move);
       document.querySelector('.editor-canvas-wrapper').addEventListener('mouseup', up);
@@ -114,16 +125,24 @@ export default {
       const { eleStyle, compStyle, uuid } = data;
       // 鼠标初始位置
       const { clientX: startX, clientY: startY } = e;
+      let hasMove = false;
 
+      // 在左侧和在上面的点
       const leftPoint = /w/.test(point);
       const topPoint = /n/.test(point);
 
+      // 水平和垂直的点
       const horizontalPoint = /^[w, e]$/.test(point);
       const verticalPoint = /^[n, s]$/.test(point);
 
+      /**
+       * 处理鼠标移动事件
+       */
       const move = async e => {
         e.stopPropagation();
         e.preventDefault();
+
+        hasMove = true;
 
         const newEleStyle = { ...eleStyle };
         const newCompStyle = { ...compStyle };
@@ -184,10 +203,17 @@ export default {
         });
       };
 
+      /**
+       * 处理鼠标按键弹起事件
+       */
       const up = e => {
+        // TODO-1 把监听事件放到Canvas，这里emit事件出去
         document.querySelector('.editor-canvas-wrapper').removeEventListener('mousemove', move);
+
+        // 如果没有移动，不触发record操作记录
+        if (!hasMove) return;
+        this.$store.dispatch('editor/history/record');
       };
-      this.$store.dispatch('editor/history/record', JSON.parse(JSON.stringify(this.$store.state.editor.eleSchema)));
 
       document.querySelector('.editor-canvas-wrapper').addEventListener('mousemove', move);
       document.querySelector('.editor-canvas-wrapper').addEventListener('mouseup', up);
