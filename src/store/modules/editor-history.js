@@ -3,10 +3,10 @@ export default {
 
   state: {
     // 快照
-    snapshots: [],
+    snapshots: [[]],
 
     // 当前索引
-    cursor: -1
+    cursor: 0
   },
 
   mutations: {
@@ -25,6 +25,9 @@ export default {
      * @param cursor  cursor
      */
     SET_CURSOR(state, cursor) {
+      if (cursor <= 0) {
+        cursor = 0;
+      }
       state.cursor = cursor;
     }
   },
@@ -64,15 +67,20 @@ export default {
      * @return 当前快照
      */
     undo(context, payload) {
-      context.commit('SET_CURSOR', context.state.cursor - 1);
+      const { state, getters } = context;
+      const { cursor } = state;
+
+      if (cursor <= 0) return getters.currSnapShot;
+
+      context.commit('SET_CURSOR', cursor - 1);
 
       context.commit('editor/setEleSchema', {
-        eleSchema: context.getters.currSnapShot
+        eleSchema: JSON.parse(JSON.stringify(getters.currSnapShot)) || []
       }, {
         root: true
       });
 
-      return context.getters.currSnapShot;
+      return getters.currSnapShot;
     },
 
     /**
@@ -82,15 +90,20 @@ export default {
      * @return 当前快照
      */
     redo(context, payload) {
-      context.commit('SET_CURSOR', context.state.cursor + 1);
+      const { state, getters } = context;
+      const { cursor, snapshots } = state;
+
+      if (cursor >= snapshots.length - 1) return getters.currSnapShot;
+
+      context.commit('SET_CURSOR', cursor + 1);
 
       context.commit('editor/setEleSchema', {
-        eleSchema: context.getters.currSnapShot
+        eleSchema: JSON.parse(JSON.stringify(getters.currSnapShot)) || []
       }, {
         root: true
       });
 
-      return context.getters.currSnapShot;
+      return getters.currSnapShot;
     }
   },
 
