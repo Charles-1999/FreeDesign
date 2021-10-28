@@ -4,27 +4,31 @@
     :class="{ active }"
     :style="formatStyle(data.eleStyle)"
     ref="element"
-    @mousedown.stop="move"
-    @click="handleElementClick">
+    @mousedown.stop="handleElementMouseDown">
     <component
       class="canvas-comp"
       :style="formatStyle(data.compStyle)"
       :is="`lib-${data.component}`"
       v-bind="data.props" />
 
-    <!-- 定位点 -->
+    <!-- 缩放点 -->
     <template v-if="active">
       <div
         class="move-point"
         :style="getPointStyle(point)"
         v-for="point in pointList"
         :key="point"
-        @mousedown.stop="resize(point, $event)" />
+        @mousedown.stop="handlePointMouseDown(point, $event)" />
     </template>
   </div>
 </template>
 
 <script>
+import { mapState, mapGetters } from 'vuex';
+
+import { formatStyle } from '../../../../utils/style';
+import { getCursor } from '../../utils/resizePoint';
+
 export default {
   name: 'Element',
 
@@ -45,18 +49,33 @@ export default {
   data() {
     return {
       // 上北N 下南S 左西W 右东E
-      pointList: ['nw', 'n', 'ne', 'e', 'w', 'sw', 's', 'se']
+      pointList: ['nw', 'n', 'ne', 'e', 'w', 'sw', 's', 'se'],
+
+      formatStyle
     };
+  },
+
+  computed: {
+    ...mapState({
+      focusList: state => state.editor.focusList,
+      validMoveArea: state => state.editor.validMoveArea
+    }),
+    ...mapGetters('editor', [
+      'getElementByUUID'
+    ])
   },
 
   methods: {
     /**
-     * 实现拖拽
+     * 处理鼠标在元素按下的事件
+     * 主要处理元素的拖拽移动、触发聚焦
      * @param {object} e event
      */
-    move(e) {
-      const { data } = this;
-      const { eleStyle, uuid } = data;
+    handleElementMouseDown(e) {
+      const { focusList, validMoveArea } = this;
+      const eleStyleList = focusList
+        .map(uuid => this.getElementByUUID(uuid).eleStyle);
+
       // 鼠标初始位置
       const { clientX: startX, clientY: startY } = e;
       let hasMove = false;
@@ -70,24 +89,21 @@ export default {
 
         hasMove = true;
 
-        const newEleStyle = { ...eleStyle };
-
-        const { left, top } = eleStyle;
-
         // 鼠标移动后的位置
         const { clientX: currX, clientY: currY } = e;
 
-        // curr - start = 鼠标移动距离
-        // 元素初始位置 + 鼠标移动距离 = 元素新位置
+        // 鼠标位移矢量
         const moveX = currX - startX;
         const moveY = currY - startY;
 
-        newEleStyle.left = moveX + left;
-        newEleStyle.top = moveY + top;
-
-        this.$store.dispatch('editor/updateStyle', {
-          uuid,
-          eleStyle: newEleStyle
+        // 通知选中的元素进行位移
+        focusList.forEach((uuid, idx) => {
+          this.$store.dispatch('editor/elementMove', {
+            uuid,
+            moveX,
+            moveY,
+            eleStyle: eleStyleList[idx]
+          });
         });
       };
 
@@ -95,33 +111,32 @@ export default {
        * 处理鼠标按键弹起事件
        */
       const up = e => {
-        document.querySelector('.editor-canvas-wrapper').removeEventListener('mousemove', move);
-        document.querySelector('.editor-canvas-wrapper').removeEventListener('mouseup', up);
+        validMoveArea.removeEventListener('mousemove', move);
+        validMoveArea.removeEventListener('mouseup', up);
 
-        // 如果没有移动，不触发record操作记录
-        if (!hasMove) return;
+        // 如果没有移动，触发聚焦，不触发record操作记录
+        if (!hasMove) {
+          this.$emit('activeChange', this.data.uuid, e.metaKey);
+          return;
+        };
         this.$store.dispatch('editor/history/record');
       };
 
-      document.querySelector('.editor-canvas-wrapper').addEventListener('mousemove', move);
-      document.querySelector('.editor-canvas-wrapper').addEventListener('mouseup', up);
+      validMoveArea.addEventListener('mousemove', move);
+      validMoveArea.addEventListener('mouseup', up);
     },
 
     /**
-     * 点击元素事件
-     */
-    handleElementClick() {
-      this.$emit('activeChange', this.data.uuid);
-    },
-
-    /**
-     * 实现缩放
+     * 处理鼠标在缩放点按下的事件
+     * 主要处理元素的拖拽缩放
+     * TODO: 多选缩放
      * @param {string} point point
      * @param {object} e event
      */
-    resize(point, e) {
-      const { data } = this;
+    handlePointMouseDown(point, e) {
+      const { data, validMoveArea } = this;
       const { eleStyle, compStyle, uuid } = data;
+
       // 鼠标初始位置
       const { clientX: startX, clientY: startY } = e;
       let hasMove = false;
@@ -190,8 +205,7 @@ export default {
         newEleStyle.left = left + deltaLeft;
         newEleStyle.top = top + deltaTop;
 
-        this.$store.dispatch({
-          type: 'editor/updateStyle',
+        this.$store.dispatch('editor/updateStyle', {
           uuid,
           compStyle: newCompStyle,
           eleStyle: newEleStyle
@@ -202,52 +216,22 @@ export default {
        * 处理鼠标按键弹起事件
        */
       const up = e => {
-        document.querySelector('.editor-canvas-wrapper').removeEventListener('mousemove', move);
-        document.querySelector('.editor-canvas-wrapper').removeEventListener('mouseup', up);
+        validMoveArea.removeEventListener('mousemove', move);
+        validMoveArea.removeEventListener('mouseup', up);
 
         // 如果没有移动，不触发record操作记录
         if (!hasMove) return;
         this.$store.dispatch('editor/history/record');
       };
 
-      // TODO-1 把监听事件放到Canvas，这里emit事件出去
-      document.querySelector('.editor-canvas-wrapper').addEventListener('mousemove', move);
-      document.querySelector('.editor-canvas-wrapper').addEventListener('mouseup', up);
+      validMoveArea.addEventListener('mousemove', move);
+      validMoveArea.addEventListener('mouseup', up);
     },
 
     /**
-     * 格式化样式对象
-     * @param {object} style style
-     * @return {object} 格式化后的样式对象
-     */
-    formatStyle(style) {
-      const unitKeys = [
-        'width', 'height', 'top', 'left',
-        'paddingTop', 'paddingBottom', 'paddingLeft', 'paddingRight',
-        'marginTop', 'marginBottom', 'marginLeft', 'marginRight',
-        'borderWidth', 'borderRadius',
-        'fontSize', 'letterSpacing'
-      ];
-
-      return Object
-        .keys(style)
-        .reduce((obj, key) => {
-          const val = style[key];
-
-          // 如果是数字类型的值，默认添加'px'后缀
-          if (unitKeys.includes(key) && typeof val === 'number') {
-            obj[key] = `${val}px`;
-          } else {
-            obj[key] = val;
-          }
-
-          return obj;
-        }, {});
-    },
-
-    /**
-     * @param {string} point 定位点的方位
-     * @return {Object} 定位点的样式
+     * 获取缩放点的样式
+     * @param {string} point 缩放点的方位
+     * @return {Object} 缩放点的样式
      */
     getPointStyle(point) {
       const { data } = this;
@@ -265,75 +249,10 @@ export default {
         marginTop: ['w', 'e'].includes(point)
           ? -(height / 2)
           : 0,
-        cursor: this.getCursor(point)
+        cursor: getCursor(point)
       };
 
-      return this.formatStyle(style);
-    },
-
-    /**
-     * @param {string} point 定位点的方位
-     * @return {string} cursor的值
-     */
-    getCursor(point) {
-      let value = '';
-
-      switch (point) {
-        case 'nw':
-        case 'se':
-          value = 'nwse';
-          break;
-
-        case 'ne':
-        case 'sw':
-          value = 'nesw';
-          break;
-
-        case 'n':
-        case 's':
-          value = 'ns';
-          break;
-
-        case 'w':
-        case 'e':
-          value = 'ew';
-          break;
-      }
-
-      return `${value}-resize`;
-    },
-
-    /**
-     * @return {object} 组件样式
-     */
-    getCompStyle() {
-      const { data } = this;
-      const { component, uuid } = data;
-
-      // 1. 获取组件的配置文件
-      const libComp = require.context(
-        // 其组件目录的相对路径
-        '../../../../components/lib',
-        // 是否查询其子目录
-        true,
-        // 匹配基础组件文件名的正则表达式
-        /\.\/(\w+\/config\.js$)/
-      );
-      const fileName = component.replace(component[0], component[0].toUpperCase());
-      const compConfig = libComp(`./${fileName}/config.js`);
-
-      const { defaultStyle } = compConfig;
-
-      const compStyle = {
-        ...(data.compStyle || {}),
-        ...defaultStyle
-      };
-
-      this.$store.dispatch({
-        type: 'editor/setCompStyle',
-        compStyle,
-        uuid
-      });
+      return formatStyle(style);
     }
   }
 };
@@ -356,8 +275,8 @@ export default {
 
 .move-point {
   position: absolute;
-  width: 6px;
-  height: 6px;
+  width: 7px;
+  height: 7px;
   border: 1px solid blue;
   border-radius: 50%;
   background-color: #fff;

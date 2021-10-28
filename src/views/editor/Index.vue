@@ -24,6 +24,7 @@
     </div>
     <div
       class="editor-canvas-wrapper"
+      ref="canvasWrapper"
       @click.self="handleCanvasWrapperClick">
       <Canvas />
     </div>
@@ -31,8 +32,9 @@
 </template>
 
 <script>
+import { mapGetters, mapMutations, mapState } from 'vuex';
+
 import Canvas from './components/canvas/Canvas.vue';
-import { mapState } from 'vuex';
 
 export default {
   name: 'Editor',
@@ -45,10 +47,22 @@ export default {
     ...mapState({
       focusList: state => state.editor.focusList,
       eleSchema: state => state.editor.eleSchema
-    })
+    }),
+    ...mapGetters('editor', [
+      'getElementByUUID'
+    ])
+  },
+
+  mounted() {
+    // 设置有效的拖拉拽区域
+    this.SET_VALID_MOVE_AREA(this.$refs.canvasWrapper);
   },
 
   methods: {
+    ...mapMutations('editor', [
+      'SET_VALID_MOVE_AREA'
+    ]),
+
     /**
      * 添加元素
      * @param {string} type type

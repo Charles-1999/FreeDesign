@@ -8,12 +8,19 @@ export default {
     // 当前画布选中的元素
     focusList: [],
 
-    eleSchema: []
+    eleSchema: [],
+
+    // 拖拽有效区域
+    validMoveArea: null
   },
 
   mutations: {
     SET_FOCUSLIST(state, focusList) {
       state.focusList = focusList;
+    },
+
+    ADD_FOCUS(state, uuid) {
+      state.focusList.push(uuid);
     },
 
     setEleSchema(state, payload) {
@@ -52,6 +59,10 @@ export default {
       };
 
       Vue.set(state.eleSchema, index, element);
+    },
+
+    SET_VALID_MOVE_AREA(state, validMoveArea) {
+      state.validMoveArea = validMoveArea;
     }
   },
 
@@ -112,12 +123,34 @@ export default {
         eleStyle
       });
 
-      // return context.getters.getElementByUUID(uuid);
+      return context.getters.getElementByUUID(uuid);
+    },
+
+    /**
+     * 移动元素
+     * @param context context
+     * @param payload payload
+     * @param payload.eleStyle 拖拽前的元素样式
+     */
+    elementMove(context, payload) {
+      const { uuid, moveX, moveY, eleStyle } = payload;
+
+      const { left, top } = eleStyle;
+
+      context.commit('UPDATE_ELEMENT_STYLE', {
+        uuid,
+        eleStyle: {
+          left: left + moveX,
+          top: top + moveY
+        }
+      });
+
+      return context.getters.getElementByUUID(uuid);
     }
   },
 
   getters: {
-    getElementByUUID: (state, uuid) => state.eleSchema.find(_ => _.uuid === uuid)
+    getElementByUUID: (state) => (uuid) => state.eleSchema.find(_ => _.uuid === uuid)
   },
 
   modules: {
