@@ -1,6 +1,8 @@
 import Vue from 'vue';
 import history from './editor-history';
 
+import { commonStyle } from '../../utils/style';
+
 export default {
   namespaced: true,
 
@@ -89,7 +91,10 @@ export default {
       const compConfig = libComp(`./${fileName}/config.js`);
 
       const { defaultStyle } = compConfig;
-      element.compStyle = defaultStyle;
+      element.compStyle = {
+        ...commonStyle,
+        ...defaultStyle
+      };
 
       // 2. 添加元素
       context.commit('ADD_ELEMENT', element);
@@ -150,7 +155,9 @@ export default {
   },
 
   getters: {
-    getElementByUUID: (state) => (uuid) => state.eleSchema.find(_ => _.uuid === uuid)
+    getElementByUUID: (state) => (uuid) => state.eleSchema.find(_ => _.uuid === uuid),
+
+    currElement: (state) => state.eleSchema.find(_ => _.uuid === state.focusList[0])
   },
 
   modules: {
