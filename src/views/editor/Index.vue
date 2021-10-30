@@ -22,11 +22,24 @@
         redo
       </el-button>
     </div>
-    <div
-      class="editor-canvas-wrapper"
-      ref="canvasWrapper"
-      @click.self="handleCanvasWrapperClick">
-      <Canvas />
+    <div class="middle">
+      <div
+        class="editor-canvas-wrapper"
+        ref="canvasWrapper"
+        @click.self="handleCanvasWrapperClick">
+        <Canvas />
+      </div>
+      <div class="attr-editor-wrapper">
+        <el-tabs>
+          <el-tab-pane label="属性">
+            <AttrEditor
+              v-if="focusList.length === 1" />
+            <div v-else>
+              请选择要编辑的元素
+            </div>
+          </el-tab-pane>
+        </el-tabs>
+      </div>
     </div>
   </div>
 </template>
@@ -35,12 +48,14 @@
 import { mapGetters, mapMutations, mapState } from 'vuex';
 
 import Canvas from './components/canvas/Canvas.vue';
+import AttrEditor from './components/attrEditor/AttrEditor.vue';
 
 export default {
   name: 'Editor',
 
   components: {
-    Canvas
+    Canvas,
+    AttrEditor
   },
 
   computed: {
@@ -100,11 +115,22 @@ export default {
   display: grid;
   grid-template-rows: 6rem 1fr;
 }
+
 .editor-canvas-wrapper {
+  flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 20px;
   background-color: #efefef;
+}
+
+.middle {
+  display: flex;
+}
+
+.attr-editor-wrapper {
+  width: 350px;
+  padding: 0 20px;
 }
 </style>
