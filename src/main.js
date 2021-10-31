@@ -1,12 +1,18 @@
 import Vue from 'vue';
 import App from './App.vue';
 
+// 路由
 import routerFn from './router';
 
+// vuex
 import store from './store';
 
+// ElementUI
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
+
+// Animate.css
+import 'animate.css';
 
 // styles
 import './assets/styles/index.less';

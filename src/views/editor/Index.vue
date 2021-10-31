@@ -30,9 +30,16 @@
         <Canvas />
       </div>
       <div class="attr-editor-wrapper">
-        <el-tabs>
-          <el-tab-pane label="属性">
+        <el-tabs value="animate">
+          <el-tab-pane label="属性" name="attr">
             <AttrEditor
+              v-if="focusList.length === 1" />
+            <div v-else>
+              请选择要编辑的元素
+            </div>
+          </el-tab-pane>
+          <el-tab-pane label="动画" name="animate">
+            <AnimateEditor
               v-if="focusList.length === 1" />
             <div v-else>
               请选择要编辑的元素
@@ -49,13 +56,15 @@ import { mapGetters, mapMutations, mapState } from 'vuex';
 
 import Canvas from './components/canvas/Canvas.vue';
 import AttrEditor from './components/attrEditor/AttrEditor.vue';
+import AnimateEditor from './components/animateEditor/AnimateEditor.vue';
 
 export default {
   name: 'Editor',
 
   components: {
     Canvas,
-    AttrEditor
+    AttrEditor,
+    AnimateEditor
   },
 
   computed: {
