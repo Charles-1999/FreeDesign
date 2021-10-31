@@ -11,6 +11,7 @@
         <fd-form
           :form-field-config="attr.options"
           :form-field-data="attrForm"
+          :get-form="getForm"
           @change="handleAttrChange" />
       </el-collapse-item>
     </el-collapse>
@@ -70,6 +71,18 @@ export default {
     handleAttrChange() {
       // 触发record操作记录
       this.$store.dispatch('editor/history/record');
+    },
+
+    getForm(key) {
+      const { attrForm } = this;
+
+      const eleStyleKeys = ['left', 'top'];
+
+      if (eleStyleKeys.includes(key)) {
+        return attrForm.eleStyle;
+      }
+
+      return attrForm.compStyle;
     }
   }
 };

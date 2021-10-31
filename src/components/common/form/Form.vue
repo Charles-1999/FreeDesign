@@ -7,11 +7,21 @@
       <!-- 属性标签 -->
       <span class="label">{{ attr.label }}:</span>
 
-      <!-- 属性编辑器 -->
+      <!-- 表单项 -->
       <FormItem
-        :form="form"
-        :attr="attr"
+        v-if="!attr.children"
+        :form="innerGetForm(key)"
         :formKey="key"
+        :config="attr"
+        @change="handleChange" />
+      <!-- 如果有children则遍历渲染children -->
+      <FormItem
+        v-else
+        v-for="(item, key) in attr.children"
+        :key="key"
+        :form="innerGetForm(key)"
+        :formKey="key"
+        :config="item"
         @change="handleChange" />
     </div>
   </div>
@@ -38,6 +48,12 @@ export default {
       type: Object,
       required: true,
       default: () => ({})
+    },
+
+    getForm: {
+      type: [Function || undefined],
+      required: false,
+      default: undefined
     }
   },
 
@@ -53,6 +69,14 @@ export default {
      */
     handleChange({ key, attr, val }) {
       this.$emit('change', { key, attr, val });
+    },
+
+    innerGetForm(key) {
+      if (this.getForm) {
+        return this.getForm(key);
+      }
+
+      return this.form;
     }
   }
 };

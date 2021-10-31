@@ -1,39 +1,33 @@
 <template>
-  <div
-    class="form-item_wrapper">
-    <div
-      v-for="(item, key) in items"
-      :key="key"
-      class="form-item">
-      <!-- 数字输入框 -->
-      <el-input-number
-        v-if="item.type === 'number'"
-        v-bind="attr.config"
-        :size="(attr.config || {}).size || 'mini'"
-        :controls-position="(attr.config || {}).controlsPosition || 'right'"
-        v-model="form[getKeyPath(key)][key]"
-        @change="handleChange(key, attr, $event)" />
+  <div class="form-item">
+    <!-- 数字输入框 -->
+    <el-input-number
+      v-if="config.type === 'number'"
+      v-bind="config.config"
+      :size="(config.config || {}).size || 'mini'"
+      :controls-position="(config.config || {}).controlsPosition || 'right'"
+      v-model="form[formKey]"
+      @change="handleChange(formKey, config, $event)" />
 
-      <!-- 颜色选择器 -->
-      <el-color-picker
-        v-if="item.type === 'color'"
-        v-bind="attr.config"
-        :size="(attr.config || {}).size || 'mini'"
-        v-model="form[getKeyPath(key)][key]"
-        @change="handleChange(key, attr, $event)" />
+    <!-- 颜色选择器 -->
+    <el-color-picker
+      v-if="config.type === 'color'"
+      v-bind="config.config"
+      :size="(config.config || {}).size || 'mini'"
+      v-model="form[formKey]"
+      @change="handleChange(formKey, config, $event)" />
 
-      <!-- Element UI -->
-      <component
-        v-if="item.type.startsWith('el-')"
-        v-bind="attr.config"
-        :is="item.type"
-        v-model="form[getKeyPath(key)][key]"
-        @change="handleChange(key, attr, $event)" />
+    <!-- Element UI -->
+    <component
+      v-if="config.type.startsWith('el-')"
+      v-bind="config.config"
+      :is="config.type"
+      v-model="form[formKey]"
+      @change="handleChange(formKey, config, $event)" />
 
-      <!-- 底部文字 -->
-      <div class="form-item_text">
-        {{ item.text }}
-      </div>
+    <!-- 底部文字 -->
+    <div class="form-item_text">
+      {{ config.text }}
     </div>
   </div>
 </template>
@@ -43,13 +37,13 @@ export default {
   name: 'FormItem',
 
   props: {
-    form: {
+    config: {
       type: Object,
-      required: true,
+      required: false,
       default: () => ({})
     },
 
-    attr: {
+    form: {
       type: Object,
       required: true,
       default: () => ({})
@@ -62,49 +56,12 @@ export default {
     }
   },
 
-  watch: {
-    attr: {
-      immediate: true,
-      handler(val) {
-        // 如果是有children，则遍历渲染children
-        if (val.children) {
-          this.items = val.children;
-        } else {
-          this.items = {
-            [this.formKey]: val
-          };
-        }
-      }
-    }
-  },
-
-  data() {
-    return {
-      items: {}
-    };
-  },
-
   methods: {
     /**
      * 处理表单项change事件
      */
     handleChange(key, attr, val) {
       this.$emit('change', { key, attr, val });
-    },
-
-    /**
-     * 获取表单项绑定的model属性
-     * @param {string} key key
-     * @return {string} modelKey
-     */
-    getKeyPath(key) {
-      const eleStyleKeys = ['left', 'top'];
-
-      if (eleStyleKeys.includes(key)) {
-        return 'eleStyle';
-      }
-
-      return 'compStyle';
     }
   }
 };
