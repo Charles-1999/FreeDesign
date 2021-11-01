@@ -17,6 +17,7 @@ export default {
   },
 
   mutations: {
+    // ----- focusList -----
     SET_FOCUSLIST(state, focusList) {
       state.focusList = focusList;
     },
@@ -25,15 +26,17 @@ export default {
       state.focusList.push(uuid);
     },
 
-    setEleSchema(state, payload) {
-      state.eleSchema = payload.eleSchema;
+    // ----- eleSchema -----
+    SET_ELESCHEMA(state, payload) {
+      // state.eleSchema = payload.eleSchema;
+      Vue.set(state, 'eleSchema', payload.eleSchema);
     },
 
     ADD_ELEMENT(state, element) {
       state.eleSchema.push(element);
     },
 
-    updateElement(state, payload) {
+    UPDATE_ELEMENT(state, payload) {
       const { uuid } = payload;
       const index = state.eleSchema.findIndex(_ => _.uuid === uuid);
 
@@ -45,6 +48,7 @@ export default {
       Vue.set(state.eleSchema, index, element);
     },
 
+    // ----- 元素样式 -----
     UPDATE_ELEMENT_STYLE(state, payload) {
       const { uuid, compStyle, eleStyle } = payload;
       const index = state.eleSchema.findIndex(_ => _.uuid === uuid);
@@ -63,6 +67,16 @@ export default {
       Vue.set(state.eleSchema, index, element);
     },
 
+    // ----- 元素动画 -----
+    ADD_ANIMATION(state, payload) {
+      const { uuid, animation } = payload;
+
+      const element = state.eleSchema.find(_ => _.uuid === uuid);
+
+      element.animations.push(animation);
+    },
+
+    // ----- 有效拖拽区域 -----
     SET_VALID_MOVE_AREA(state, validMoveArea) {
       state.validMoveArea = validMoveArea;
     }
@@ -96,7 +110,10 @@ export default {
         ...defaultStyle
       };
 
-      // 2. 添加元素
+      // 2. 动画列表
+      element.animations = element.animations || [];
+
+      // 3. 添加元素
       context.commit('ADD_ELEMENT', element);
     },
 
@@ -151,6 +168,24 @@ export default {
       });
 
       return context.getters.getElementByUUID(uuid);
+    },
+
+    /**
+     * 元素添加动画
+     */
+    addAnimation(context, payload) {
+      const { uuid, animation } = payload;
+      const { duration = 1, delay = 0, cycle = 0 } = animation;
+
+      context.commit('ADD_ANIMATION', {
+        uuid,
+        animation: {
+          ...animation,
+          duration,
+          delay,
+          cycle
+        }
+      });
     }
   },
 

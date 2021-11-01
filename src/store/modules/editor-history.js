@@ -74,7 +74,7 @@ export default {
 
       context.commit('SET_CURSOR', cursor - 1);
 
-      context.commit('editor/setEleSchema', {
+      context.commit('editor/SET_ELESCHEMA', {
         eleSchema: JSON.parse(JSON.stringify(getters.currSnapShot)) || []
       }, {
         root: true
@@ -97,7 +97,7 @@ export default {
 
       context.commit('SET_CURSOR', cursor + 1);
 
-      context.commit('editor/setEleSchema', {
+      context.commit('editor/SET_ELESCHEMA', {
         eleSchema: JSON.parse(JSON.stringify(getters.currSnapShot)) || []
       }, {
         root: true
