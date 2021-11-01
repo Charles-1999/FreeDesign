@@ -41,18 +41,16 @@ export default {
       focusList: state => state.editor.focusList
     }),
     ...mapGetters('editor', [
-      'getElementByUUID'
-    ]),
+      'getElementByUUID',
+      'currElement'
+    ])
+  },
 
-    currElement() {
-      const { focusList } = this;
-      if (focusList.length > 1) {
-        return {};
-      }
-
-      const currElement = this.getElementByUUID(focusList[0]);
-
-      return currElement;
+  watch: {
+    // 当redo undo时，eleSchema被重新赋值
+    // 需要重新计算currElement赋值给表单
+    eleSchema() {
+      this.attrForm = this.currElement;
     }
   },
 
