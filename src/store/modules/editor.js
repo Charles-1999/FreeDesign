@@ -17,7 +17,7 @@ export default {
   },
 
   mutations: {
-    // ----- focusList -----
+    // --------------- focusList ---------------
     SET_FOCUSLIST(state, focusList) {
       state.focusList = focusList;
     },
@@ -26,10 +26,9 @@ export default {
       state.focusList.push(uuid);
     },
 
-    // ----- eleSchema -----
+    // --------------- eleSchema ---------------
     SET_ELESCHEMA(state, payload) {
-      // state.eleSchema = payload.eleSchema;
-      Vue.set(state, 'eleSchema', payload.eleSchema);
+      state.eleSchema = payload.eleSchema;
     },
 
     ADD_ELEMENT(state, element) {
@@ -48,7 +47,7 @@ export default {
       Vue.set(state.eleSchema, index, element);
     },
 
-    // ----- 元素样式 -----
+    // --------------- 元素样式 ---------------
     UPDATE_ELEMENT_STYLE(state, payload) {
       const { uuid, compStyle, eleStyle } = payload;
       const index = state.eleSchema.findIndex(_ => _.uuid === uuid);
@@ -67,7 +66,7 @@ export default {
       Vue.set(state.eleSchema, index, element);
     },
 
-    // ----- 元素动画 -----
+    // --------------- 元素动画 ---------------
     ADD_ANIMATION(state, payload) {
       const { uuid, animation } = payload;
 
@@ -76,7 +75,28 @@ export default {
       element.animations.push(animation);
     },
 
-    // ----- 有效拖拽区域 -----
+    DELETE_ANIMATION(state, payload) {
+      const { uuid, animationIdx } = payload;
+
+      const element = state.eleSchema.find(_ => _.uuid === uuid);
+
+      element.animations.splice(animationIdx, 1);
+    },
+
+    UPDATE_ANIMATION(state, payload) {
+      const { uuid, animationIdx, animation } = payload;
+
+      const element = state.eleSchema.find(_ => _.uuid === uuid);
+
+      const newAnimation = {
+        ...element.animations[animationIdx],
+        ...animation
+      };
+
+      Vue.set(element.animations, animationIdx, newAnimation);
+    },
+
+    // --------------- 有效拖拽区域 ---------------
     SET_VALID_MOVE_AREA(state, validMoveArea) {
       state.validMoveArea = validMoveArea;
     }
@@ -185,6 +205,19 @@ export default {
           delay,
           cycle
         }
+      });
+    },
+
+    /**
+     * 元素更换动画
+     */
+    changeAnimation(context, payload) {
+      const { uuid, animationIdx, animation } = payload;
+
+      context.commit('UPDATE_ANIMATION', {
+        uuid,
+        animationIdx,
+        animation
       });
     }
   },

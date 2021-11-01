@@ -1,4 +1,4 @@
-export const animationDetail = {
+export const animationFormConfig = {
   duration: {
     label: '动画时长（秒）',
     type: 'number'
@@ -14,5 +14,5 @@ export const animationDetail = {
 };
 
 export default {
-  animationDetail
+  animationFormConfig
 };

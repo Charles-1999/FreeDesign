@@ -4,13 +4,13 @@
       <el-button
         type="primary"
         size="small"
-        @click="animationLibShow = true">
+        @click="addAnimation">
         添加动画
       </el-button>
       <el-button
         type="primary"
         size="small"
-        @click="previewAnimation">
+        @click="previewAnimation()">
         预览动画
       </el-button>
     </div>
@@ -20,17 +20,37 @@
       class="element-animation-list"
       v-if="currElement.animations.length">
       <el-collapse-item
+        class="element-animation-item"
         v-for="(animation, idx) in currElement.animations"
         :key="idx"
         :name="idx">
         <template slot="title">
           <span>动画{{ idx + 1 }}</span>
-          <span>{{ animation.label }}</span>
+          <el-button
+            class="btn_label"
+            size="mini"
+            round
+            @click.stop="changeAnimation(idx)">
+            {{ animation.label }}
+            <i class="el-icon-s-fold el-icon--right" />
+          </el-button>
+          <el-button
+            size="mini"
+            circle
+            plain
+            icon="el-icon-caret-right"
+            @click.stop="previewAnimation(idx)" />
+          <el-button
+            size="mini"
+            circle
+            plain
+            icon="el-icon-delete-solid"
+            @click.stop="deleteAnimation(idx)" />
         </template>
 
         <div class="animation-detail">
           <fd-form
-            :form-field-config="animationDetail"
+            :form-field-config="animationFormConfig"
             :form-field-data="animationForm[idx]"
             @change="handleAnimationChange" />
         </div>
@@ -45,6 +65,7 @@
       :modal="false"
       :size="390">
       <AnimationLib
+        :activeAnimation="activeAnimation"
         @select="handleSelectAnimation" />
     </el-drawer>
   </div>
@@ -53,7 +74,7 @@
 <script>
 import { mapState, mapGetters } from 'vuex';
 import EventBus from '../../../../utils/eventBus';
-import { animationDetail } from './config';
+import { animationFormConfig } from './config';
 
 import AnimationLib from '../animationLib/AnimationLib.vue';
 
@@ -68,7 +89,15 @@ export default {
     return {
       animationLibShow: false,
 
-      animationDetail,
+      // 当前动画名
+      activeAnimation: '',
+      // 当前动画索引
+      currAnimationIdx: -1,
+      // 是否为更换动画，用于区分添加动画
+      isChangeAnimation: false,
+
+      // 动画编辑表单
+      animationFormConfig,
       animationForm: []
     };
   },
@@ -98,33 +127,82 @@ export default {
 
   methods: {
     /**
-     * 处理动画change事件
+     * 动画表单change事件
      */
     handleAnimationChange() {
       // 触发record操作记录
       this.$store.dispatch('editor/history/record');
     },
 
+    /**
+     * 元素添加动画
+     */
+    addAnimation() {
+      // 打开动画库
+      this.activeAnimation = '';
+      this.isChangeAnimation = false;
+      this.animationLibShow = true;
+    },
+
+    /**
+     * 元素删除动画
+     */
+    deleteAnimation(idx) {
+      this.$store.commit('editor/DELETE_ANIMATION', {
+        uuid: this.currElement.uuid,
+        animationIdx: idx
+      });
+    },
+
+    /**
+     * 元素更换动画
+     */
+    changeAnimation(idx) {
+      const { currElement } = this;
+      const { animations } = currElement;
+      const currAnimation = animations[idx];
+
+      // 打开动画库
+      this.activeAnimation = currAnimation.name;
+      this.isChangeAnimation = true;
+      this.currAnimationIdx = idx;
+      this.animationLibShow = true;
+    },
+
+    /**
+     * 动画库select事件
+     */
     handleSelectAnimation(animation) {
+      const { isChangeAnimation, currAnimationIdx } = this;
+
       // 关闭动画库
       this.animationLibShow = false;
 
-      const animationDetail = {
-        name: animation.value,
-        label: animation.label
-      };
-
-      this.$store.dispatch('editor/addAnimation', {
-        uuid: this.currElement.uuid,
-        animation: animationDetail
-      });
+      if (isChangeAnimation) {
+        // 更换动画
+        this.$store.dispatch('editor/changeAnimation', {
+          uuid: this.currElement.uuid,
+          animationIdx: currAnimationIdx,
+          animation: animation
+        });
+      } else {
+        // 添加动画
+        this.$store.dispatch('editor/addAnimation', {
+          uuid: this.currElement.uuid,
+          animation: animation
+        });
+      }
     },
 
     /**
      * 预览动画
      */
-    previewAnimation() {
-      EventBus.$emit('RunAnimation', this.currElement.uuid, this.currElement.animations);
+    previewAnimation(idx) {
+      const { currElement } = this;
+      const { animations } = currElement;
+
+      const runAnimations = idx === undefined ? animations : [animations[idx]];
+      EventBus.$emit('RunAnimation', this.currElement.uuid, runAnimations);
     }
   }
 };
@@ -133,5 +211,11 @@ export default {
 <style lang="less" scoped>
 .element-animation-list {
   margin-top: 20px;
+}
+
+.element-animation-item {
+  .btn_label {
+    margin: 0 20px;
+  }
 }
 </style>

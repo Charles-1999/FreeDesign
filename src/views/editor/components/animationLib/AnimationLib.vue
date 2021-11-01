@@ -7,19 +7,26 @@
       v-for="(type, idx) in animationList"
       :key="idx"
       :label="type.label">
+      <!-- 动画item -->
       <div
         class="animation-item"
+        :class="activeAnimation === animation.name
+          && 'acitve__animation'"
         v-for="(animation, idx) in type.children"
         :key="idx"
-        @mouseenter="currAnimation = animation.value"
+        @mouseenter="currAnimation = animation.name"
         @mouseleave="currAnimation = ''"
         @click="selectAnimation(animation)">
+        <!-- 动画item_inner 动画主体 -->
         <div
           class="animation-item_inner"
-          :class="currAnimation === animation.value && `animate__${currAnimation} animate__animated`" />
+          :class="currAnimation === animation.name
+            && `animate__${currAnimation} animate__animated`" />
+        <!-- 动画label -->
         <span
           class="animation-item_label"
-          :class="currAnimation === animation.value && 'active__animation'">
+          :class="currAnimation === animation.name
+            && 'curr__animation'">
           {{ animation.label }}
         </span>
       </div>
@@ -32,6 +39,14 @@ import { animationList } from './config';
 
 export default {
   name: 'AnimationLib',
+
+  props: {
+    activeAnimation: {
+      type: String,
+      required: false,
+      default: ''
+    }
+  },
 
   data() {
     return {
@@ -77,12 +92,24 @@ export default {
     background-color: #ccc;
     margin-bottom: 5px;
   }
+}
 
+.animation-item {
   .animate__animated {
     background-color: #409EFF;
   }
 
-  .active__animation {
+  .curr__animation {
+    color: #409EFF;
+  }
+}
+
+.acitve__animation {
+  .animation-item_inner {
+    background-color: #409EFF;
+  }
+
+  .animation-item_label {
     color: #409EFF;
   }
 }
