@@ -57,18 +57,12 @@ export default {
     }
   },
 
-  data() {
-    return {
-      form: this.formFieldData
-    };
-  },
-
   methods: {
     /**
      * 处理表单项change事件
      */
     handleChange({ key, attr, val }) {
-      this.$emit('change', { key, attr, val });
+      this.$emit('change', { key, attr, val, form: this.innerGetForm(key) });
     },
 
     innerGetForm(key) {
@@ -76,7 +70,7 @@ export default {
         return this.getForm(key);
       }
 
-      return this.form;
+      return this.formFieldData;
     }
   }
 };
