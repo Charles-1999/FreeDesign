@@ -1,4 +1,4 @@
-export const animateList = [
+export const animationList = [
   {
     label: '进入',
     children: [
@@ -95,5 +95,5 @@ export const animateList = [
 ];
 
 export default {
-  animateList
+  animationList
 };

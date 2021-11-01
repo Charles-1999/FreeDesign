@@ -25,6 +25,8 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex';
+import EventBus from '../../../../utils/eventBus';
+import { animateCSS } from '../../../../utils/animation';
 
 import { formatStyle } from '../../../../utils/style';
 import { getCursor } from '../../utils/resizePoint';
@@ -53,6 +55,16 @@ export default {
 
       formatStyle
     };
+  },
+
+  mounted() {
+    EventBus.$on('RunAnimation', async (uuid, animations) => {
+      if (this.data.uuid !== uuid) return;
+
+      for (const animation of animations) {
+        await animateCSS(this.$el, animation);
+      }
+    });
   },
 
   computed: {
