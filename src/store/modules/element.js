@@ -155,7 +155,7 @@ export default {
       const { left, top } = eleStyle;
 
       context.commit('UPDATE_ELEMENT_STYLE', {
-        eleUUID: uuid,
+        uuid,
         eleStyle: {
           left: left + moveX,
           top: top + moveY
