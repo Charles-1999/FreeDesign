@@ -70,7 +70,8 @@ export default {
   computed: {
     ...mapState({
       focusList: state => state.editor.focusList,
-      validMoveArea: state => state.editor.validMoveArea
+      validMoveArea: state => state.editor.validMoveArea,
+      currPageIdx: state => state.editor.currPageIdx
     }),
     ...mapGetters('editor', [
       'getElementByUUID'

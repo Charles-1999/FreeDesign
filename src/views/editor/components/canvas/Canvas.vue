@@ -2,9 +2,9 @@
   <div
     class="canvas"
     :style="{
-      transform: 'scale(' + data.scale + ')',
-      width: data.width + 'px',
-      height: data.height + 'px'
+      transform: 'scale(' + projectData.scale + ')',
+      width: projectData.width + 'px',
+      height: projectData.height + 'px'
     }"
     @click.self="handleCanvasClick">
       <!-- 多选时缩放点 -->
@@ -18,7 +18,7 @@
       </template> -->
 
       <Element
-        v-for="comp in eleSchema"
+        v-for="comp in currPage.elements"
         :key="comp.uuid"
         :data="comp"
         :active="focusList.includes(comp.uuid)"
@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapGetters, mapState } from 'vuex';
 import { formatStyle } from '../../../../utils/style';
 import { getCursor } from '../../utils/resizePoint';
 
@@ -41,13 +41,6 @@ export default {
 
   data() {
     return {
-      // 项目数据
-      data: {
-        width: 375,
-        height: 650,
-        scale: 1
-      },
-
       // 上北N 下南S 左西W 右东E
       pointList: ['nw', 'ne', 'sw', 'se']
     };
@@ -55,9 +48,12 @@ export default {
 
   computed: {
     ...mapState({
-      focusList: state => state.editor.focusList,
-      eleSchema: state => state.editor.eleSchema
-    })
+      projectData: state => state.editor.projectData,
+      focusList: state => state.editor.focusList
+    }),
+    ...mapGetters('editor', [
+      'currPage'
+    ])
   },
 
   methods: {
@@ -79,15 +75,15 @@ export default {
      * @return {Object} 缩放点的样式
      */
     getPointStyle(point) {
-      const { focusList, eleSchema, data } = this;
-      const elements = eleSchema.filter(_ => focusList.includes(_.uuid));
+      const { focusList, currPage: { elements }, data } = this;
+      const focusElements = elements.filter(_ => focusList.includes(_.uuid));
 
       // TODO-1 这部分计算提取到computed，避免重复计算
       let maxWidth = 0;
       let maxHeight = 0;
       let minLeft = data.width;
       let minTop = data.height;
-      elements.forEach(element => {
+      focusElements.forEach(element => {
         const { compStyle, eleStyle } = element;
         const totalWidth = compStyle.width + eleStyle.left;
         const totalHeight = compStyle.height + eleStyle.top;

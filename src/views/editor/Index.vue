@@ -21,6 +21,20 @@
         @click="history('redo')">
         redo
       </el-button>
+      <el-select
+        v-model="$store.state.editor.currPageIdx">
+        <el-option
+          v-for="(item, idx) in projectData.pages"
+          :key="idx"
+          :label="idx"
+          :value="idx">
+        </el-option>
+      </el-select>
+      <el-button
+        type="primary"
+        @click="addPage">
+        添加页面
+      </el-button>
     </div>
     <div class="middle">
       <div
@@ -30,7 +44,7 @@
         <Canvas />
       </div>
       <div class="attr-editor-wrapper">
-        <el-tabs value="attr">
+        <el-tabs value="animation">
           <el-tab-pane label="属性" name="attr">
             <AttrEditor
               v-if="focusList.length === 1" />
@@ -70,7 +84,8 @@ export default {
   computed: {
     ...mapState({
       focusList: state => state.editor.focusList,
-      eleSchema: state => state.editor.eleSchema
+      projectData: state => state.editor.projectData,
+      currPageIdx: state => state.editor.currPageIdx
     }),
     ...mapGetters('editor', [
       'getElementByUUID'
@@ -114,6 +129,10 @@ export default {
 
     async history(type) {
       await this.$store.dispatch(`editor/history/${type}`);
+    },
+
+    addPage() {
+      this.$store.dispatch('editor/addPage', {});
     }
   }
 };

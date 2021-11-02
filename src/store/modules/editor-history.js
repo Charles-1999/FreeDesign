@@ -3,7 +3,11 @@ export default {
 
   state: {
     // 快照
-    snapshots: [[]],
+    snapshots: [[{
+      elements: [],
+      pageStyle: {},
+      config: {}
+    }]],
 
     // 当前索引
     cursor: 0
@@ -41,11 +45,11 @@ export default {
      */
     record(context, snapshot) {
       const { cursor, snapshots } = context.state;
-      const { editor: { eleSchema } } = context.rootState;
+      const { editor: { projectData: { pages } } } = context.rootState;
 
-      // 默认在editor的state中取当前的eleSchema
+      // 默认在project的state中取pages
       if (!snapshot) {
-        snapshot = JSON.parse(JSON.stringify(eleSchema));
+        snapshot = JSON.parse(JSON.stringify(pages));
       }
 
       // 1. 清空后面的快照
@@ -74,11 +78,9 @@ export default {
 
       context.commit('SET_CURSOR', cursor - 1);
 
-      context.commit('editor/SET_ELESCHEMA', {
-        eleSchema: JSON.parse(JSON.stringify(getters.currSnapShot)) || []
-      }, {
-        root: true
-      });
+      context.commit('editor/SET_PAGES',
+        JSON.parse(JSON.stringify(getters.currSnapShot)) || [],
+        { root: true });
 
       return getters.currSnapShot;
     },
@@ -97,11 +99,9 @@ export default {
 
       context.commit('SET_CURSOR', cursor + 1);
 
-      context.commit('editor/SET_ELESCHEMA', {
-        eleSchema: JSON.parse(JSON.stringify(getters.currSnapShot)) || []
-      }, {
-        root: true
-      });
+      context.commit('editor/SET_PAGES',
+        JSON.parse(JSON.stringify(getters.currSnapShot)) || [],
+        { root: true });
 
       return getters.currSnapShot;
     }

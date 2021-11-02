@@ -37,19 +37,18 @@ export default {
 
   computed: {
     ...mapState({
-      eleSchema: state => state.editor.eleSchema,
       focusList: state => state.editor.focusList
     }),
     ...mapGetters('editor', [
-      'getElementByUUID',
+      'currPage',
       'currElement'
     ])
   },
 
   watch: {
-    // 当redo undo时，eleSchema被重新赋值
+    // 当redo undo时，currPage被重新赋值
     // 需要重新计算currElement赋值给表单
-    eleSchema() {
+    currPage() {
       this.attrForm = this.currElement;
     }
   },
