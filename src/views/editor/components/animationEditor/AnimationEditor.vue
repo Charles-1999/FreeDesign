@@ -171,7 +171,7 @@ export default {
     /**
      * 动画库select事件
      */
-    handleSelectAnimation(animation) {
+    async handleSelectAnimation(animation) {
       const { isChangeAnimation, currAnimationIdx } = this;
 
       // 关闭动画库
@@ -179,17 +179,21 @@ export default {
 
       if (isChangeAnimation) {
         // 更换动画
-        this.$store.dispatch('editor/changeAnimation', {
+        await this.$store.dispatch('editor/changeAnimation', {
           uuid: this.currElement.uuid,
           animationIdx: currAnimationIdx,
           animation: animation
         });
+
+        await this.$store.dispatch('editor/history/record');
       } else {
         // 添加动画
-        this.$store.dispatch('editor/addAnimation', {
+        await this.$store.dispatch('editor/addAnimation', {
           uuid: this.currElement.uuid,
           animation: animation
         });
+
+        await this.$store.dispatch('editor/history/record');
       }
     },
 
