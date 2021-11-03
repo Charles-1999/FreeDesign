@@ -73,7 +73,7 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex';
-import EventBus from '../../../../utils/eventBus';
+import EventBus from '@utils/eventBus';
 import { animationFormConfig } from './config';
 
 import AnimationLib from '../animationLib/AnimationLib.vue';

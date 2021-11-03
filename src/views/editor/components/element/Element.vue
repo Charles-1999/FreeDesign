@@ -25,10 +25,9 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex';
-import EventBus from '../../../../utils/eventBus';
-import { animateCSS } from '../../../../utils/animation';
-
-import { formatStyle } from '../../../../utils/style';
+import EventBus from '@utils/eventBus';
+import { animateCSS } from '@utils/animation';
+import { formatStyle } from '@utils/style';
 import { getCursor } from '../../utils/resizePoint';
 
 export default {

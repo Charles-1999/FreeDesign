@@ -2,7 +2,7 @@
  * 缩放点的公共函数
  */
 
-import { formatStyle } from '../../../utils/style';
+import { formatStyle } from '@utils/style';
 
 /**
  * @param {string} point 缩放点的方位

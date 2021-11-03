@@ -1,7 +1,7 @@
 import history from './editor-history';
 import project from './project';
 
-import { pageCommonStyle } from '../../utils/style';
+import { pageCommonStyle } from '@utils/style';
 
 export default {
   namespaced: true,

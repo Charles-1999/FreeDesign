@@ -1,3 +1,5 @@
+const path = require('path');
+
 module.exports = {
   devServer: {
     port: 8888,
@@ -10,5 +12,13 @@ module.exports = {
         }
       }
     }
+  },
+  // 扩展 webpack 配置
+  chainWebpack: config => {
+    config.resolve.alias
+      .set('@', path.resolve('src'))
+      .set('@src', path.resolve('src'))
+      .set('@comps', path.resolve('src/components'))
+      .set('@utils', path.resolve('src/utils'));
   }
 };

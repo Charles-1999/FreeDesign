@@ -1,5 +1,5 @@
 import element from './element';
-import { pageCommonStyle } from '../../utils/style';
+import { pageCommonStyle } from '@utils/style';
 
 export default {
   mutations: {

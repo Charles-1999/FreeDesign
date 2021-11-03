@@ -27,7 +27,7 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex';
-import { formatStyle } from '../../../../utils/style';
+import { formatStyle } from '@utils/style';
 import { getCursor } from '../../utils/resizePoint';
 
 import Element from '../element/Element.vue';

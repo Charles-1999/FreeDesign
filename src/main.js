@@ -8,7 +8,7 @@ import routerFn from './router';
 import store from './store';
 
 // utils
-import http from './utils/http.service';
+import http from '@/utils/http.service';
 
 // ElementUI
 import ElementUI from 'element-ui';
