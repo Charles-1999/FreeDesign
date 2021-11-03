@@ -1,6 +1,8 @@
 import history from './editor-history';
 import project from './project';
 
+import { pageCommonStyle } from '../../utils/style';
+
 export default {
   namespaced: true,
 
@@ -17,7 +19,7 @@ export default {
       scale: 1,
       pages: [{
         elements: [],
-        pageStyle: {},
+        pageStyle: pageCommonStyle,
         config: {}
       }],
       pageModel: 0

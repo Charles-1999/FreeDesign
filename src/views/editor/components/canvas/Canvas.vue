@@ -2,9 +2,7 @@
   <div
     class="canvas"
     :style="{
-      transform: 'scale(' + projectData.scale + ')',
-      width: projectData.width + 'px',
-      height: projectData.height + 'px'
+      ...formatStyle(currPage.pageStyle)
     }"
     @click.self="handleCanvasClick">
       <!-- 多选时缩放点 -->
@@ -42,7 +40,9 @@ export default {
   data() {
     return {
       // 上北N 下南S 左西W 右东E
-      pointList: ['nw', 'ne', 'sw', 'se']
+      pointList: ['nw', 'ne', 'sw', 'se'],
+
+      formatStyle
     };
   },
 
@@ -117,9 +117,9 @@ export default {
 <style lang="less" scoped>
   .canvas {
     position: relative;
+    width: 100%;
+    height: 100%;
     box-shadow: 0 3px 10px #dcdcdc;
-    background-color: #fff;
-    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABkAAAAZAgMAAAC5h23wAAAAAXNSR0IB2cksfwAAAAlQTFRF9fX18PDwAAAABQ8/pgAAAAN0Uk5T/yIA41y2EwAAABhJREFUeJxjYIAC0VAQcGCQWgUCDUONBgDH8Fwzu33LswAAAABJRU5ErkJggg==);
   }
 
   .move-point {

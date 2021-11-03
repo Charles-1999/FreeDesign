@@ -37,14 +37,27 @@
       </el-button>
     </div>
     <div class="middle">
-      <div
-        class="editor-canvas-wrapper"
-        ref="canvasWrapper"
-        @click.self="handleCanvasWrapperClick">
-        <Canvas />
+      <!-- 页面编辑区 -->
+      <div class="editor-main">
+        <div
+          class="editor-canvas-wrapper"
+          :style="{
+            transform: 'scale(' + projectData.scale + ')',
+            width: projectData.width + 'px',
+            height: projectData.height + 'px',
+          }"
+          ref="canvasWrapper"
+          @click.self="handleCanvasWrapperClick">
+          <Canvas />
+        </div>
       </div>
+
+      <!-- 属性编辑区 -->
       <div class="attr-editor-wrapper">
-        <el-tabs value="animation">
+        <el-tabs value="page">
+          <el-tab-pane label="页面" name="page">
+            <PageEditor />
+          </el-tab-pane>
           <el-tab-pane label="属性" name="attr">
             <AttrEditor
               v-if="focusList.length === 1" />
@@ -69,6 +82,7 @@
 import { mapGetters, mapMutations, mapState } from 'vuex';
 
 import Canvas from './components/canvas/Canvas.vue';
+import PageEditor from './components/pageEditor/PageEditor.vue';
 import AttrEditor from './components/attrEditor/AttrEditor.vue';
 import AnimationEditor from './components/animationEditor/AnimationEditor.vue';
 
@@ -77,6 +91,7 @@ export default {
 
   components: {
     Canvas,
+    PageEditor,
     AttrEditor,
     AnimationEditor
   },
@@ -144,13 +159,15 @@ export default {
   grid-template-rows: 6rem 1fr;
 }
 
-.editor-canvas-wrapper {
+.editor-main {
   flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
   background-color: #efefef;
+}
+
+.editor-canvas-wrapper {
+  margin: 25px auto;
+  background: #fff;
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABkAAAAZAgMAAAC5h23wAAAAAXNSR0IB2cksfwAAAAlQTFRF9fX18PDwAAAABQ8/pgAAAAN0Uk5T/yIA41y2EwAAABhJREFUeJxjYIAC0VAQcGCQWgUCDUONBgDH8Fwzu33LswAAAABJRU5ErkJggg==);
 }
 
 .middle {

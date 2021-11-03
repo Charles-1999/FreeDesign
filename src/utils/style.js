@@ -1,7 +1,16 @@
 /**
+ * 页面基础样式
+ */
+export const pageCommonStyle = {
+  // 背景
+  backgroundColor: undefined,
+  backgroundImage: undefined
+};
+
+/**
  * lib组件的公共基础样式
  */
-export const commonStyle = {
+export const compCommonStyle = {
   // 尺寸
   width: 100,
   height: 100,
@@ -18,7 +27,7 @@ export const commonStyle = {
   borderRadius: 0,
 
   // 背景
-  backgroundColor: 'transparent',
+  backgroundColor: undefined,
   backgroundClip: 'content-box',
 
   // 字体
@@ -62,6 +71,6 @@ export const formatStyle = (style) => {
 };
 
 export default {
-  commonStyle,
+  compCommonStyle,
   formatStyle
 };

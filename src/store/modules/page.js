@@ -1,4 +1,5 @@
 import element from './element';
+import { pageCommonStyle } from '../../utils/style';
 
 export default {
   mutations: {
@@ -29,9 +30,14 @@ export default {
     addPage(context, page) {
       const { elements = [], pageStyle = {}, config = {} } = page;
 
+      const mixPageStyle = {
+        ...pageCommonStyle,
+        ...pageStyle
+      };
+
       context.commit('ADD_PAGE', {
         elements,
-        pageStyle,
+        pageStyle: mixPageStyle,
         config
       });
     }

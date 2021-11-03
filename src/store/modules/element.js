@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import { commonStyle } from '../../utils/style';
+import { compCommonStyle } from '../../utils/style';
 
 export default {
   mutations: {
@@ -101,7 +101,7 @@ export default {
 
       const { defaultStyle } = compConfig;
       element.compStyle = {
-        ...commonStyle,
+        ...compCommonStyle,
         ...defaultStyle
       };
 
