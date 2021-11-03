@@ -1,4 +1,7 @@
-import Vue from 'vue';
+import history from './editor-history';
+import project from './project';
+
+import { pageCommonStyle } from '@utils/style';
 
 export default {
   namespaced: true,
@@ -7,113 +10,54 @@ export default {
     // 当前画布选中的元素
     focusList: [],
 
-    eleSchema: []
+    eleSchema: [],
+
+    projectData: {
+      title: '',
+      width: 375,
+      height: 645,
+      scale: 1,
+      pages: [{
+        elements: [],
+        pageStyle: pageCommonStyle,
+        config: {}
+      }],
+      pageModel: 0
+    },
+
+    currPageIdx: 0,
+
+    // 拖拽有效区域
+    validMoveArea: null
   },
 
   mutations: {
-    setFocusList(state, payload) {
-      state.focusList = payload.focusList;
+    ...project.mutations,
+
+    // --------------- focusList ---------------
+    SET_FOCUSLIST(state, focusList) {
+      state.focusList = focusList;
     },
 
-    setEleSchema(state, payload) {
-      state.eleSchema = payload.eleSchema;
+    ADD_FOCUS(state, uuid) {
+      state.focusList.push(uuid);
     },
 
-    addEleSchema(state, payloay) {
-      state.eleSchema.push(payloay.element);
-    },
-
-    updateElement(state, payload) {
-      const { uuid } = payload;
-      const index = state.eleSchema.findIndex(_ => _.uuid === uuid);
-
-      const element = {
-        ...state.eleSchema[index],
-        ...payload
-      };
-
-      Vue.set(state.eleSchema, index, element);
-    },
-
-    updateElementStyle(state, payload) {
-      const { uuid, compStyle, eleStyle } = payload;
-      const index = state.eleSchema.findIndex(_ => _.uuid === uuid);
-      const element = state.eleSchema[index];
-
-      element.compStyle = {
-        ...element.compStyle,
-        ...compStyle
-      };
-
-      element.eleStyle = {
-        ...element.eleStyle,
-        ...eleStyle
-      };
-
-      Vue.set(state.eleSchema, index, element);
+    // --------------- 有效拖拽区域 ---------------
+    SET_VALID_MOVE_AREA(state, validMoveArea) {
+      state.validMoveArea = validMoveArea;
     }
   },
 
   actions: {
-    /**
-     * 添加元素
-     * @param context context
-     * @param payload payload
-     */
-    addElement(context, payload) {
-      const { element } = payload;
-      const { component } = element;
+    ...project.actions
+  },
 
-      // 1. 加载组件的默认样式
-      const libComp = require.context(
-        // 其组件目录的相对路径
-        '../../components/lib',
-        // 是否查询其子目录
-        true,
-        // 匹配基础组件文件名的正则表达式
-        /\.\/(\w+\/config\.js$)/
-      );
-      const fileName = component.replace(component[0], component[0].toUpperCase());
-      const compConfig = libComp(`./${fileName}/config.js`);
+  getters: {
+    ...project.getters
+  },
 
-      const { defaultStyle } = compConfig;
-      element.compStyle = defaultStyle;
-
-      // 2. 添加元素
-      context.commit({
-        type: 'addEleSchema',
-        element
-      });
-    },
-
-    /**
-     * 设置组件样式
-     * @param context context
-     * @param payload payload
-     */
-    setCompStyle(context, payload) {
-      const { uuid, compStyle } = payload;
-
-      const element = context.state.eleSchema
-        .find(_ => _.uuid === uuid);
-
-      element.compStyle = compStyle;
-    },
-
-    /**
-     * 更新样式
-     * @param context context
-     * @param payload payload
-     */
-    updateStyle(context, payload) {
-      const { uuid, compStyle = {}, eleStyle = {} } = payload;
-
-      context.commit({
-        type: 'updateElementStyle',
-        uuid,
-        compStyle,
-        eleStyle
-      });
-    }
+  modules: {
+    history
   }
 };

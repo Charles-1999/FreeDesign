@@ -1,12 +1,12 @@
 /**
- * LibRext组件配置
+ * LibRect组件配置
  */
 
 // 默认样式
 export const defaultStyle = {
-  width: '100px',
-  height: '100px',
-  backgroundColor: '#ccc'
+  width: 100,
+  height: 100,
+  backgroundColor: '#edfedf'
 };
 
 // 默认参数

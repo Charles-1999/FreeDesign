@@ -4,8 +4,8 @@
 
 // 默认样式
 export const defaultStyle = {
-  width: '200px',
-  height: '100px',
+  width: 200,
+  height: 100,
   color: 'pink'
 };
 

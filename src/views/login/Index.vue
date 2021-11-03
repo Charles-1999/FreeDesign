@@ -45,6 +45,7 @@ export default {
     padding: 12rem 0 5rem;
     width: 100%;
     margin-bottom: 52px;
+    text-align: center;
     img {
       height: 48px;
       margin-right: 16px;
