@@ -18,6 +18,7 @@ module.exports = {
     config.resolve.alias
       .set('@', path.resolve('src'))
       .set('@src', path.resolve('src'))
+      .set('@config', path.resolve('config'))
       .set('@comps', path.resolve('src/components'))
       .set('@utils', path.resolve('src/utils'));
   }
