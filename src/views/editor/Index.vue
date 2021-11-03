@@ -107,9 +107,12 @@ export default {
     ])
   },
 
-  mounted() {
+  async mounted() {
     // 设置有效的拖拉拽区域
     this.SET_VALID_MOVE_AREA(this.$refs.canvasWrapper);
+
+    const res = await this.$http.get('/page/list');
+    console.log(res);
   },
 
   methods: {

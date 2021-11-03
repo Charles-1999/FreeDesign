@@ -7,6 +7,9 @@ import routerFn from './router';
 // vuex
 import store from './store';
 
+// utils
+import http from './utils/http.service';
+
 // ElementUI
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
@@ -34,6 +37,14 @@ const pagesRouters = require.context(
 const router = routerFn({ pagesRouters });
 
 Vue.config.productionTip = false;
+
+// init define
+Object.defineProperties(Vue.prototype, {
+  $http: {
+    value: http,
+    writable: false
+  }
+});
 
 new Vue({
   router,
