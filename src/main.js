@@ -31,10 +31,16 @@ Vue.use(commonComponents);
 Vue.use(ElementUI);
 
 const pagesRouters = require.context(
-  './views', true, /router\.ts$/
+  './views', true, /router\.js$/
 );
 
 const router = routerFn({ pagesRouters });
+router.beforeEach((to, from, next) => {
+  if (to.meta.title) {
+    document.title = to.meta.title;
+  }
+  next();
+});
 
 Vue.config.productionTip = false;
 

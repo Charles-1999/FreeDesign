@@ -11,6 +11,14 @@ const routes = [
   //   component: Index
   // },
   {
+    path: '/login',
+    name: 'Login',
+    meta: {
+      title: '登录页'
+    },
+    component: () => import(/* webpackChunkName: "editor" */ '../views/login/Index.vue')
+  },
+  {
     path: '/home',
     component: () => import('../views/home/Index.vue'),
     children: [
@@ -18,12 +26,18 @@ const routes = [
       {
         path: '',
         name: 'ProjectList',
+        meta: {
+          title: '项目列表'
+        },
         component: () => import('../views/project-list/Index.vue')
       },
       {
         // 模板库
         path: 'template-list',
         name: 'TemplateList',
+        meta: {
+          title: '模板库'
+        },
         component: () => import('../views/template-list/Index.vue')
       }
     ]
@@ -46,7 +60,7 @@ const routes = [
   },
   {
     path: '/',
-    redirect: '/home'
+    redirect: '/login'
   },
   {
     path: '*',
