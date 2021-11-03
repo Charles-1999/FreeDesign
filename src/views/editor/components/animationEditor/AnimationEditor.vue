@@ -204,6 +204,8 @@ export default {
       const { currElement } = this;
       const { animations } = currElement;
 
+      // 如果没传入idx，则播放这个元素的全部动画
+      // 否则播放这个元素对应索引的动画
       const runAnimations = idx === undefined ? animations : [animations[idx]];
       EventBus.$emit('RunAnimation', this.currElement.uuid, runAnimations);
     }
