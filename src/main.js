@@ -7,8 +7,12 @@ import routerFn from './router';
 // vuex
 import store from './store';
 
+// config
+import config from '@config';
+
 // utils
-import http from '@/utils/http.service';
+import http from '@utils/http.service';
+import { storage } from '@utils/localStorage.service';
 
 // ElementUI
 import ElementUI from 'element-ui';
@@ -48,6 +52,14 @@ Vue.config.productionTip = false;
 Object.defineProperties(Vue.prototype, {
   $http: {
     value: http,
+    writable: false
+  },
+  $storage: {
+    value: storage,
+    writable: false
+  },
+  $config: {
+    value: config,
     writable: false
   }
 });
