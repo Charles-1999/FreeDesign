@@ -1,6 +1,6 @@
 import axios from 'axios';
 import config from '@config';
-import { showMessage } from './message.service';
+import { showMessage } from '../message.service';
 
 // axios 实例
 const instance = axios.create({

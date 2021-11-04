@@ -11,7 +11,7 @@ import store from './store';
 import config from '@config';
 
 // utils
-import http from '@utils/http.service';
+import http from '@utils/http/http.service.js';
 import { storage } from '@utils/localStorage.service';
 
 // ElementUI
