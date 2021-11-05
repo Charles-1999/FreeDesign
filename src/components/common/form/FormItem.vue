@@ -17,9 +17,24 @@
       v-model="form[formKey]"
       @change="handleChange(formKey, config, $event)" />
 
+    <!-- 选择图片 -->
+    <fd-selectimage
+      v-if="config.type === 'selectimage'"
+      v-bind="config.config"
+      :select-list="form[formKey]"
+      @change="handleImageChange(formKey, config, $event)" />
+
     <!-- Element UI -->
     <component
       v-if="config.type.startsWith('el-')"
+      v-bind="config.config"
+      :is="config.type"
+      v-model="form[formKey]"
+      @change="handleChange(formKey, config, $event)" />
+
+    <!-- common Components -->
+    <component
+      v-if="config.type.startsWith('fd-')"
       v-bind="config.config"
       :is="config.type"
       v-model="form[formKey]"
@@ -56,11 +71,25 @@ export default {
     }
   },
 
+  data() {
+    return {
+      innerForm: this.form
+    };
+  },
+
   methods: {
     /**
      * 处理表单项change事件
      */
     handleChange(key, attr, val) {
+      this.$emit('change', { key, attr, val });
+    },
+
+    /**
+     * 处理图片change事件
+     */
+    handleImageChange(key, attr, val) {
+      this.innerForm[key] = val;
       this.$emit('change', { key, attr, val });
     }
   }
@@ -74,6 +103,7 @@ export default {
 }
 
 .form-item {
+  flex: 1;
   margin-right: 20px;
 
   .form-item_text {
@@ -97,5 +127,11 @@ export default {
   .el-input-number--mini {
     width: 90px;
   }
+}
+
+// 只有一个form-item和最后一个
+.form-item:last-of-type,
+.form-item:only-of-type {
+  margin-right: 0;
 }
 </style>

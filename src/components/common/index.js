@@ -1,8 +1,7 @@
 /**
  * 组件自动导入，将会扫描目录下所有组件进行注册
  * 组件用fd-前缀命名
- * 文件夹组件用index.js导出
- * 单文件组件直接导出
+ * 文件夹组件在.vue文件导出
  */
 
 const components = require.context(
@@ -11,7 +10,7 @@ const components = require.context(
   // 是否查询其子目录
   true,
   // 匹配基础组件文件名的正则表达式
-  /\.\/([A-Z]\w+\.vue$)|(\w+\/index\.js$)/
+  /([A-Z]\w+\.vue$)/
 );
 
 /**
