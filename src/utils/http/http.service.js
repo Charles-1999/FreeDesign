@@ -1,16 +1,16 @@
 import axios from 'axios';
 import config from '@config';
-import { showMessage } from './message.service';
+import { showMessage } from '../message.service';
 
 // axios 实例
-const instance = axios.create();
-
-/* 1. 设置实例默认参数 */
-
-// 默认URL前缀
-instance.defaults.baseURL = config.baseURL;
-// 携带cookie
-instance.defaults.withCredentials = true;
+const instance = axios.create({
+  headers: {
+    'content-type': 'application/json;charset=UTF-8'
+  },
+  baseURL: config.baseURL,
+  timeout: 50000,
+  withCredentials: true
+});
 
 /* 2. 设置拦截器 */
 

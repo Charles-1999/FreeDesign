@@ -1,3 +1,11 @@
+<!--
+ * @Author: your name
+ * @Date: 2021-11-04 15:32:40
+ * @LastEditTime: 2021-11-05 00:11:29
+ * @LastEditors: Please set LastEditors
+ * @Description: In User Settings Edit
+ * @FilePath: /FreeDesign/src/views/login/components/LoginCard.vue
+-->
 <template>
   <el-card class="login-panel-wrapper">
     <h2>请登录</h2>
@@ -7,9 +15,9 @@
       :rules="formRules"
       :validate-on-rule-change="false"
       ref="loginForm">
-      <el-form-item prop="username">
+      <el-form-item prop="email">
         <el-input
-          v-model="loginForm.username"
+          v-model="loginForm.email"
           placeholder="请输入用户名"
           prefix-icon="el-icon-user" />
       </el-form-item>
@@ -39,17 +47,18 @@
 </template>
 
 <script>
+import { UserLogin } from '../../../apis/login';
 export default {
   name: 'LoginCard',
   data() {
     return {
       loginForm: {
-        username: '',
+        email: '',
         password: ''
       },
       formRules: {
-        username: [
-          { required: true, message: '请输入用户名' }
+        email: [
+          { required: true, message: '请输入邮箱' }
         ],
         password: [
           { required: true, message: '请输入密码' }
@@ -58,7 +67,10 @@ export default {
     };
   },
   methods: {
-    handleLogin() {
+    async handleLogin() {
+      console.log(this.loginForm);
+      const res = await UserLogin(this.loginForm);
+      console.log(res);
       this.$router.push('/home');
     },
     changeRegister() {
