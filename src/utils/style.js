@@ -4,7 +4,7 @@
 export const pageCommonStyle = {
   // 背景
   backgroundColor: undefined,
-  backgroundImage: undefined
+  backgroundImage: []
 };
 
 /**
@@ -62,6 +62,9 @@ export const formatStyle = (style) => {
         obj[key] = `${val}px`;
       } else if (key === 'rotate') {
         obj.transform = `rotate(${val}deg)`;
+      } else if (key === 'backgroundImage') {
+        // 处理背景图片
+        obj[key] = `url(${(val[0] || {}).url})`;
       } else {
         obj[key] = val;
       }
