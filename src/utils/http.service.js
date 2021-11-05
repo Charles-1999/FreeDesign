@@ -65,12 +65,4 @@ instance.interceptors.response.use(
   }
 );
 
-<<<<<<< HEAD
-// const axiosWrap = instance;
-
-// axiosWrap.get = (url, param) => instance.get(url, { param });
-// axiosWrap.post = (...args) => instance.post(...args);
-
-=======
->>>>>>> 7bd28032f6c8c136d10b2c8f6bb069d180fa6b64
 export default instance;

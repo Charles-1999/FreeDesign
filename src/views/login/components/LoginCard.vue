@@ -1,11 +1,3 @@
-<!--
- * @Author: your name
- * @Date: 2021-11-04 15:32:40
- * @LastEditTime: 2021-11-05 16:29:40
- * @LastEditors: Please set LastEditors
- * @Description: In User Settings Edit
- * @FilePath: /FreeDesign/src/views/login/components/LoginCard.vue
--->
 <template>
   <el-card class="login-panel-wrapper">
     <h2>请登录</h2>
@@ -18,7 +10,7 @@
       <el-form-item prop="email">
         <el-input
           v-model="loginForm.email"
-          placeholder="请输入用户名"
+          placeholder="请输入邮箱"
           prefix-icon="el-icon-user" />
       </el-form-item>
       <el-form-item prop="password">
@@ -68,7 +60,7 @@ export default {
   },
   methods: {
     async handleLogin() {
-      const res = await this.$http.post('/api' + ACCOUNT.LOGIN, this.loginForm);
+      const res = await this.$http.post(ACCOUNT.LOGIN, this.loginForm);
       console.log(res);
       this.$router.push('/home');
     },
