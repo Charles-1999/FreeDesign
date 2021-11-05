@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-11-04 15:32:40
- * @LastEditTime: 2021-11-05 00:11:29
+ * @LastEditTime: 2021-11-05 16:27:49
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /FreeDesign/src/views/login/components/LoginCard.vue
@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import { UserLogin } from '../../../apis/login';
+import { ACCOUNT } from '@apis/index.js';
 export default {
   name: 'LoginCard',
   data() {
@@ -68,8 +68,7 @@ export default {
   },
   methods: {
     async handleLogin() {
-      console.log(this.loginForm);
-      const res = await UserLogin(this.loginForm);
+      const res = await this.$http.get(ACCOUNT);
       console.log(res);
       this.$router.push('/home');
     },

@@ -52,61 +52,6 @@ instance.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-const ErrorMsg = {
-  code: -1,
-  msg: 'err',
-  data: {}
-};
-
-const Axios = {
-  get: async ({ url = '', config = {}, callback }) => {
-    try {
-      const res = await instance.get(url, config);
-
-      if (res.status === 200) {
-        const result = res.data;
-        callback && callback(result);
-        return result;
-      }
-
-      return null;
-    } catch (error) {
-      console.log('get catch error: ', error);
-    }
-  },
-  post: async ({ url = '', data, callback }, headers = {}) => {
-    if (typeof data === 'string') {
-      data = JSON.stringify(data);
-    }
-
-    try {
-      const res = (await instance.post(url, data, headers)) || {};
-      console.log(res, 'success-before');
-      if (res && res.status === 200) {
-        console.log('success');
-        const result = res.data;
-        callback && callback(result);
-        return result;
-      }
-
-      return ErrorMsg;
-    } catch (error) {
-      const csrfRes = await Axios.get({ url: '/getBaseInfo' });
-
-      if (csrfRes.code === 0 && csrfRes.data.csrfToken) {
-        Vue.prototype.$cookies.set('csrfToken', csrfRes.data.csrfToken);
-        return await Axios.post({ url, data, callback });
-      }
-    }
-
-    if (+error.status === 401 && error.data && +error.data.code === 401) {
-      location.replace(`https://paas.oa.com/_logout/?url=${encodeURIComponent(`https://${location.host}/pages`)}`);
-      return error.data;
-    }
-
-    return ErrorMsg;
-  }
-};
 
 const axiosWrap = instance;
 
