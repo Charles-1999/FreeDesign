@@ -4,9 +4,10 @@
       <img src="../../assets/logo.png" />
       <span>FreeDesign</span>
     </header>
-    <div class="login-bg" />
-    <LoginCard v-if="isRegister" @setRegister="setRegister" />
-    <RegisterCard v-else @setRegister="setRegister" />
+    <main class="login-main">
+      <LoginCard v-if="isRegister" @setRegister="setRegister" />
+      <RegisterCard v-else @setRegister="setRegister" />
+    </main>
   </div>
 </template>
 
@@ -38,6 +39,8 @@ export default {
   flex-direction: column;
   align-items: center;
   min-height: 100vh;
+  background: 100% center #f0f2f5 no-repeat
+    url(../../assets/login/bg.svg);
   .login-logo {
     height: 4.8rem;
     line-height: 4.8rem;
@@ -61,14 +64,8 @@ export default {
         serif;
     }
   }
-  .login-bg {
-    z-index: -100;
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background: 100% center fixed #f0f2f5 no-repeat
-      url(../../assets/login/bg.svg);
-    background-size: 100%;
+  .login-main {
+    margin: 0 auto 80px;
   }
 }
 </style>
