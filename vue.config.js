@@ -20,6 +20,7 @@ module.exports = {
       .set('@src', path.resolve('src'))
       .set('@config', path.resolve('config'))
       .set('@comps', path.resolve('src/components'))
-      .set('@utils', path.resolve('src/utils'));
+      .set('@utils', path.resolve('src/utils'))
+      .set('@apis', path.resolve('src/apis'));
   }
 };
