@@ -1,6 +1,6 @@
 import axios from 'axios';
 import config from '@config';
-import { showMessage } from '../message.service';
+import { showMessage } from './message.service';
 
 // axios 实例
 const instance = axios.create({
@@ -52,5 +52,10 @@ instance.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
+const axiosWrap = instance;
+
+axiosWrap.get = (url, param) => instance.get(url, { param });
+axiosWrap.post = (...args) => instance.post(...args);
 
 export default instance;
