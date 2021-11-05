@@ -25,13 +25,25 @@ const handleRequestError = (status, errcode, msg, noEmit) => {
   switch (errcode) {
     case 5007:
       // 尚未登录
-      if (!noEmit) showMessage('尚未登录');
+      if (!noEmit) showMessage(msg);
       break;
   }
 };
 
 // 请求拦截器
-// instance.interceptors.request.use()
+instance.interceptors.request.use(
+  (request) => {
+    const { selfHttpConfig = {} } = request;
+    const { external = false } = selfHttpConfig;
+
+    // 如果不是外部请求，url添加/api前缀
+    if (!external) {
+      request.url = '/api' + request.url;
+    }
+
+    return request;
+  }
+);
 
 // 响应拦截器
 instance.interceptors.response.use(
@@ -52,10 +64,5 @@ instance.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-
-const axiosWrap = instance;
-
-axiosWrap.get = (url, param) => instance.get(url, { param });
-axiosWrap.post = (...args) => instance.post(...args);
 
 export default instance;
