@@ -3,6 +3,7 @@ import App from './App.vue';
 
 // 路由
 import routerFn from './router';
+import { routerTitle } from './plugins/router.plugins';
 
 // vuex
 import store from './store';
@@ -39,12 +40,7 @@ const pagesRouters = require.context(
 );
 
 const router = routerFn({ pagesRouters });
-router.beforeEach((to, from, next) => {
-  if (to.meta.title) {
-    document.title = to.meta.title;
-  }
-  next();
-});
+routerTitle(router);
 
 Vue.config.productionTip = false;
 
