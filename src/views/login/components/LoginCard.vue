@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-11-04 15:32:40
- * @LastEditTime: 2021-11-05 16:27:49
+ * @LastEditTime: 2021-11-05 16:29:40
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /FreeDesign/src/views/login/components/LoginCard.vue
@@ -68,7 +68,7 @@ export default {
   },
   methods: {
     async handleLogin() {
-      const res = await this.$http.get(ACCOUNT);
+      const res = await this.$http.post('/api' + ACCOUNT.LOGIN, this.loginForm);
       console.log(res);
       this.$router.push('/home');
     },

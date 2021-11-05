@@ -53,9 +53,9 @@ instance.interceptors.response.use(
   }
 );
 
-const axiosWrap = instance;
+// const axiosWrap = instance;
 
-axiosWrap.get = (url, param) => instance.get(url, { param });
-axiosWrap.post = (...args) => instance.post(...args);
+// axiosWrap.get = (url, param) => instance.get(url, { param });
+// axiosWrap.post = (...args) => instance.post(...args);
 
 export default instance;
