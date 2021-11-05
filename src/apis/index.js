@@ -1,3 +1,4 @@
 import { ACCOUNT } from './login';
+import { TEMPLATE } from './template';
 
-export { ACCOUNT };
+export { ACCOUNT, TEMPLATE };
