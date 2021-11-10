@@ -1,42 +1,26 @@
 <template>
   <div class="editor-wrapper">
-    <div>
-      <el-button
-        type="primary"
-        @click="addElement('text')">
-        文本
-      </el-button>
-      <el-button
-        type="primary"
-        @click="addElement('rect')">
-        矩形
-      </el-button>
-      <el-button
-        type="primary"
-        @click="history('undo')">
-        undo
-      </el-button>
-      <el-button
-        type="primary"
-        @click="history('redo')">
-        redo
-      </el-button>
-      <el-select
-        v-model="$store.state.editor.currPageIdx">
-        <el-option
-          v-for="(item, idx) in projectData.pages"
-          :key="idx"
-          :label="idx"
-          :value="idx">
-        </el-option>
-      </el-select>
-      <el-button
-        type="primary"
-        @click="addPage">
-        添加页面
-      </el-button>
-    </div>
+    <fd-header />
     <div class="middle">
+      <!-- 侧边栏 -->
+      <el-tabs
+        class="side-bar"
+        tab-position="left"
+        value="page">
+        <el-tab-pane name="comp">
+          <span slot="label">
+            <i></i> 基础组件
+          </span>
+          <ComponentLib />
+        </el-tab-pane>
+        <el-tab-pane name="page">
+          <span slot="label">
+            <i></i> 页面管理
+          </span>
+          <PageList />
+        </el-tab-pane>
+      </el-tabs>
+
       <!-- 页面编辑区 -->
       <div class="editor-main">
         <div
@@ -82,6 +66,8 @@
 import { mapGetters, mapMutations, mapState } from 'vuex';
 
 import Canvas from './components/canvas/Canvas.vue';
+import ComponentLib from './components/componentLib/ComponentLibs.vue';
+import PageList from './components/pageList/PageList.vue';
 import PageEditor from './components/pageEditor/PageEditor.vue';
 import AttrEditor from './components/attrEditor/AttrEditor.vue';
 import AnimationEditor from './components/animationEditor/AnimationEditor.vue';
@@ -91,6 +77,8 @@ export default {
 
   components: {
     Canvas,
+    ComponentLib,
+    PageList,
     PageEditor,
     AttrEditor,
     AnimationEditor
@@ -117,27 +105,6 @@ export default {
       'SET_VALID_MOVE_AREA'
     ]),
 
-    /**
-     * 添加元素
-     * @param {string} type type
-     * @return {void}
-     */
-    addElement(type) {
-      this.$store.dispatch({
-        type: 'editor/addElement',
-        element: {
-          uuid: new Date().getTime(),
-          component: type,
-          eleStyle: {
-            top: 50,
-            left: 70
-          }
-        }
-      });
-
-      this.$store.dispatch('editor/history/record');
-    },
-
     handleCanvasWrapperClick() {
       this.$store.commit('editor/SET_FOCUSLIST', []);
     },
@@ -155,8 +122,7 @@ export default {
 
 <style lang="less" scoped>
 .editor-wrapper {
-  display: grid;
-  grid-template-rows: 6rem 1fr;
+  height: 100vh;
 }
 
 .editor-main {
@@ -172,6 +138,18 @@ export default {
 
 .middle {
   display: flex;
+  height: calc(100vh - 6rem);
+}
+
+.side-bar {
+  ::v-deep.el-tabs__content {
+    width: 210px;
+    height: 100%;
+
+    .el-tab-pane {
+      height: 100%;
+    }
+  }
 }
 
 .attr-editor-wrapper {

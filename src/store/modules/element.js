@@ -196,7 +196,9 @@ export default {
   },
 
   getters: {
-    currElement: (state, getters) => getters.currPage.elements.find(_ => _.uuid === state.focusList[0]),
+    currElement: (state, getters) =>
+      getters.currPage.elements.find(_ => _.uuid === state.focusList[0]) ||
+      { animations: [] },
 
     getElementByUUID: (state, getters) => (uuid) => getters.currPage.elements.find(_ => _.uuid === uuid)
   }
