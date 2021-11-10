@@ -2,7 +2,7 @@
   <div
     class="canvas"
     :style="{
-      ...formatStyle(currPage.pageStyle)
+      ...formatStyle(innerPage.pageStyle),
     }"
     @click.self="handleCanvasClick">
       <!-- 多选时缩放点 -->
@@ -16,10 +16,10 @@
       </template> -->
 
       <Element
-        v-for="comp in currPage.elements"
+        v-for="comp in innerPage.elements"
         :key="comp.uuid"
         :data="comp"
-        :active="focusList.includes(comp.uuid)"
+        :active="focusList.includes(comp.uuid) && !preview"
         :ref="`ele_${comp.uuid}`"
         @activeChange="onActiveChange" />
     </div>
@@ -37,12 +37,28 @@ export default {
 
   components: { Element },
 
+  props: {
+    page: {
+      type: Object,
+      required: false,
+      default: undefined
+    },
+
+    preview: {
+      type: Boolean,
+      required: false,
+      default: false
+    }
+  },
+
   data() {
     return {
       // 上北N 下南S 左西W 右东E
       pointList: ['nw', 'ne', 'sw', 'se'],
 
-      formatStyle
+      formatStyle,
+
+      innerPage: {}
     };
   },
 
@@ -54,6 +70,17 @@ export default {
     ...mapGetters('editor', [
       'currPage'
     ])
+  },
+
+  watch: {
+    currPage() {
+      this.innerPage = this.page || this.currPage;
+    }
+  },
+
+  created() {
+    // 如果参数有传page则渲染参数的page
+    this.innerPage = this.page || this.currPage;
   },
 
   methods: {
