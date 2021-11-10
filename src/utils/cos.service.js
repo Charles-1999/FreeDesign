@@ -9,7 +9,7 @@ import http from '@utils/http.service';
  * @return token
  */
 export const getUploadToken = async () => {
-  const { token } = await http.get('/api/resources/qiniu/upload_token');
+  const { token } = await http.get('/resources/qiniu/upload_token');
 
   return token;
 };

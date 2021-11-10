@@ -120,7 +120,7 @@ export default {
      * 获取图片列表
      */
     async getImageList() {
-      const { images } = await this.$http.get('/api/resources/image/list');
+      const { images } = await this.$http.get('/resources/image/list');
       this.imagesList = images;
     },
 
@@ -150,7 +150,7 @@ export default {
      * 删除图片
      */
     async deleteImg(img) {
-      await this.$http.delete(`/api/resources/image/${img.id}`);
+      await this.$http.delete(`/resources/image/${img.id}`);
 
       this.imagesList = this.imagesList.filter(_ => _.id !== img.id);
     },
@@ -199,7 +199,7 @@ export default {
       const { key } = response;
       const { size, name } = file;
 
-      const { id } = await this.$http.post('/api/resources/image', {
+      const { id } = await this.$http.post('/resources/image', {
         key_name: key,
         name,
         size
