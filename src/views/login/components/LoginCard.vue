@@ -40,6 +40,7 @@
 </template>
 
 <script>
+// import { ACCOUNT } from '@apis';
 export default {
   name: 'LoginCard',
   data() {
@@ -61,13 +62,22 @@ export default {
   },
   methods: {
     async handleLogin() {
-      this.loading = true;
-      // const res = await this.$http.post(ACCOUNT.LOGIN, this.loginForm);
-      this.$store.dispatch('login', this.loginForm);
-      // this.$http.
-      this.loading = false;
-      this.$router.push('/home');
+      const { needRedirect } = this.$route.query;
+
+      try {
+        this.loading = true;
+
+        // 执行登录
+        await this.$store.dispatch('auth/login', this.loginForm);
+
+        // 路由重定向
+        const path = needRedirect.path || '/home';
+        this.$router.push(path);
+      } finally {
+        this.loading = false;
+      }
     },
+
     changeRegister() {
       this.$emit('setRegister');
     }

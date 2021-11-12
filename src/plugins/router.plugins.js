@@ -1,35 +1,36 @@
-import store from '@/store';
-
-export const routerHandler = router => {
+export const routerHandler = (router, store) => {
+  // 鉴权判断
   router.beforeEach(async (to, from, next) => {
-    const loginStatus = await checkLogin(to);
-    console.log(loginStatus);
-    if (loginStatus) {
-      next('/login');
+    // 1. 如果路由不需要登录态，跳过
+    if (!to.meta.needLogin) {
+      next();
       return;
     }
-    changeTitle(to);
+
+    // 2. 直接通过接口鉴权
+    // 鉴权失败跳到登录页面
+    try {
+      await store.dispatch('auth/getMe');
+    } catch (err) {
+      next({
+        name: 'Login',
+        query: {
+          needRedirect: to
+        }
+      });
+    }
+
+    // 3. 执行跳转
     next();
   });
-};
 
-/**
- * 修改网页标题
- */
-const changeTitle = to => {
-  if (to.meta.title) {
-    document.title = to.meta.title;
-  }
-};
+  // 修改网页标题
+  router.beforeEach(async (to, from, next) => {
+    if (to.meta.title) {
+      document.title = to.meta.title;
+    }
 
-/**
- * 判断是否需要登录
- * @returns {Boolean} true表示需要登录
- */
-const checkLogin = async to => {
-  if (!to.meta.needLogin) return false;
-  if (store.getters.isLogged) return false;
-  await store.dispatch('getMe');
-  if (store.getters.isLogged) return false;
-  return true;
+    // 执行跳转
+    next();
+  });
 };

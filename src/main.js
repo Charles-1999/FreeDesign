@@ -40,7 +40,7 @@ const pagesRouters = require.context(
 );
 
 const router = routerFn({ pagesRouters });
-routerHandler(router);
+routerHandler(router, store);
 
 Vue.config.productionTip = false;
 
