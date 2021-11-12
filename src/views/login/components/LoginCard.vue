@@ -62,7 +62,7 @@ export default {
   },
   methods: {
     async handleLogin() {
-      const { needRedirect } = this.$route.query;
+      const { needRedirect = {} } = this.$route.query;
 
       try {
         this.loading = true;
