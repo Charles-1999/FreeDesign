@@ -54,6 +54,7 @@
         <el-button
           class="register-form-btn"
           type="primary"
+          :loading="loading"
           @click="handleRegister">
           注册
         </el-button>
@@ -94,6 +95,7 @@ export default {
     return {
       codeTime: 0,
       asyncCode: '',
+      loading: false,
       registerForm: {
         email: '',
         nickname: '',
@@ -137,8 +139,11 @@ export default {
       });
     },
     handleRegister() {
+      this.loading = true;
       this.$refs.registerForm.validate(async (valid) => {
-        if (!valid) return false;
+        if (!valid) {
+          return false;
+        }
         const { email, nickname, password, code } = this.registerForm;
         const res = await this.$http.post(ACCOUNT.REGISTER, {
           email,
@@ -150,6 +155,7 @@ export default {
         // TODO 邮箱已存在，验证码错误等提示
         this.$router.push('/home');
       });
+      this.loading = false;
     },
     changeRegister() {
       this.$emit('setRegister');

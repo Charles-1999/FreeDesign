@@ -24,6 +24,7 @@
         <el-button
           class="login-form-btn"
           type="primary"
+          :loading="loading"
           @click="handleLogin">
           登录
         </el-button>
@@ -44,6 +45,7 @@ export default {
   name: 'LoginCard',
   data() {
     return {
+      loading: false,
       loginForm: {
         email: '',
         password: ''
@@ -60,7 +62,9 @@ export default {
   },
   methods: {
     async handleLogin() {
+      this.loading = true;
       const res = await this.$http.post(ACCOUNT.LOGIN, this.loginForm);
+      this.loading = false;
       console.log(res);
       this.$router.push('/home');
     },

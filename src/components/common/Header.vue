@@ -26,7 +26,9 @@
             </el-button>
           </el-dropdown-item>
           <el-dropdown-item>
-            <el-button type="text">
+            <el-button
+              type="text"
+              @click="handleLogout">
               登出
             </el-button>
           </el-dropdown-item>
@@ -37,12 +39,19 @@
 </template>
 
 <script>
+import { ACCOUNT } from '@apis/login';
 export default {
   name: 'FdHeader',
   data() {
     return {
       auth: 'admin'
     };
+  },
+  methods: {
+    async handleLogout() {
+      await this.$http.post(ACCOUNT.LOGOUT);
+      this.$router.push('/');
+    }
   }
 };
 </script>
