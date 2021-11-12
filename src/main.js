@@ -3,7 +3,7 @@ import App from './App.vue';
 
 // 路由
 import routerFn from './router';
-import { routerHandler } from './plugins/router.plugins';
+import { routerHandler } from './plugins/router.plugin';
 
 // vuex
 import store from './store';
