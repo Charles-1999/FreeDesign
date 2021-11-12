@@ -26,7 +26,7 @@ export default {
       await http.post(ACCOUNT.LOGIN, data);
 
       // 2. 获取个人信息
-      await dispatch('auth/getMe');
+      await dispatch('getMe');
     },
 
     async logout(context) {
