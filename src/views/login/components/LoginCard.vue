@@ -40,7 +40,6 @@
 </template>
 
 <script>
-import { ACCOUNT } from '@apis/index.js';
 export default {
   name: 'LoginCard',
   data() {
@@ -63,9 +62,10 @@ export default {
   methods: {
     async handleLogin() {
       this.loading = true;
-      const res = await this.$http.post(ACCOUNT.LOGIN, this.loginForm);
+      // const res = await this.$http.post(ACCOUNT.LOGIN, this.loginForm);
+      this.$store.dispatch('login', this.loginForm);
+      // this.$http.
       this.loading = false;
-      console.log(res);
       this.$router.push('/home');
     },
     changeRegister() {
