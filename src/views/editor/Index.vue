@@ -1,6 +1,23 @@
 <template>
   <div class="editor-wrapper">
-    <fd-header />
+    <fd-header>
+      <div
+        class="tool-bar"
+        slot="page-header-middle">
+        <div
+          class="tool-item"
+          @click="history('undo')">
+          <i class="el-icon-refresh-left"></i>
+          <span>撤销</span>
+        </div>
+        <div
+          class="tool-item"
+          @click="history('redo')">
+          <i class="el-icon-refresh-right"></i>
+          <span>重做</span>
+        </div>
+      </div>
+    </fd-header>
     <div class="middle">
       <!-- 侧边栏 -->
       <el-tabs
@@ -95,6 +112,22 @@ export default {
     ])
   },
 
+  created() {
+    document.onkeydown = (e) => {
+      const { key, metaKey } = e;
+
+      if (key === 'z' && metaKey) {
+        this.history('undo');
+      } else if (key === 'y' && metaKey) {
+        this.history('redo');
+      } else if (key === 'Delete') {
+        this.focusList.forEach(uuid => {
+          this.$store.commit('editor/DELETE_ELEMENT', uuid);
+        });
+      }
+    };
+  },
+
   async mounted() {
     // 设置有效的拖拉拽区域
     this.SET_VALID_MOVE_AREA(this.$refs.canvasWrapper);
@@ -109,8 +142,8 @@ export default {
       this.$store.commit('editor/SET_FOCUSLIST', []);
     },
 
-    async history(type) {
-      await this.$store.dispatch(`editor/history/${type}`);
+    history(type) {
+      this.$store.dispatch(`editor/history/${type}`);
     },
 
     addPage() {
@@ -121,6 +154,32 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.tool-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .tool-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0 5px;
+    padding: 5px;
+    font-size: 13px;
+    cursor: pointer;
+
+    [class^=el-icon-] {
+      font-size: 18px;
+      font-weight: 700;
+    }
+  }
+
+  .tool-item:hover {
+    color: #409EFF;
+  }
+}
+
 .editor-wrapper {
   height: 100vh;
 }
