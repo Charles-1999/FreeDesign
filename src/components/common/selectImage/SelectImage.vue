@@ -4,7 +4,7 @@
       <div
         class="add-wrap"
         v-if="innerSelectList.length < limit"
-        @click="imgLibShow = true">
+        @click="openImgLib">
         <i class="el-icon-plus add-wrap-icon"></i>
       </div>
       <el-card
@@ -15,20 +15,15 @@
         <el-image
           :src="$config.cos.queryUrl + img.key_name"
           fit="contain"
-          @click="imgLibShow = true" />
+          @click="openImgLib" />
       </el-card>
     </div>
-
-    <fd-imglib
-      :show="imgLibShow"
-      :limit="limit"
-      :select-list="innerSelectList"
-      @close="handleLibClose"
-      @confirm="handleImgLibConfirm" />
   </div>
 </template>
 
 <script>
+import EventBus from '@utils/eventBus';
+
 export default {
   name: 'SelectImage',
 
@@ -50,8 +45,14 @@ export default {
     return {
       imgLibShow: false,
 
+      uuid: `SelectImage${Date.now()}`,
+
       innerSelectList: this.selectList
     };
+  },
+
+  created() {
+    EventBus.$on('imgLib-confirm', this.handleImgLibConfirm);
   },
 
   methods: {
@@ -65,10 +66,23 @@ export default {
     /**
      * 图片库选择图片事件
      */
-    handleImgLibConfirm(list) {
+    handleImgLibConfirm(caller, list) {
+      if (caller !== this.uuid) return;
+
       this.innerSelectList = list;
 
       this.$emit('change', list);
+    },
+
+    /**
+     * 打开图片库
+     */
+    openImgLib() {
+      EventBus.$emit('imgLib-show-change', true, {
+        caller: this.uuid,
+        selectList: this.innerSelectList,
+        limit: this.limit
+      });
     }
   }
 };

@@ -4,8 +4,7 @@
     width="740px"
     title="我的图片"
     :visible.sync='visible'
-    :destroy-on-close="true"
-    @close="handleClose">
+    :destroy-on-close="true">
     <!-- footer -->
     <div slot="footer" class="img-lib-footer">
       <el-button
@@ -34,7 +33,7 @@
       <!-- 图片 -->
       <div
         class="image-wrap"
-        :class="innerSelectList.map(_ => _.id).includes(img.id) && 'active-img'"
+        :class="selectList.map(_ => _.id).includes(img.id) && 'active-img'"
         v-for="img in imagesList"
         :key="img.id"
         @click="handleImgClick(img)">
@@ -64,55 +63,47 @@
 </template>
 
 <script>
+import EventBus from '@utils/eventBus';
 import { getUploadToken } from '@utils/cos.service';
 
 export default {
   name: 'ImgLib',
 
-  props: {
-    show: {
-      type: Boolean,
-      required: true,
-      default: false
-    },
-
-    limit: {
-      type: Number,
-      required: false,
-      default: 99
-    },
-
-    selectList: {
-      type: Array,
-      required: true,
-      default: () => []
-    }
-  },
-
   data() {
     return {
       visible: false,
 
-      uploadData: {},
-
+      // 图片库的照片
       imagesList: [],
 
-      innerSelectList: [...this.selectList]
+      // 调用者
+      caller: '',
+      // 选择上限
+      limit: 99,
+      // 选择的图片
+      selectList: [],
+
+      // 上传cos的数据
+      uploadData: {}
     };
   },
 
   watch: {
-    show(val) {
-      if (!val) return;
-
-      this.visible = val;
-      this.innerSelectList = [...this.selectList];
-    },
-
     visible(val) {
       // 如果显示了，就去请求接口
       if (val) this.getImageList();
     }
+  },
+
+  created() {
+    EventBus.$on('imgLib-show-change', (show, options) => {
+      const { caller, limit, selectList } = options;
+
+      this.visible = show;
+      this.caller = caller || '';
+      this.selectList = selectList || [];
+      this.limit = limit || 99;
+    });
   },
 
   methods: {
@@ -128,22 +119,22 @@ export default {
      * 点击图片事件
      */
     handleImgClick(img) {
-      const { innerSelectList, limit } = this;
-      const idx = innerSelectList.findIndex(_ => _.id === img.id);
+      const { selectList, limit } = this;
+      const idx = selectList.findIndex(_ => _.id === img.id);
 
       // 如果已被选择，则移除
       if (idx !== -1) {
-        innerSelectList.splice(idx, 1);
+        selectList.splice(idx, 1);
         return;
       }
 
       // 图片数量限制
-      if (innerSelectList.length >= limit) {
+      if (selectList.length >= limit) {
         this.$message({ message: `只能选择${limit}张图片`, type: 'warning' });
         return;
       }
 
-      innerSelectList.push(img);
+      selectList.push(img);
     },
 
     /**
@@ -159,13 +150,13 @@ export default {
      * 提交所选择的图片
      */
     confirm() {
-      const { innerSelectList, imagesList } = this;
+      const { selectList, imagesList, caller } = this;
 
       this.visible = false;
 
       // 处理图片url
       const returnList = imagesList
-        .filter(img => innerSelectList.map(_ => _.id).includes(img.id))
+        .filter(img => selectList.map(_ => _.id).includes(img.id))
         .map(_ => {
           if (!_.url) {
             _.url = this.$config.cos.queryUrl + _.key_name;
@@ -173,14 +164,8 @@ export default {
 
           return _;
         });
-      this.$emit('confirm', returnList);
-    },
 
-    /**
-     * 关闭图片库事件
-     */
-    handleClose() {
-      this.$emit('close', false);
+      EventBus.$emit('imgLib-confirm', caller, returnList);
     },
 
     /**
