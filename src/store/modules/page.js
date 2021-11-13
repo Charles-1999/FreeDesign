@@ -50,7 +50,8 @@ export default {
         idx
       });
 
-      context.commit('SET_CURR_PAGE_IDX', idx + 1);
+      const pageIdx = idx ? idx + 1 : context.state.currPageIdx + 1;
+      context.commit('SET_CURR_PAGE_IDX', pageIdx);
     },
 
     deletePage(context, uuid) {
