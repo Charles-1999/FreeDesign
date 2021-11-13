@@ -101,7 +101,7 @@ export default {
 
       this.visible = show;
       this.caller = caller || '';
-      this.selectList = selectList || [];
+      this.selectList = [...selectList] || [];
       this.limit = limit || 99;
     });
   },

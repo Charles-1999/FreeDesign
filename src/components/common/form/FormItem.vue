@@ -89,7 +89,7 @@ export default {
      * 处理图片change事件
      */
     handleImageChange(key, attr, val) {
-      this.innerForm[key] = val;
+      this.form[key] = val;
       this.$emit('change', { key, attr, val });
     }
   }

@@ -51,6 +51,12 @@ export default {
     };
   },
 
+  watch: {
+    selectList(val) {
+      this.innerSelectList = val;
+    }
+  },
+
   created() {
     EventBus.$on('imgLib-confirm', this.handleImgLibConfirm);
   },
