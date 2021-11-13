@@ -50,14 +50,23 @@ export default {
         idx
       });
 
-      context.commit('SET_CURR_PAGE_IDX', idx + 1);
+      const pageIdx = idx ? idx + 1 : context.state.currPageIdx + 1;
+      context.commit('SET_CURR_PAGE_IDX', pageIdx);
     },
 
     deletePage(context, uuid) {
+      const { currPageIdx, projectData } = context.state;
+      const pagesCount = projectData.pages.length;
+      const pageIdx = pagesCount <= currPageIdx ? pagesCount - 1 : currPageIdx;
+
+      // 1. 删除页面
       context.commit('DELETE_PAGE', uuid);
 
-      // 始终保持有一页
-      if (context.state.projectData.pages.length <= 0) {
+      // 2. 重新设置当前页索引
+      context.commit('SET_CURR_PAGE_IDX', pageIdx);
+
+      // 3. 始终保持有一页
+      if (projectData.pages.length <= 0) {
         context.dispatch('addPage', { page: {} });
       }
     },

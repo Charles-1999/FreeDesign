@@ -23,8 +23,8 @@ const instance = axios.create({
  */
 const handleRequestError = (status, errcode, msg, noEmit) => {
   switch (errcode) {
+    case 5006:
     case 5007:
-      // 尚未登录
       if (!noEmit) showMessage(msg);
       break;
   }

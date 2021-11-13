@@ -3,7 +3,7 @@ import App from './App.vue';
 
 // 路由
 import routerFn from './router';
-import { routerTitle } from './plugins/router.plugins';
+import { routerHandler } from './plugins/router.plugin';
 
 // vuex
 import store from './store';
@@ -40,7 +40,7 @@ const pagesRouters = require.context(
 );
 
 const router = routerFn({ pagesRouters });
-routerTitle(router);
+routerHandler(router, store);
 
 Vue.config.productionTip = false;
 

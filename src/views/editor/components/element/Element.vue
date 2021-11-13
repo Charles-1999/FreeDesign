@@ -9,7 +9,8 @@
       class="canvas-comp"
       :style="formatStyle(data.compStyle)"
       :is="`lib-${data.component}`"
-      v-bind="data.props" />
+      v-bind="data.props"
+      @change="handleElementPropsChange" />
 
     <!-- 缩放点 -->
     <template v-if="active">
@@ -69,8 +70,7 @@ export default {
   computed: {
     ...mapState({
       focusList: state => state.editor.focusList,
-      validMoveArea: state => state.editor.validMoveArea,
-      currPageIdx: state => state.editor.currPageIdx
+      validMoveArea: state => state.editor.validMoveArea
     }),
     ...mapGetters('editor', [
       'getElementByUUID'
@@ -265,6 +265,34 @@ export default {
       };
 
       return formatStyle(style);
+    },
+
+    /**
+     * 处理元素props change事件
+     */
+    handleElementPropsChange(props) {
+      const { uuid, component } = this.data;
+      let setProps = props;
+
+      // 1. 加载组件的配置文件
+      const libComp = require.context(
+        // 其组件目录的相对路径
+        '../../../../components/lib',
+        // 是否查询其子目录
+        true,
+        // 匹配基础组件文件名的正则表达式
+        /\.\/(\w+\/config\.js$)/
+      );
+      const fileName = component.replace(component[0], component[0].toUpperCase());
+      const compConfig = libComp(`./${fileName}/config.js`);
+      const { propsHandler } = compConfig;
+
+      // 对组件的props进行处理
+      if (propsHandler) {
+        setProps = propsHandler(props);
+      }
+
+      this.$store.commit('editor/UPDATE_ELEMENT', { uuid, props: setProps });
     }
   }
 };

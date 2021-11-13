@@ -3,9 +3,10 @@
     <div class="plist-container">
       <ProjectCard type="create" />
       <div
-        v-for="(item, index) of 19"
-        :key="index">
-        <ProjectCard />
+        v-for="item of projectList"
+        :key="item.id">
+        <ProjectCard
+          :id="item.id" />
       </div>
     </div>
   </div>
@@ -13,10 +14,34 @@
 
 <script>
 import ProjectCard from '../../components/ProjectCard.vue';
+
 export default {
   name: 'ProjectList',
+
   components: {
     ProjectCard
+  },
+
+  data() {
+    return {
+      projectList: []
+    };
+  },
+
+  created() {
+    this.getList();
+  },
+
+  methods: {
+    async getList() {
+      const { pages } = await this.$http.get('/page/list', {
+        params: {
+          page_mode: '1'
+        }
+      });
+
+      this.projectList = pages;
+    }
   }
 };
 </script>

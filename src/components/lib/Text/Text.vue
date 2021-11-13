@@ -1,6 +1,5 @@
 <template>
-  <div
-    :style="defaultStyle">
+  <div>
     <span
       ref="span"
       @dblclick="handleDbClick"
@@ -51,7 +50,12 @@ export default {
       const text = this.$refs.span.innerHTML;
 
       this.innerText = text;
-      this.$emit('change', text);
+
+      const props = {
+        text
+      };
+
+      this.$emit('change', props);
     }
   }
 };

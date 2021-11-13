@@ -1,6 +1,35 @@
 <template>
   <div class="editor-wrapper">
-    <fd-header />
+    <fd-header>
+      <div
+        class="tool-bar"
+        slot="page-header-middle">
+        <div
+          class="tool-item"
+          @click="history('undo')">
+          <i class="el-icon-refresh-left"></i>
+          <span>撤销</span>
+        </div>
+        <div
+          class="tool-item"
+          @click="history('redo')">
+          <i class="el-icon-refresh-right"></i>
+          <span>重做</span>
+        </div>
+        <div
+          class="tool-item"
+          @click="playAnimation">
+          <i class="el-icon-refresh-right"></i>
+          <span>播放</span>
+        </div>
+        <div
+          class="tool-item"
+          @click="save">
+          <i class="el-icon-save"></i>
+          <span>保存</span>
+        </div>
+      </div>
+    </fd-header>
     <div class="middle">
       <!-- 侧边栏 -->
       <el-tabs
@@ -59,11 +88,15 @@
         </el-tabs>
       </div>
     </div>
+
+    <!-- 图片库 -->
+    <fd-imglib />
   </div>
 </template>
 
 <script>
 import { mapGetters, mapMutations, mapState } from 'vuex';
+import EventBus from '@utils/eventBus';
 
 import Canvas from './components/canvas/Canvas.vue';
 import ComponentLib from './components/componentLib/ComponentLibs.vue';
@@ -84,6 +117,12 @@ export default {
     AnimationEditor
   },
 
+  data() {
+    return {
+      id: undefined
+    };
+  },
+
   computed: {
     ...mapState({
       focusList: state => state.editor.focusList,
@@ -91,8 +130,19 @@ export default {
       currPageIdx: state => state.editor.currPageIdx
     }),
     ...mapGetters('editor', [
-      'getElementByUUID'
+      'getElementByUUID',
+      'currPage'
     ])
+  },
+
+  created() {
+    const { id } = this.$route.query;
+    this.id = Number(id);
+
+    // 初始化
+    this.init();
+
+    this.editorListenerHandler();
   },
 
   async mounted() {
@@ -105,22 +155,127 @@ export default {
       'SET_VALID_MOVE_AREA'
     ]),
 
+    /**
+     * 初始化
+     */
+    init() {
+      const { id } = this;
+
+      // 默认打开第一个页面
+      this.$store.commit('editor/SET_CURR_PAGE_IDX', 0);
+
+      // 如果有id，获取项目数据
+      if (id) {
+        this.getProjectData();
+        return;
+      }
+
+      // 初始化项目数据
+      this.$store.commit('editor/INIT_PROJECT_DATA');
+    },
+
+    /**
+     * 获取项目数据
+     */
+    async getProjectData() {
+      const { pages } = await this.$http.get('/page/' + this.id);
+
+      this.$store.commit('editor/UPDATE_PROJECT_DATA', {
+        pages
+      });
+    },
+
+    /**
+     * 页面键盘快捷键
+     */
+    editorListenerHandler() {
+      document.onkeydown = (e) => {
+        const { key, metaKey } = e;
+
+        if (key === 'z' && metaKey) {
+          this.history('undo');
+        } else if (key === 'y' && metaKey) {
+          this.history('redo');
+        } else if (key === 'Delete') {
+          this.focusList.forEach(uuid => {
+            this.$store.commit('editor/DELETE_ELEMENT', uuid);
+          });
+        }
+      };
+    },
+
     handleCanvasWrapperClick() {
       this.$store.commit('editor/SET_FOCUSLIST', []);
     },
 
-    async history(type) {
-      await this.$store.dispatch(`editor/history/${type}`);
+    history(type) {
+      this.$store.dispatch(`editor/history/${type}`);
     },
 
-    addPage() {
-      this.$store.dispatch('editor/addPage', {});
+    playAnimation() {
+      const { currPage } = this;
+
+      currPage.elements.forEach(ele => {
+        EventBus.$emit('RunAnimation', ele.uuid, ele.animations);
+      });
+    },
+
+    /**
+     * 保存项目
+     */
+    async save() {
+      const { id, projectData } = this;
+      const { pageMode, pages, title, height, width, scale } = projectData;
+
+      const requestData = {
+        page_mode: pageMode,
+        pages: JSON.stringify(pages),
+        title,
+        description: '',
+        width,
+        height,
+        scale
+      };
+
+      // 有id，就是修改
+      if (this.id) {
+        await this.$http.put('/page/' + id, requestData);
+      } else {
+        // 没id，新建页面
+        await this.$http.post('/page', requestData);
+      }
     }
   }
 };
 </script>
 
 <style lang="less" scoped>
+.tool-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .tool-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0 5px;
+    padding: 5px;
+    font-size: 13px;
+    cursor: pointer;
+
+    [class^=el-icon-] {
+      font-size: 18px;
+      font-weight: 700;
+    }
+  }
+
+  .tool-item:hover {
+    color: #409EFF;
+  }
+}
+
 .editor-wrapper {
   height: 100vh;
 }
@@ -138,7 +293,7 @@ export default {
 
 .middle {
   display: flex;
-  height: calc(100vh - 6rem);
+  height: calc(100vh - 60px);
 }
 
 .side-bar {

@@ -24,6 +24,7 @@
         <el-button
           class="login-form-btn"
           type="primary"
+          :loading="loading"
           @click="handleLogin">
           登录
         </el-button>
@@ -39,11 +40,12 @@
 </template>
 
 <script>
-import { ACCOUNT } from '@apis/index.js';
+// import { ACCOUNT } from '@apis';
 export default {
   name: 'LoginCard',
   data() {
     return {
+      loading: false,
       loginForm: {
         email: '',
         password: ''
@@ -60,10 +62,22 @@ export default {
   },
   methods: {
     async handleLogin() {
-      const res = await this.$http.post(ACCOUNT.LOGIN, this.loginForm);
-      console.log(res);
-      this.$router.push('/home');
+      const { needRedirect = {} } = this.$route.query;
+
+      try {
+        this.loading = true;
+
+        // 执行登录
+        await this.$store.dispatch('auth/login', this.loginForm);
+
+        // 路由重定向
+        const path = needRedirect.path || '/home';
+        this.$router.push(path);
+      } finally {
+        this.loading = false;
+      }
     },
+
     changeRegister() {
       this.$emit('setRegister');
     }

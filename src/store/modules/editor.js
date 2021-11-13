@@ -1,3 +1,5 @@
+import Vue from 'vue';
+
 import history from './editor-history';
 import project from './project';
 
@@ -23,7 +25,7 @@ export default {
         pageStyle: { ...pageCommonStyle },
         config: {}
       }],
-      pageModel: 0
+      pageMode: 1
     },
 
     currPageIdx: 0,
@@ -42,6 +44,36 @@ export default {
 
     ADD_FOCUS(state, uuid) {
       state.focusList.push(uuid);
+    },
+
+    // --------------- projectData ---------------
+    INIT_PROJECT_DATA(state, payload) {
+      const initData = {
+        title: '',
+        width: 375,
+        height: 645,
+        scale: 1,
+        pages: [{
+          uuid: Date.now(),
+          elements: [],
+          pageStyle: { ...pageCommonStyle },
+          config: {}
+        }],
+        pageMode: 1
+      };
+
+      Vue.set(state, 'projectData', initData);
+    },
+
+    UPDATE_PROJECT_DATA(state, payload) {
+      const { projectData } = state;
+
+      const newProjectData = {
+        ...projectData,
+        ...payload
+      };
+
+      Vue.set(state, 'projectData', newProjectData);
     },
 
     // --------------- 有效拖拽区域 ---------------

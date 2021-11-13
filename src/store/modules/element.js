@@ -19,15 +19,20 @@ export default {
     },
 
     UPDATE_ELEMENT(state, payload) {
+      const { projectData, currPageIdx } = state;
+      const currPage = projectData.pages[currPageIdx];
       const { uuid } = payload;
-      const index = state.eleSchema.findIndex(_ => _.uuid === uuid);
+
+      const index = currPage.elements.findIndex(_ => _.uuid === uuid);
 
       const element = {
-        ...state.eleSchema[index],
+        ...currPage.elements[index],
         ...payload
       };
 
-      Vue.set(state.eleSchema, index, element);
+      console.log(element);
+
+      Vue.set(currPage.elements, index, element);
     },
 
     // --------------- 元素样式 ---------------

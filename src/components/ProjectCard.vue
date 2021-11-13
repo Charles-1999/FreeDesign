@@ -10,6 +10,7 @@
 <script>
 export default {
   name: 'ProjectCard',
+
   props: {
     imgUrl: {
       type: String,
@@ -20,11 +21,22 @@ export default {
       type: String,
       require: false,
       default: 'edit'
+    },
+
+    id: {
+      type: Number,
+      required: false,
+      default: undefined
     }
   },
   methods: {
     go() {
-      this.$router.push('/editor');
+      this.$router.push({
+        name: 'Editor',
+        query: {
+          id: this.id
+        }
+      });
     }
   }
 };

@@ -1,6 +1,16 @@
 <template>
   <div class="page-list-wrap">
+    <div class="page-list-header">
+      <el-button
+        type="primary"
+        size="small"
+        icon="el-icon-plus"
+        @click="addPage()">
+        添加页面
+      </el-button>
+    </div>
     <div class="page-list">
+      <!-- 页面显示 -->
       <div
         class="page-wrap"
         :class="idx === currPageIdx && 'curr-page'"
@@ -20,27 +30,39 @@
             }"
             :page="page"
             :preview="true" />
-          <el-button
-            v-show="mouseOnPage === idx"
-            size="mini"
-            circle
-            icon="el-icon-plus"
-            @click.stop="addPage(idx)" />
+          <el-tooltip
+            content="添加页面"
+            placement="right">
+            <el-button
+              v-show="mouseOnPage === idx"
+              size="mini"
+              circle
+              icon="el-icon-plus"
+              @click.stop="addPage(idx)" />
+          </el-tooltip>
         </div>
         <div
           class="btn-wrap">
-          <el-button
-            size="mini"
-            circle
-            icon="el-icon-document-copy"
-            @click.stop="copyPage(page, idx)"
-            v-show="mouseOnPage === idx" />
-          <el-button
-            size="mini"
-            circle
-            icon="el-icon-delete"
-            @click.stop="deletePage(page)"
-            v-show="mouseOnPage === idx" />
+          <el-tooltip
+            content="复制页面"
+            placement="right">
+            <el-button
+              size="mini"
+              circle
+              icon="el-icon-document-copy"
+              @click.stop="copyPage(page, idx)"
+              v-show="mouseOnPage === idx" />
+          </el-tooltip>
+           <el-tooltip
+            content="删除页面"
+            placement="right">
+            <el-button
+              size="mini"
+              circle
+              icon="el-icon-delete"
+              @click.stop="deletePage(page)"
+              v-show="mouseOnPage === idx" />
+          </el-tooltip>
         </div>
       </div>
     </div>
@@ -135,9 +157,16 @@ export default {
   height: 98%;
 }
 
+.page-list-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+  border-bottom: 1px solid #eee;
+}
+
 .page-list {
-  height: 100%;
-  padding-bottom: 20px;
+  height: calc(100% - 50px);
   overflow: scroll;
 }
 
@@ -145,17 +174,16 @@ export default {
   display: flex;
   align-items: center;
   justify-content:space-around;
-  margin-top: 30px;
+  margin: 15px 0 30px;
 
   .index {
     width: 26px;
     height: 26px;
     text-align: center;
-    background-color: #fff;
-    border: 1px solid #409EFF;
+    background-color: #ccc;
     border-radius: 50%;
     line-height: 26px;
-    color: #409EFF;
+    color: #fff;
     box-sizing: border-box;
   }
 
@@ -201,7 +229,6 @@ export default {
 .page-wrap.curr-page {
   .index {
     background-color: #409EFF;
-    color: #fff;
   }
 
   .canvas {
