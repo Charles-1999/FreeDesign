@@ -130,7 +130,9 @@ export default {
 
 <style lang="less" scoped>
 .page-list-wrap {
-  height: 100%;
+  // box-sizing: content-box;
+  // overflow: auto;
+  height: 98%;
 }
 
 .page-list {
