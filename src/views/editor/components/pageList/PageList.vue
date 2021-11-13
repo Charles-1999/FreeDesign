@@ -30,27 +30,39 @@
             }"
             :page="page"
             :preview="true" />
-          <el-button
-            v-show="mouseOnPage === idx"
-            size="mini"
-            circle
-            icon="el-icon-plus"
-            @click.stop="addPage(idx)" />
+          <el-tooltip
+            content="添加页面"
+            placement="right">
+            <el-button
+              v-show="mouseOnPage === idx"
+              size="mini"
+              circle
+              icon="el-icon-plus"
+              @click.stop="addPage(idx)" />
+          </el-tooltip>
         </div>
         <div
           class="btn-wrap">
-          <el-button
-            size="mini"
-            circle
-            icon="el-icon-document-copy"
-            @click.stop="copyPage(page, idx)"
-            v-show="mouseOnPage === idx" />
-          <el-button
-            size="mini"
-            circle
-            icon="el-icon-delete"
-            @click.stop="deletePage(page)"
-            v-show="mouseOnPage === idx" />
+          <el-tooltip
+            content="复制页面"
+            placement="right">
+            <el-button
+              size="mini"
+              circle
+              icon="el-icon-document-copy"
+              @click.stop="copyPage(page, idx)"
+              v-show="mouseOnPage === idx" />
+          </el-tooltip>
+           <el-tooltip
+            content="删除页面"
+            placement="right">
+            <el-button
+              size="mini"
+              circle
+              icon="el-icon-delete"
+              @click.stop="deletePage(page)"
+              v-show="mouseOnPage === idx" />
+          </el-tooltip>
         </div>
       </div>
     </div>
