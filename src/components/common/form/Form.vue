@@ -80,7 +80,7 @@ export default {
 .attr-item {
   display: flex;
   align-items: flex-start;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 
   .label {
     width: 100px;

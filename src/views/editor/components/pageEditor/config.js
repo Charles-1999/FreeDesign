@@ -6,7 +6,7 @@ export const pageStyleFormConfig = {
 
   backgroundImage: {
     label: '背景图片',
-    type: 'selectimage',
+    type: 'selectImage',
     config: {
       limit: 1
     }

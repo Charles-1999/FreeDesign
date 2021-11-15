@@ -41,7 +41,7 @@ export default {
 
       compFormConfig: {},
 
-      activeCollapse: [0, 1, 2]
+      activeCollapse: [0, 1, 2, 3]
     };
   },
 
@@ -132,6 +132,8 @@ export default {
 <style lang="less" scoped>
 .attr-editor {
   width: 100%;
+  height: 100%;
+  overflow: auto;
   padding: 0 10px;
 }
 </style>

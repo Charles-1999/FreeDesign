@@ -88,13 +88,19 @@ export default {
       if (multi) {
         this.$store.commit('editor/ADD_FOCUS', uuid);
       } else {
-        console.log('onActiveChange');
         this.$store.commit('editor/SET_FOCUSLIST', [uuid]);
       }
+
+      this.$emit('element-active-change');
     },
 
+    /**
+     * 画布点击事件
+     */
     handleCanvasClick() {
       this.$store.commit('editor/SET_FOCUSLIST', []);
+
+      this.$emit('element-active-change');
     },
 
     /**
