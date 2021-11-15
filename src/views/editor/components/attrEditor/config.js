@@ -69,6 +69,14 @@ const background = {
     label: '背景颜色',
     type: 'color',
     default: undefined
+  },
+  backgroundImage: {
+    label: '背景图片',
+    type: 'selectImage',
+    default: [],
+    config: {
+      limit: 1
+    }
   }
 };
 

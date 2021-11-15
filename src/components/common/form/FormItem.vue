@@ -19,7 +19,7 @@
 
     <!-- 选择图片 -->
     <fd-selectimage
-      v-if="config.type === 'selectimage'"
+      v-if="config.type === 'selectImage'"
       v-bind="config.config"
       :select-list="form[formKey]"
       @change="handleImageChange(formKey, config, $event)" />

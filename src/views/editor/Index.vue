@@ -51,7 +51,9 @@
       </el-tabs>
 
       <!-- 页面编辑区 -->
-      <div class="editor-main">
+      <div
+        class="editor-main"
+        @click.self="handleCanvasWrapperClick">
         <div
           class="editor-canvas-wrapper"
           :style="{
@@ -59,8 +61,7 @@
             width: projectData.width + 'px',
             height: projectData.height + 'px',
           }"
-          ref="canvasWrapper"
-          @click.self="handleCanvasWrapperClick">
+          ref="canvasWrapper">
           <Canvas />
         </div>
       </div>
@@ -310,5 +311,11 @@ export default {
 .attr-editor-wrapper {
   width: 350px;
   padding: 0 20px;
+
+  ::v-deep.title {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
 }
 </style>
