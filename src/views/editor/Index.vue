@@ -311,6 +311,8 @@ export default {
 
 .editor-main {
   flex: 1;
+  width: 100%;
+  overflow: auto;
   background-color: #efefef;
 }
 

@@ -125,7 +125,7 @@ export default {
   }
 
   .el-input-number--mini {
-    width: 90px;
+    width: 100px;
   }
 }
 

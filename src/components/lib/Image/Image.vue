@@ -1,7 +1,7 @@
 <template>
   <div
     class="image-wrap"
-    @dblclick="handleDBClick">
+    @dblclick="openImgLib">
     <el-image
       :src="innerUrl"
       fit="contain" />
@@ -47,7 +47,7 @@ export default {
   },
 
   methods: {
-    handleDBClick() {
+    openImgLib() {
       EventBus.$emit('imgLib-show-change', true, {
         caller: this.uuid,
         limit: 1,
