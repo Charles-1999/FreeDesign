@@ -27,7 +27,7 @@ const routes = [
     children: [
       // 项目列表
       {
-        path: '',
+        path: '/home',
         name: 'ProjectList',
         meta: {
           title: '项目列表',
