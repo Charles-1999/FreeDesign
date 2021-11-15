@@ -3,7 +3,8 @@
     class="image-wrap"
     @dblclick="handleDBClick">
     <el-image
-      :src="innerUrl" />
+      :src="innerUrl"
+      fit="contain" />
   </div>
 </template>
 
@@ -15,10 +16,10 @@ export default {
   name: 'LibImage',
 
   props: {
-    url: {
-      type: String,
+    images: {
+      type: Array,
       required: false,
-      default: ''
+      default: () => []
     }
   },
 
@@ -26,7 +27,7 @@ export default {
     return {
       uuid: `Image${Date.now()}`,
 
-      innerUrl: this.url,
+      innerUrl: (this.images[0] || {}).url || '',
 
       imgLibShow: false,
       innerSelectList: [],
@@ -36,8 +37,8 @@ export default {
   },
 
   watch: {
-    url(val) {
-      this.innerUrl = val;
+    images(val) {
+      this.innerUrl = (val[0] || {}).url || '';
     }
   },
 
@@ -49,15 +50,9 @@ export default {
     handleDBClick() {
       EventBus.$emit('imgLib-show-change', true, {
         caller: this.uuid,
-        limit: 1
+        limit: 1,
+        selectList: []
       });
-    },
-
-    /**
-     * 图片库关闭事件
-     */
-    handleLibClose(val) {
-      this.imgLibShow = val;
     },
 
     /**
@@ -66,7 +61,9 @@ export default {
     handleImgLibConfirm(caller, list) {
       if (caller !== this.uuid) return;
 
-      this.$emit('change', list);
+      this.$emit('change', {
+        images: list
+      });
     }
   }
 };
