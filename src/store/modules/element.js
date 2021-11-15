@@ -104,7 +104,7 @@ export default {
       const fileName = component.replace(component[0], component[0].toUpperCase());
       const compConfig = libComp(`./${fileName}/config.js`);
 
-      const { defaultStyle } = compConfig;
+      const { defaultStyle, defaultProps } = compConfig;
       element.compStyle = {
         ...compCommonStyle,
         ...defaultStyle
@@ -112,6 +112,9 @@ export default {
 
       // 2. 动画列表
       element.animations = element.animations || [];
+
+      // 3. 组件默认props
+      element.props = JSON.parse(JSON.stringify(defaultProps));
 
       // 3. 添加元素
       context.commit('ADD_ELEMENT', element);
