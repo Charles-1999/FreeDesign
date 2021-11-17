@@ -24,7 +24,7 @@ export default {
       menuList: [
         {
           icon: 'el-icon-document',
-          title: '我的H5',
+          title: '我的作品',
           to: '/home'
         },
         {

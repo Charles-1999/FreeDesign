@@ -1,7 +1,7 @@
 <template>
   <div class="pcard-item-wrapper" @click="go">
     <el-card class="pcard-item-container" shadow='hover' :body-style="{padding: 0}">
-      <i class="el-icon-circle-plus-outline" :style="{fontSize: '100px', fontWeight: '100'}" v-if="type === 'create'" />
+      <i class="el-icon-circle-plus-outline" :style="{fontSize: '100px', fontWeight: '100'}" v-if="id === undefined" />
       <img v-else :src="imgUrl" alt="cover" />
     </el-card>
   </div>
@@ -17,16 +17,14 @@ export default {
       required: false,
       default: require('../assets/logo.png')
     },
-    type: {
-      type: String,
-      require: false,
-      default: 'edit'
-    },
-
     id: {
       type: Number,
       required: false,
       default: undefined
+    },
+    mode: {
+      type: Number,
+      required: true
     }
   },
   methods: {
@@ -34,7 +32,8 @@ export default {
       this.$router.push({
         name: 'Editor',
         query: {
-          id: this.id
+          id: this.id,
+          page_mode: this.mode
         }
       });
     }
