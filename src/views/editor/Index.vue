@@ -28,6 +28,12 @@
           <i class="el-icon-save"></i>
           <span>保存</span>
         </div>
+        <div
+          class="tool-item"
+          @click="template">
+          <i class="el-icon-save"></i>
+          <span>存为模版</span>
+        </div>
       </div>
     </fd-header>
     <div class="middle">
@@ -38,15 +44,21 @@
         value="page">
         <el-tab-pane name="comp">
           <span slot="label">
-            <i></i> 基础组件
+            <i></i> 组件
           </span>
           <ComponentLib />
         </el-tab-pane>
         <el-tab-pane name="page">
           <span slot="label">
-            <i></i> 页面管理
+            <i></i> 页面
           </span>
           <PageList />
+        </el-tab-pane>
+        <el-tab-pane name="material">
+          <span slot="label">
+            <i></i> 素材
+          </span>
+          <MaterialLib />
         </el-tab-pane>
       </el-tabs>
 
@@ -65,6 +77,7 @@
           <Canvas
             @element-active-change="handleElementActiveChange" />
         </div>
+        <ComponentTool />
       </div>
 
       <!-- 属性编辑区 -->
@@ -101,9 +114,11 @@ import { mapGetters, mapMutations, mapState } from 'vuex';
 import EventBus from '@utils/eventBus';
 
 import Canvas from './components/canvas/Canvas.vue';
+import ComponentTool from './components/componentTool/ComponentTool.vue';
 import ComponentLib from './components/componentLib/ComponentLibs.vue';
 import PageList from './components/pageList/PageList.vue';
 import PageEditor from './components/pageEditor/PageEditor.vue';
+import MaterialLib from './components/materialLib/MaterialLib.vue';
 import AttrEditor from './components/attrEditor/AttrEditor.vue';
 import AnimationEditor from './components/animationEditor/AnimationEditor.vue';
 
@@ -112,9 +127,11 @@ export default {
 
   components: {
     Canvas,
+    ComponentTool,
     ComponentLib,
     PageList,
     PageEditor,
+    MaterialLib,
     AttrEditor,
     AnimationEditor
   },
@@ -184,10 +201,10 @@ export default {
      * 获取项目数据
      */
     async getProjectData() {
-      const { pages } = await this.$http.get('/page/' + this.id);
+      const { pages, width, height } = await this.$http.get('/page/' + this.id);
 
       this.$store.commit('editor/UPDATE_PROJECT_DATA', {
-        pages
+        pages, width, height
       });
     },
 
@@ -273,6 +290,12 @@ export default {
       } catch (err) {
         this.$message({ message: '保存失败，请重新尝试', type: 'error' });
       }
+    },
+
+    async template() {
+      await this.$http.post('/page/set_template/' + this.id, {
+        category_id: 2
+      });
     }
   }
 };
