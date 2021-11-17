@@ -296,7 +296,8 @@ export default {
 
     async template() {
       await this.$http.post('/page/set_template/' + this.id, {
-        category_id: 2
+        // category_id: 2
+        // TODO 选择保存到的分类，undefined为不分类，默认
       });
     }
   }
