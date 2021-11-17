@@ -77,7 +77,7 @@
           <Canvas
             @element-active-change="handleElementActiveChange" />
         </div>
-        <ComponentTool />
+        <ComponentTool v-if="focusList.length === 1" />
       </div>
 
       <!-- 属性编辑区 -->
@@ -231,6 +231,8 @@ export default {
      * 画布外的点击事件
      */
     handleCanvasWrapperClick() {
+      if (!this.focusList.length) return;
+
       this.$store.commit('editor/SET_FOCUSLIST', []);
 
       this.currAttrEditor = 'page';
@@ -334,6 +336,7 @@ export default {
 
 .editor-main {
   flex: 1;
+  position: relative;
   width: 100%;
   overflow: auto;
   background-color: #efefef;

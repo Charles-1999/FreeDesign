@@ -107,17 +107,23 @@ export default {
       const { defaultStyle, defaultProps } = compConfig;
       element.compStyle = {
         ...compCommonStyle,
-        ...defaultStyle
+        ...defaultStyle,
+        ...element.compStyle
       };
 
       // 2. 动画列表
       element.animations = element.animations || [];
 
       // 3. 组件默认props
-      element.props = JSON.parse(JSON.stringify(defaultProps));
+      if (!element.props) {
+        element.props = JSON.parse(JSON.stringify(defaultProps));
+      }
 
       // 3. 添加元素
       context.commit('ADD_ELEMENT', element);
+
+      // 4. 改变当前选中的元素
+      context.commit('SET_FOCUSLIST', [element.uuid]);
     },
 
     /**

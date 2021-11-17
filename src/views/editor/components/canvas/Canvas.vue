@@ -98,6 +98,8 @@ export default {
      * 画布点击事件
      */
     handleCanvasClick() {
+      if (!this.focusList.length) return;
+
       this.$store.commit('editor/SET_FOCUSLIST', []);
 
       this.$emit('element-active-change');
