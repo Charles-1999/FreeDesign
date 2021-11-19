@@ -41,7 +41,7 @@
       <el-tabs
         class="side-bar"
         tab-position="left"
-        value="page">
+        value="comp">
         <el-tab-pane name="comp">
           <span slot="label">
             <i></i> 组件
@@ -221,7 +221,7 @@ export default {
           this.history('redo');
         } else if (key === 'Delete') {
           this.focusList.forEach(uuid => {
-            this.$store.commit('editor/DELETE_ELEMENT', uuid);
+            this.$store.dispatch('editor/removeElement', { uuid });
           });
         }
       };

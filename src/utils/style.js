@@ -39,6 +39,14 @@ export const compCommonStyle = {
 };
 
 /**
+ * element元素的公共基础样式 eleStyle
+ */
+export const eleCommonStyle = {
+  // 层级
+  zIndex: 100
+};
+
+/**
  * 格式化样式对象
  * @param {object} style style
  * @return {object} 格式化后的样式对象
@@ -75,5 +83,6 @@ export const formatStyle = (style) => {
 
 export default {
   compCommonStyle,
+  eleCommonStyle,
   formatStyle
 };
