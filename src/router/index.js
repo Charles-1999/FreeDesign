@@ -37,10 +37,20 @@ const routes = [
       },
       {
         // 模板库
+        path: 'my-template',
+        name: 'MyTemplate',
+        meta: {
+          title: '我的模板',
+          needLogin: true
+        },
+        component: () => import('../views/my-template/Index.vue')
+      },
+      {
+        // 模板库
         path: 'template-list',
         name: 'TemplateList',
         meta: {
-          title: '模板库',
+          title: '模板市场',
           needLogin: true
         },
         component: () => import('../views/template-list/Index.vue')
