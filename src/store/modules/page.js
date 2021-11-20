@@ -32,6 +32,17 @@ export default {
   actions: {
     ...element.actions,
 
+    setPages(context, pages) {
+      const { focusList, currPageIdx } = context.state;
+
+      // 如果新的改动找不到当前聚焦的元素，就需要清空focusList
+      if (!pages[currPageIdx].elements.find(_ => _.uuid === focusList[0])) {
+        context.commit('SET_FOCUSLIST', []);
+      }
+
+      context.commit('SET_PAGES', pages);
+    },
+
     addPage(context, { page, idx }) {
       const { elements = [], pageStyle = {}, config = {} } = page;
 

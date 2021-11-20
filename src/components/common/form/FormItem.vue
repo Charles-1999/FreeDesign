@@ -19,7 +19,7 @@
 
     <!-- 选择图片 -->
     <fd-selectimage
-      v-if="config.type === 'selectimage'"
+      v-if="config.type === 'selectImage'"
       v-bind="config.config"
       :select-list="form[formKey]"
       @change="handleImageChange(formKey, config, $event)" />
@@ -125,7 +125,7 @@ export default {
   }
 
   .el-input-number--mini {
-    width: 90px;
+    width: 100px;
   }
 }
 

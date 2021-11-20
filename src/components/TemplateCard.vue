@@ -2,15 +2,16 @@
   <div class="pcard-item-wrapper" @click="go">
     <el-card class="pcard-item-container" shadow='hover' :body-style="{padding: 0}">
       <i class="el-icon-circle-plus-outline" :style="{fontSize: '100px', fontWeight: '100'}" v-if="id === undefined" />
-      <img v-else :src="imgUrl" alt="cover" />
+      <img v-else :src="imgUrl ? imgUrl : defaultCover" alt="cover" />
     </el-card>
   </div>
 </template>
 
 <script>
-export default {
-  name: 'ProjectCard',
+import { TEMPLATE } from '@apis/template';
 
+export default {
+  name: 'TemplateCard',
   props: {
     imgUrl: {
       type: String,
@@ -19,21 +20,24 @@ export default {
     },
     id: {
       type: Number,
-      required: false,
-      default: undefined
-    },
-    mode: {
-      type: Number,
       required: true
     }
   },
+  data() {
+    return {
+      defaultCover: require('../assets/logo.png')
+    };
+  },
   methods: {
-    go() {
+    async go() {
+      const { id: pid } = this;
+      const res = await this.$http.post(`${TEMPLATE.COPY}/${pid}`);
+      const { id: resId } = res;
+      console.log(resId);
       this.$router.push({
         name: 'Editor',
         query: {
-          id: this.id,
-          page_mode: this.mode
+          id: resId
         }
       });
     }
@@ -43,7 +47,7 @@ export default {
 
 <style lang="less" scoped>
 .pcard-item-wrapper {
-  margin: 2rem 1.5rem;
+  margin: 4px;
   cursor: pointer;
   .pcard-item-container {
     width: 160px;

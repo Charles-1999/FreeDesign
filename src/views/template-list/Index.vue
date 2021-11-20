@@ -24,21 +24,21 @@ export default {
       templateList: []
     };
   },
-  mounted() {
-    const getList = async () => {
+  created() {
+    this.getList();
+  },
+  methods: {
+    async getList() {
       const list = await this.$http.get(TEMPLATE.PUBLIC);
       const { templates } = list;
       const ids = templates.map((template) => {
         return template.id;
       });
-      console.log(ids);
       const mget = await this.$http.post(TEMPLATE.MGET, {
         ids
       });
-      console.log(mget);
       this.templateList = mget;
-    };
-    getList();
+    }
   }
 };
 </script>

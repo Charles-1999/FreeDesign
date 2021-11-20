@@ -5,10 +5,22 @@
       :default-active="activeIndex"
       :collapse="isCollapse"
       :router="true">
-      <el-menu-item v-for="item of menuList" :key="item.title" :index="item.to">
-        <i :class="[item.icon, 'menu-icon']" />
-        <span class="text" slot="title">{{item.title}}</span>
+      <el-menu-item index="/home">
+        <i class="el-icon-document menu-icon" />
+        <span class="text" slot="title">我的作品</span>
       </el-menu-item>
+      <el-submenu index="/home/template">
+        <template slot="title">
+          <i class="el-icon-edit-outline menu-icon" />
+          <span class="text" slot="title">模板库</span>
+        </template>
+        <el-menu-item index="/home/my-template">
+          <span class="text" slot="title">我的模板</span>
+        </el-menu-item>
+        <el-menu-item index="/home/template-list">
+          <span class="text" slot="title">模板市场</span>
+        </el-menu-item>
+      </el-submenu>
     </el-menu>
   </el-aside>
 </template>
@@ -20,19 +32,7 @@ export default {
     return {
       screenWidth: document.body.clientWidth,
       isCollapse: false,
-      activeIndex: '/',
-      menuList: [
-        {
-          icon: 'el-icon-document',
-          title: '我的H5',
-          to: '/home'
-        },
-        {
-          icon: 'el-icon-edit-outline',
-          title: '模板库',
-          to: '/home/template-list'
-        }
-      ]
+      activeIndex: '/'
     };
   },
   mounted() {

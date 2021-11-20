@@ -28,6 +28,12 @@
           <i class="el-icon-save"></i>
           <span>保存</span>
         </div>
+        <div
+          class="tool-item"
+          @click="template">
+          <i class="el-icon-save"></i>
+          <span>存为模版</span>
+        </div>
       </div>
     </fd-header>
     <div class="middle">
@@ -35,23 +41,31 @@
       <el-tabs
         class="side-bar"
         tab-position="left"
-        value="page">
+        value="comp">
         <el-tab-pane name="comp">
           <span slot="label">
-            <i></i> 基础组件
+            <i></i> 组件
           </span>
           <ComponentLib />
         </el-tab-pane>
         <el-tab-pane name="page">
           <span slot="label">
-            <i></i> 页面管理
+            <i></i> 页面
           </span>
           <PageList />
+        </el-tab-pane>
+        <el-tab-pane name="material">
+          <span slot="label">
+            <i></i> 素材
+          </span>
+          <MaterialLib />
         </el-tab-pane>
       </el-tabs>
 
       <!-- 页面编辑区 -->
-      <div class="editor-main">
+      <div
+        class="editor-main"
+        @click.self="handleCanvasWrapperClick">
         <div
           class="editor-canvas-wrapper"
           :style="{
@@ -59,15 +73,16 @@
             width: projectData.width + 'px',
             height: projectData.height + 'px',
           }"
-          ref="canvasWrapper"
-          @click.self="handleCanvasWrapperClick">
-          <Canvas />
+          ref="canvasWrapper">
+          <Canvas
+            @element-active-change="handleElementActiveChange" />
         </div>
+        <ComponentTool v-if="focusList.length === 1" />
       </div>
 
       <!-- 属性编辑区 -->
       <div class="attr-editor-wrapper">
-        <el-tabs value="page">
+        <el-tabs v-model="currAttrEditor">
           <el-tab-pane label="页面" name="page">
             <PageEditor />
           </el-tab-pane>
@@ -99,9 +114,11 @@ import { mapGetters, mapMutations, mapState } from 'vuex';
 import EventBus from '@utils/eventBus';
 
 import Canvas from './components/canvas/Canvas.vue';
+import ComponentTool from './components/componentTool/ComponentTool.vue';
 import ComponentLib from './components/componentLib/ComponentLibs.vue';
 import PageList from './components/pageList/PageList.vue';
 import PageEditor from './components/pageEditor/PageEditor.vue';
+import MaterialLib from './components/materialLib/MaterialLib.vue';
 import AttrEditor from './components/attrEditor/AttrEditor.vue';
 import AnimationEditor from './components/animationEditor/AnimationEditor.vue';
 
@@ -110,16 +127,20 @@ export default {
 
   components: {
     Canvas,
+    ComponentTool,
     ComponentLib,
     PageList,
     PageEditor,
+    MaterialLib,
     AttrEditor,
     AnimationEditor
   },
 
   data() {
     return {
-      id: undefined
+      id: undefined,
+
+      currAttrEditor: 'page'
     };
   },
 
@@ -163,6 +184,8 @@ export default {
 
       // 默认打开第一个页面
       this.$store.commit('editor/SET_CURR_PAGE_IDX', 0);
+      // 清空选中的元素
+      this.$store.commit('editor/SET_FOCUSLIST', []);
 
       // 如果有id，获取项目数据
       if (id) {
@@ -178,10 +201,10 @@ export default {
      * 获取项目数据
      */
     async getProjectData() {
-      const { pages } = await this.$http.get('/page/' + this.id);
+      const { pages, width, height } = await this.$http.get('/page/' + this.id);
 
       this.$store.commit('editor/UPDATE_PROJECT_DATA', {
-        pages
+        pages, width, height
       });
     },
 
@@ -198,16 +221,35 @@ export default {
           this.history('redo');
         } else if (key === 'Delete') {
           this.focusList.forEach(uuid => {
-            this.$store.commit('editor/DELETE_ELEMENT', uuid);
+            this.$store.dispatch('editor/removeElement', { uuid });
           });
         }
       };
     },
 
+    /**
+     * 画布外的点击事件
+     */
     handleCanvasWrapperClick() {
+      if (!this.focusList.length) return;
+
       this.$store.commit('editor/SET_FOCUSLIST', []);
+
+      this.currAttrEditor = 'page';
     },
 
+    /**
+     * 元素焦点change事件
+     */
+    handleElementActiveChange() {
+      const { focusList } = this;
+
+      this.currAttrEditor = focusList.length ? 'attr' : 'page';
+    },
+
+    /**
+     * 处理操作记录，undo,redo
+     */
     history(type) {
       this.$store.dispatch(`editor/history/${type}`);
     },
@@ -237,13 +279,26 @@ export default {
         scale
       };
 
-      // 有id，就是修改
-      if (this.id) {
-        await this.$http.put('/page/' + id, requestData);
-      } else {
-        // 没id，新建页面
-        await this.$http.post('/page', requestData);
+      try {
+        // 有id，就是修改
+        if (this.id) {
+          await this.$http.put('/page/' + id, requestData);
+        } else {
+          // 没id，新建页面
+          await this.$http.post('/page', requestData);
+        }
+
+        this.$message({ message: '保存成功', type: 'success' });
+      } catch (err) {
+        this.$message({ message: '保存失败，请重新尝试', type: 'error' });
       }
+    },
+
+    async template() {
+      await this.$http.post('/page/set_template/' + this.id, {
+        // category_id: 2
+        // TODO 选择保存到的分类，undefined为不分类，默认
+      });
     }
   }
 };
@@ -282,6 +337,9 @@ export default {
 
 .editor-main {
   flex: 1;
+  position: relative;
+  width: 100%;
+  overflow: auto;
   background-color: #efefef;
 }
 
@@ -310,5 +368,23 @@ export default {
 .attr-editor-wrapper {
   width: 350px;
   padding: 0 20px;
+
+  ::v-deep.el-tabs {
+    height: 100%;
+
+    .el-tabs__content {
+      height: calc(100% - 55px);
+
+      .el-tab-pane {
+        height: 100%;
+      }
+    }
+  }
+
+  ::v-deep.title {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
 }
 </style>

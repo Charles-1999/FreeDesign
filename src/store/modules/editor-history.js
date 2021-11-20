@@ -78,7 +78,7 @@ export default {
 
       context.commit('SET_CURSOR', cursor - 1);
 
-      context.commit('editor/SET_PAGES',
+      context.dispatch('editor/setPages',
         JSON.parse(JSON.stringify(getters.currSnapShot)) || [],
         { root: true });
 
@@ -99,7 +99,7 @@ export default {
 
       context.commit('SET_CURSOR', cursor + 1);
 
-      context.commit('editor/SET_PAGES',
+      context.dispatch('editor/setPages',
         JSON.parse(JSON.stringify(getters.currSnapShot)) || [],
         { root: true });
 

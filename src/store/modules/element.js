@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import { compCommonStyle } from '@utils/style';
+import { compCommonStyle, eleCommonStyle } from '@utils/style';
 
 export default {
   mutations: {
@@ -91,30 +91,65 @@ export default {
     addElement(context, payload) {
       const { element } = payload;
       const { component } = element;
+      const { elements } = context.getters.currPage;
 
-      // 1. 加载组件的默认样式
+      // 1. 加载组件的配置
       const libComp = require.context(
-        // 其组件目录的相对路径
         '../../components/lib',
-        // 是否查询其子目录
         true,
-        // 匹配基础组件文件名的正则表达式
         /\.\/(\w+\/config\.js$)/
       );
       const fileName = component.replace(component[0], component[0].toUpperCase());
       const compConfig = libComp(`./${fileName}/config.js`);
 
-      const { defaultStyle } = compConfig;
+      const { defaultStyle, defaultProps } = compConfig;
+
+      // 2. 元素组件样式相关
+      // 2.1 计算元素层级
+      const defaultZIndex = 100;
+      const zIndex = Math.max(...elements.map(_ => _.eleStyle.zIndex), defaultZIndex) + 1;
+
+      // 2.2 配置元素的样式
       element.compStyle = {
         ...compCommonStyle,
-        ...defaultStyle
+        ...defaultStyle,
+        ...element.compStyle
       };
 
-      // 2. 动画列表
+      element.eleStyle = {
+        ...eleCommonStyle,
+        ...element.eleStyle,
+        zIndex
+      };
+
+      // 3. 动画列表
       element.animations = element.animations || [];
 
-      // 3. 添加元素
+      // 4. 组件默认props
+      if (!element.props) {
+        element.props = JSON.parse(JSON.stringify(defaultProps));
+      }
+
+      // 5. 添加元素
       context.commit('ADD_ELEMENT', element);
+
+      // 6. 改变当前选中的元素
+      context.commit('SET_FOCUSLIST', [element.uuid]);
+    },
+
+    /**
+     * 移除元素
+     * @param context context
+     * @param payload payload
+     */
+    removeElement(context, payload) {
+      const { uuid } = payload;
+
+      // 1. 移除元素
+      context.commit('DELETE_ELEMENT', uuid);
+
+      // 2. 重置当前选中的元素
+      context.commit('SET_FOCUSLIST', []);
     },
 
     /**
@@ -197,6 +232,47 @@ export default {
         animationIdx,
         animation
       });
+    },
+
+    /**
+     * 改变图层
+     * @param type 类型: up 上移、down 下移、top 置顶、bottom 置底
+     */
+    changeZIndex(context, payload) {
+      const { uuid, type } = payload;
+      const { getElementByUUID, elementsByZIndexASC } = context.getters;
+
+      // 当前操作的元素
+      const currElement = getElementByUUID(uuid);
+      const currIdx = elementsByZIndexASC.findIndex(_ => _.uuid === uuid);
+      const currZIndex = currElement.eleStyle.zIndex;
+
+      // 上移，与上一层交换；下移，与下一层交换
+      if (['up', 'down'].includes(type)) {
+        const idx = type === 'up' ? currIdx + 1 : currIdx - 1;
+        const target = elementsByZIndexASC[idx] || currElement;
+
+        currElement.eleStyle.zIndex = target.eleStyle.zIndex;
+        target.eleStyle.zIndex = currZIndex;
+      }
+
+      // 置顶，后面全部前移，与冒泡差不多
+      if (type === 'top') {
+        for (let i = currIdx + 1; i < elementsByZIndexASC.length; i++) {
+          const temp = elementsByZIndexASC[i].eleStyle.zIndex;
+          elementsByZIndexASC[i].eleStyle.zIndex = currElement.eleStyle.zIndex;
+          currElement.eleStyle.zIndex = temp;
+        }
+      }
+
+      // 置底，前面全部往后移，与冒泡差不多
+      if (type === 'bottom') {
+        for (let i = currIdx - 1; i >= 0; i--) {
+          const temp = elementsByZIndexASC[i].eleStyle.zIndex;
+          elementsByZIndexASC[i].eleStyle.zIndex = currElement.eleStyle.zIndex;
+          currElement.eleStyle.zIndex = temp;
+        }
+      }
     }
   },
 
@@ -205,6 +281,9 @@ export default {
       getters.currPage.elements.find(_ => _.uuid === state.focusList[0]) ||
       { animations: [] },
 
-    getElementByUUID: (state, getters) => (uuid) => getters.currPage.elements.find(_ => _.uuid === uuid)
+    getElementByUUID: (state, getters) => (uuid) => getters.currPage.elements.find(_ => _.uuid === uuid),
+
+    // 根据zIndex升序排序的元素
+    elementsByZIndexASC: (state, getters) => getters.currPage.elements.sort((a, b) => a.eleStyle.zIndex - b.eleStyle.zIndex)
   }
 };

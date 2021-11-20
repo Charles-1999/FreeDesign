@@ -1,5 +1,13 @@
 <template>
   <div class="attr-editor">
+    <template v-if="Object.keys(compFormConfig).length">
+      <div class="title">组件属性</div>
+      <fd-form
+        :form-field-config="compFormConfig"
+        :form-field-data="currElement.props"
+        @change="handlePropsChange" />
+    </template>
+
     <div class="title">基础属性</div>
     <el-collapse
       v-model="activeCollapse">
@@ -31,7 +39,9 @@ export default {
 
       attrForm: {},
 
-      activeCollapse: [0, 1, 2]
+      compFormConfig: {},
+
+      activeCollapse: [0, 1, 2, 3]
     };
   },
 
@@ -50,11 +60,16 @@ export default {
     // 需要重新计算currElement赋值给表单
     currPage() {
       this.attrForm = this.currElement;
+    },
+
+    currElement() {
+      this.getCompAttrFormConfig();
     }
   },
 
   created() {
     this.attrForm = this.currElement;
+    this.getCompAttrFormConfig();
   },
 
   methods: {
@@ -70,6 +85,12 @@ export default {
       this.$store.dispatch('editor/history/record');
     },
 
+    handlePropsChange(...args) {
+      // console.log(...args);
+      // 触发record操作记录
+      this.$store.dispatch('editor/history/record');
+    },
+
     getForm(key) {
       const { attrForm } = this;
 
@@ -80,6 +101,29 @@ export default {
       }
 
       return attrForm.compStyle;
+    },
+
+    /**
+     * 获取组件属性表单
+     */
+    getCompAttrFormConfig() {
+      const { currElement } = this;
+      const { component } = currElement;
+
+      const libComp = require.context(
+        // 其组件目录的相对路径
+        '../../../../components/lib',
+        // 是否查询其子目录
+        true,
+        // 匹配基础组件文件名的正则表达式
+        /\.\/(\w+\/config\.js$)/
+      );
+      const fileName = component.replace(component[0], component[0].toUpperCase());
+      const compConfig = libComp(`./${fileName}/config.js`);
+
+      const { attrFormConfig } = compConfig;
+
+      this.compFormConfig = attrFormConfig || {};
     }
   }
 };
@@ -88,6 +132,8 @@ export default {
 <style lang="less" scoped>
 .attr-editor {
   width: 100%;
+  height: 100%;
+  overflow: auto;
   padding: 0 10px;
 }
 </style>

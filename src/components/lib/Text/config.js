@@ -5,13 +5,12 @@
 // 默认样式
 export const defaultStyle = {
   width: 200,
-  height: 100,
-  color: 'pink'
+  height: 100
 };
 
 // 默认参数
 export const defaultProps = {
-  text: '这是一段文字'
+  text: '双击编辑文本'
 };
 
 export default {
