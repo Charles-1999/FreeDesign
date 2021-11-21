@@ -9,6 +9,13 @@ module.exports = {
         changeOrigin: true, // 是否跨域
         pathRewrite: {
           '^/api': ''
+        },
+        '/qiniu': {
+          target: 'https://upload-z2.qiniup.com',
+          changeOrigin: true,
+          pathRewrite: {
+            '^/qiniu': ''
+          }
         }
       }
     }
