@@ -1,16 +1,19 @@
-const Koa = require('koa');
-const httpRequest = require('./request');
+import Koa from 'koa';
+import cors from '@koa/cors';
+import bodyParser from 'koa-bodyparser';
+import { logger } from './src/logger.js';
+import router from './src/routes.js';
 
+// 初始化 Koa 应用实例
 const app = new Koa();
 
-const port = '8085';
-const host = '0.0.0.0';
+// 注册中间件
+app.use(logger());
+app.use(cors());
+app.use(bodyParser());
 
-app.use(async ctx => {
-  httpRequest();
-  ctx.body = 'Hello World';
-});
+// 响应用户请求
+app.use(router.routes()).use(router.allowedMethods());
 
-app.listen(port, host, () => {
-  console.log(`API server listening on ${host}:${port}`);
-});
+// 运行服务器
+app.listen(3006);

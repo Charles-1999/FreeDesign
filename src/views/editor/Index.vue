@@ -40,6 +40,12 @@
           <i class="el-icon-save"></i>
           <span>存为素材</span>
         </div>
+          <div
+          class="tool-item"
+          @click="preview">
+          <i class="el-icon-save"></i>
+          <span>预览</span>
+        </div>
       </div>
     </fd-header>
     <div class="middle">
@@ -131,6 +137,7 @@ import PageEditor from './components/pageEditor/PageEditor.vue';
 import MaterialLib from './components/materialLib/MaterialLib.vue';
 import AttrEditor from './components/attrEditor/AttrEditor.vue';
 import AnimationEditor from './components/animationEditor/AnimationEditor.vue';
+import Axios from 'axios';
 
 export default {
   name: 'Editor',
@@ -329,7 +336,7 @@ export default {
         fd.append('file', file);
         fd.append('token', uploadToken);
 
-        await this.$http.post('https://upload-z2.qiniup.com', fd, {
+        await this.$http.post('/qiniu', fd, {
           selfHttpConfig: {
             external: true
           }
@@ -352,6 +359,11 @@ export default {
       // } catch (err) {
       //   this.$message({ message: '保存失败，请重新尝试', type: 'error' });
       // }
+    },
+    preview() {
+      Axios.post('http://localhost:3006/auth/getInfo', {
+        id: this.id
+      });
     }
   }
 };
