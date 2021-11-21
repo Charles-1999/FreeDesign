@@ -113,9 +113,9 @@ const text = {
       }
     }
   },
-  textAlign: {
-    label: '对齐方式'
-  },
+  // textAlign: {
+  //   label: '对齐方式'
+  // },
   letterSpacing: {
     label: '字间距',
     type: 'number',
