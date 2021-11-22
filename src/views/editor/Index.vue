@@ -40,6 +40,12 @@
           <i class="el-icon-save"></i>
           <span>存为素材</span>
         </div>
+          <div
+          class="tool-item"
+          @click="preview">
+          <i class="el-icon-save"></i>
+          <span>预览</span>
+        </div>
       </div>
     </fd-header>
     <div class="middle">
@@ -131,6 +137,7 @@ import PageEditor from './components/pageEditor/PageEditor.vue';
 import MaterialLib from './components/materialLib/MaterialLib.vue';
 import AttrEditor from './components/attrEditor/AttrEditor.vue';
 import AnimationEditor from './components/animationEditor/AnimationEditor.vue';
+import Axios from 'axios';
 
 export default {
   name: 'Editor',
@@ -346,6 +353,29 @@ export default {
         } catch (err) {
           this.$message({ message: '保存失败，请重新尝试', type: 'error' });
         }
+      });
+      // const url = canvas.toDataURL('image/png');
+      // console.log(url);
+      // this.htmlUrl = url;
+      // this.isShow = true;
+
+      // try {
+      //   await this.$http.post('/material', {
+      //     name: 'test' + Date.now(),
+      //     content: JSON.stringify(this.currPage.elements),
+      //     cover_image: '',
+      //     is_free: true
+      //   });
+
+      //   this.$message({ message: '保存成功', type: 'success' });
+      // } catch (err) {
+      //   this.$message({ message: '保存失败，请重新尝试', type: 'error' });
+      // }
+    },
+
+    preview() {
+      Axios.post('http://localhost:3006/auth/getInfo', {
+        id: this.id
       });
     }
   }
