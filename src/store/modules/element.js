@@ -30,8 +30,6 @@ export default {
         ...payload
       };
 
-      console.log(element);
-
       Vue.set(currPage.elements, index, element);
     },
 
