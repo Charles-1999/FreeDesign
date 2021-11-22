@@ -120,7 +120,7 @@
 <script>
 import { mapGetters, mapMutations, mapState } from 'vuex';
 import html2canvas from 'html2canvas';
-import { getUploadToken } from '@utils/cos.service';
+import { getUploadToken, upload } from '@utils/cos.service';
 import EventBus from '@utils/eventBus';
 
 import Canvas from './components/canvas/Canvas.vue';
@@ -316,42 +316,37 @@ export default {
     },
 
     async material() {
+      // 1. 获取截图
       const canvas = await html2canvas(this.$refs.canvasWrapper, {
         useCORS: true
       });
 
+      // 2. 上传截图
       canvas.toBlob(async (blob) => {
         const uploadToken = await getUploadToken();
 
-        const file = new File([blob], '123test', { type: 'image/png' });
+        const file = new File([blob], 'material' + Date.now(), { type: 'image/png' });
 
         const fd = new FormData();
         fd.append('file', file);
         fd.append('token', uploadToken);
 
-        await this.$http.post('/qiniu', fd, {
-          selfHttpConfig: {
-            external: true
-          }
-        });
+        const { key } = await upload(fd);
+
+        // 3. 保存素材
+        try {
+          await this.$http.post('/material', {
+            name: 'test' + Date.now(),
+            content: JSON.stringify(this.currPage.elements),
+            cover_image: this.$config.cos.queryUrl + key,
+            is_free: true
+          });
+
+          this.$message({ message: '保存成功', type: 'success' });
+        } catch (err) {
+          this.$message({ message: '保存失败，请重新尝试', type: 'error' });
+        }
       });
-      // const url = canvas.toDataURL('image/png');
-      // console.log(url);
-      // this.htmlUrl = url;
-      // this.isShow = true;
-
-      // try {
-      //   await this.$http.post('/material', {
-      //     name: 'test' + Date.now(),
-      //     content: JSON.stringify(this.currPage.elements),
-      //     cover_image: '',
-      //     is_free: true
-      //   });
-
-      //   this.$message({ message: '保存成功', type: 'success' });
-      // } catch (err) {
-      //   this.$message({ message: '保存失败，请重新尝试', type: 'error' });
-      // }
     }
   }
 };
