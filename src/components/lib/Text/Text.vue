@@ -31,6 +31,12 @@ export default {
     };
   },
 
+  watch: {
+    text(val) {
+      this.innerText = val;
+    }
+  },
+
   methods: {
     /**
      * 处理双击事件

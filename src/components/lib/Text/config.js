@@ -13,6 +13,16 @@ export const defaultProps = {
   text: '双击编辑文本'
 };
 
+export const attrFormConfig = {
+  text: {
+    label: '文本',
+    type: 'el-input',
+    config: {
+      type: 'textarea'
+    }
+  }
+};
+
 export default {
   defaultStyle,
   defaultProps
