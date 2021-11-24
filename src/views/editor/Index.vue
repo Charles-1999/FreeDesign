@@ -88,8 +88,7 @@
           ref="canvasWrapper">
           <img :src="htmlUrl" v-show="isShow" />
           <Canvas
-            ref="canvas"
-            @element-active-change="handleElementActiveChange" />
+            ref="canvas" />
         </div>
         <ComponentTool v-if="focusList.length === 1" />
       </div>
@@ -177,6 +176,13 @@ export default {
     ])
   },
 
+  watch: {
+    focusList(val) {
+      // 当有选中元素时，显示属性编辑器
+      this.currAttrEditor = val.length ? 'attr' : 'page';
+    }
+  },
+
   created() {
     const { id } = this.$route.query;
     this.id = Number(id);
@@ -236,7 +242,14 @@ export default {
       document.onkeydown = (e) => {
         const { key, metaKey } = e;
 
-        if (key === 'z' && metaKey) {
+        if (key === 'a' && metaKey) {
+          // 全选
+          const list = this.currPage.elements.map(_ => _.uuid);
+          this.$store.commit('editor/SET_FOCUSLIST', list);
+
+          // 禁用默认的事件
+          return false;
+        } else if (key === 'z' && metaKey) {
           this.history('undo');
         } else if (key === 'y' && metaKey) {
           this.history('redo');
@@ -257,15 +270,6 @@ export default {
       this.$store.commit('editor/SET_FOCUSLIST', []);
 
       this.currAttrEditor = 'page';
-    },
-
-    /**
-     * 元素焦点change事件
-     */
-    handleElementActiveChange() {
-      const { focusList } = this;
-
-      this.currAttrEditor = focusList.length ? 'attr' : 'page';
     },
 
     /**
@@ -354,23 +358,6 @@ export default {
           this.$message({ message: '保存失败，请重新尝试', type: 'error' });
         }
       });
-      // const url = canvas.toDataURL('image/png');
-      // console.log(url);
-      // this.htmlUrl = url;
-      // this.isShow = true;
-
-      // try {
-      //   await this.$http.post('/material', {
-      //     name: 'test' + Date.now(),
-      //     content: JSON.stringify(this.currPage.elements),
-      //     cover_image: '',
-      //     is_free: true
-      //   });
-
-      //   this.$message({ message: '保存成功', type: 'success' });
-      // } catch (err) {
-      //   this.$message({ message: '保存失败，请重新尝试', type: 'error' });
-      // }
     },
 
     preview() {
@@ -433,9 +420,14 @@ export default {
 }
 
 .side-bar {
+  ::v-deep.el-tabs__item{
+    padding: 0 10px;
+  }
+
   ::v-deep.el-tabs__content {
-    width: 210px;
+    width: 230px;
     height: 100%;
+    padding-right: 10px;
 
     .el-tab-pane {
       height: 100%;

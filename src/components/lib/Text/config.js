@@ -18,7 +18,8 @@ export const attrFormConfig = {
     label: '文本',
     type: 'el-input',
     config: {
-      type: 'textarea'
+      type: 'textarea',
+      rows: 5
     }
   }
 };

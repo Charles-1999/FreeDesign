@@ -44,9 +44,10 @@ export default {
      * @return {void}
      */
     addElement(type) {
+      const uuid = new Date().getTime();
       this.$store.dispatch('editor/addElement', {
         element: {
-          uuid: new Date().getTime(),
+          uuid,
           component: type,
           eleStyle: {
             top: 50,
@@ -65,6 +66,7 @@ export default {
 .comp-list {
   display: flex;
   flex-wrap: wrap;
+  justify-content: space-between;
   padding: 10px;
 }
 

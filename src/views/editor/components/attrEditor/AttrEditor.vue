@@ -86,7 +86,6 @@ export default {
     },
 
     handlePropsChange(...args) {
-      // console.log(...args);
       // 触发record操作记录
       this.$store.dispatch('editor/history/record');
     },
@@ -135,5 +134,9 @@ export default {
   height: 100%;
   overflow: auto;
   padding: 0 10px;
+
+  ::v-deep.el-textarea__inner {
+    width: auto;
+  }
 }
 </style>
