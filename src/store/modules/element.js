@@ -102,6 +102,8 @@ export default {
 
       const { defaultStyle, defaultProps } = compConfig;
 
+      console.log(defaultProps, defaultStyle);
+
       // 2. 元素组件样式相关
       // 2.1 计算元素层级
       const defaultZIndex = 100;

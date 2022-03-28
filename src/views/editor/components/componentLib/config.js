@@ -13,6 +13,11 @@ export const baseComp = {
     label: '图片',
     icon: 'icon-tupian',
     size: 18
+  },
+  line: {
+    label: '分割线',
+    icon: 'icon-tupian',
+    size: 18
   }
 };
 

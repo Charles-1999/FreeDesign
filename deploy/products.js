@@ -13,7 +13,7 @@
  */
 const fs = require('fs');
 const path = require('path');
-// env 文件 判断打包环境指定对应的服务器id
+// env 文件判断打包环境指定对应的服务器id
 const envfile = process.env.NODE_ENV === 'prod' ? '../.env.prod' : '../.env.test';
 // env环境变量的路径
 const envPath = path.resolve(__dirname, envfile);
@@ -56,20 +56,20 @@ const SERVER_LIST = [
     id: 0,
     name: '生产环境',
     domain: 'www.test.com', // 域名
-    host: '39.97.3.27', // ip
+    host: '175.178.86.231', // ip
     port: 22, // 端口
     username: 'root', // 登录服务器的账号
-    password: 'Htc1382980123', // 登录服务器的账号
+    password: 'htc13829801238', // 登录服务器的账号
     path: '/var/www/html/dist'// 发布至静态服务器的项目路径
   },
   {
     id: 1,
     name: '正式环境',
     domain: 'prod.xxx.com',
-    host: '39.97.3.27',
+    host: '175.178.86.231',
     port: 22,
     username: 'root',
-    password: 'Htc1382980123',
+    password: 'htc13829801238',
     path: '/var/www/html/dist'
   }
 ];

@@ -54,6 +54,7 @@ instance.interceptors.response.use(
 
   // 请求失败
   (error) => {
+    console.log(error);
     const { status, data, config } = error.response;
     const { errcode, message } = data;
     // 请求的独立配置

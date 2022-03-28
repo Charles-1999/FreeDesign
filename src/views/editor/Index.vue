@@ -361,8 +361,21 @@ export default {
     },
 
     preview() {
-      Axios.post('http://localhost:3006/auth/getInfo', {
-        id: this.id
+      const { projectData } = this;
+      const { pageMode, pages, title, height, width, scale } = projectData;
+
+      const requestData = {
+        page_mode: pageMode,
+        pages: JSON.stringify(pages),
+        title,
+        description: '',
+        width,
+        height,
+        scale
+      };
+      Axios.post('http://localhost:3008/auth/getInfo', {
+        id: this.id,
+        value: requestData
       });
     }
   }
