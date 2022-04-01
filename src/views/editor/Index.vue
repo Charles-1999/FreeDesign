@@ -119,6 +119,7 @@
 
     <!-- 图片库 -->
     <fd-imglib />
+    <Preview :drawer="isPreview" :id="id" />
   </div>
 </template>
 
@@ -127,7 +128,6 @@ import { mapGetters, mapMutations, mapState } from 'vuex';
 import html2canvas from 'html2canvas';
 import { getUploadToken, upload } from '@utils/cos.service';
 import EventBus from '@utils/eventBus';
-
 import Canvas from './components/canvas/Canvas.vue';
 import ComponentTool from './components/componentTool/ComponentTool.vue';
 import ComponentLib from './components/componentLib/ComponentLibs.vue';
@@ -136,7 +136,7 @@ import PageEditor from './components/pageEditor/PageEditor.vue';
 import MaterialLib from './components/materialLib/MaterialLib.vue';
 import AttrEditor from './components/attrEditor/AttrEditor.vue';
 import AnimationEditor from './components/animationEditor/AnimationEditor.vue';
-import Axios from 'axios';
+import Preview from './components/preview/preview.vue';
 
 export default {
   name: 'Editor',
@@ -149,17 +149,16 @@ export default {
     PageEditor,
     MaterialLib,
     AttrEditor,
-    AnimationEditor
+    AnimationEditor,
+    Preview
   },
 
   data() {
     return {
       id: undefined,
-
       currAttrEditor: 'page',
-
+      isPreview: false,
       htmlUrl: '',
-
       isShow: false
     };
   },
@@ -361,22 +360,7 @@ export default {
     },
 
     preview() {
-      const { projectData } = this;
-      const { pageMode, pages, title, height, width, scale } = projectData;
-
-      const requestData = {
-        page_mode: pageMode,
-        pages: JSON.stringify(pages),
-        title,
-        description: '',
-        width,
-        height,
-        scale
-      };
-      Axios.post('http://localhost:3008/auth/getInfo', {
-        id: this.id,
-        value: requestData
-      });
+      this.isPreview = !this.isPreview;
     }
   }
 };

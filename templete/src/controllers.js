@@ -24,7 +24,6 @@ async function getInfo(ctx) {
 
 async function view(ctx) {
   const data = await axios.get(`http://120.24.151.34:8000/view/${ctx.params.id || 36}`);
-  // console.log(data);
   const pageDataFree = data.data;
   const pageMode = {
     h5: 'h5-swiper',
