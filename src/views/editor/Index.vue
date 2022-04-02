@@ -119,7 +119,7 @@
 
     <!-- 图片库 -->
     <fd-imglib />
-    <Preview :drawer="isPreview" :id="id" />
+    <Preview :drawer="isPreview" :id="id"  @close="preview" />
   </div>
 </template>
 

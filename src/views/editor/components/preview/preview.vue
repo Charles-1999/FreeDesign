@@ -1,5 +1,7 @@
 <template>
  <el-drawer
+  @close="closeDrawer"
+  :wrapperClosable="false"
   title="预览"
   :visible.sync="drawer">
   <div class="preview-container">
@@ -9,11 +11,8 @@
         </el-form-item>
         <el-form-item label="页面链接:">
             <div class="share-wx-config-wrapper">{{'http://175.178.86.231:3007/auth/view/' + this.id}}</div>
-          <div><el-button type="primary" @click="doCopy">复制链接</el-button></div>
+          <div><el-button type="primary">复制链接</el-button></div>
         </el-form-item>
-        <!--页面效果-->
-        <!-- <el-form-item label="页面信息:"> -->
-        <!-- </el-form-item> -->
       </el-form>
   </div>
 </el-drawer>
@@ -52,6 +51,12 @@ export default {
     return {
       // drawer: false
     };
+  },
+  methods: {
+    closeDrawer() {
+      console.log(121);
+      this.$emit('close');
+    }
   }
 };
 </script>
