@@ -182,18 +182,18 @@ export default {
      * 上传成功回调
      */
     async onSuccess(response, file, fileList) {
-      const { key } = response;
+      // const { key } = response;
       const { size, name } = file;
 
       const { id } = await this.$http.post('/resources/image', {
-        key_name: key,
+        key_name: name,
         name,
         size
       });
 
       this.imagesList.unshift({
         id,
-        key_name: key,
+        key_name: name,
         name,
         size
       });

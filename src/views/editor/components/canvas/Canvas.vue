@@ -6,14 +6,14 @@
     }"
     @click.self="handleCanvasClick">
       <!-- 多选时缩放点 -->
-      <!-- <template v-if="focusList.length > 1">
+      <template v-if="focusList.length > 1">
         <div class="line" />
         <div
           class="move-point"
           :style="getPointStyle(point)"
           v-for="point in pointList"
           :key="point" />
-      </template> -->
+      </template>
 
       <Element
         v-for="comp in innerPage.elements"
