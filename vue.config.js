@@ -1,4 +1,5 @@
 const path = require('path');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
 module.exports = {
   pages: {
@@ -24,7 +25,7 @@ module.exports = {
     }
   },
   devServer: {
-    port: 8888,
+    port: 7777,
     proxy: {
       '/api': {
         target: 'http://120.24.151.34:8000', // 代理接口地址
@@ -43,6 +44,22 @@ module.exports = {
     }
   },
   // 扩展 webpack 配置
+  configureWebpack: {
+    externals: {
+      vue: 'Vue',
+      vuex: 'Vuex',
+      'vue-router': 'VueRouter',
+      axios: 'axios',
+      'element-ui': 'ELEMENT',
+      html2canvas: 'html2canvas'
+    },
+    plugins: [
+      // new BundleAnalyzerPlugin({
+      //   analyzerMode: 'server',
+      //   openAnalyzer: false
+      // })
+    ]
+  },
   chainWebpack: config => {
     config.resolve.alias
       .set('@', path.resolve('src'))

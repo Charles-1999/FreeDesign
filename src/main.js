@@ -17,10 +17,6 @@ import { storage } from '@utils/localStorage.service';
 
 // ElementUI
 import ElementUI from 'element-ui';
-import 'element-ui/lib/theme-chalk/index.css';
-
-// Animate.css
-import 'animate.css';
 
 // styles
 import './assets/styles/index.less';
