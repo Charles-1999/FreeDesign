@@ -80,9 +80,30 @@ export const formatStyle = (style) => {
       return obj;
     }, {});
 };
+export const animateCSS = (el, animation, prefix = 'animate__') => {
+  return new Promise((resolve, reject) => {
+    const { name, duration, delay } = animation;
+    // 动画名称
+    console.log(name);
+    el.classList.add('animated', name);
+    el.style.setProperty('animation-duration', `${duration}s`);
+    el.style.setProperty('animation-delay', `${delay}s`);
+
+    // 当动画结束，清掉动画的类
+    function handleAnimationEnd(event) {
+      console.log(666);
+      event.stopPropagation();
+      el.classList.remove('animated', name);
+      resolve('Animation ended');
+    }
+
+    el.addEventListener('animationend', handleAnimationEnd, { once: true });
+  });
+};
 
 export default {
   compCommonStyle,
   eleCommonStyle,
-  formatStyle
+  formatStyle,
+  animateCSS
 };
