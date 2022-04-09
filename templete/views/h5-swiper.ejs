@@ -44,7 +44,7 @@
 </head>
 <body>
 <div id="app">
-    <div v-for="(pageData,index) in pageDataFree.pages" id="canvas">
+    <!-- <div v-for="(pageData,index) in pageDataFree.pages" id="canvas">
     <div v-for="item in pageData.elements">
      <div
      class="canvas-element"
@@ -57,151 +57,17 @@
      </div>
     </div>
   </div>
+  <div class="animate__animated animate__bounce animate__delay-2s">121</div> -->
+  <engine-h5-swiper  />
+  <engine-h5-swiper  />
 </div>
 <script>
-  Vue.component('lib-text',{
-    template : `<div>
-    <span
-      ref="span">
-      {{ innerText }}
-    </span>
-  </div>`,
-  props: {
-    text: {
-      type: String,
-      required: false,
-      default: ""
-    }
-  },
-  data() {
-    return {
-      innerText: this.text,
-    };
-  },
-  })
-  Vue.component('lib-rect',{
-    template : `
-  <div
-    class="rect"
-    :style="defaultStyle" />`,
-  props: {
-  },
-  data() {
-    return {
-    defaultStyle: {
-     width: 100,
-     height: 100,
-     backgroundColor: '#edfedf'
-}
-    };
-  },
-  })
-  Vue.component('lib-line',{
-    template : `
-  <div
-    class="rect"
-    :style="defaultStyle" />`,
-  props: {
-  },
-  data() {
-    return {
-    defaultStyle: {
-     width: 100,
-     height: 100,
-     backgroundColor: '#edfedf'
-}
-    };
-  },
-  })
-  Vue.component('lib-image',{
-    template : `
-    <div
-    class="image-wrap">
-    <el-image
-      :src="innerUrl"
-      fit="contain" />
-  </div>`,
-  props: {
-    images: {
-      type: Array,
-      required: false,
-      default: () => []
-    }
-  },
-
-  data() {
-    return {
-   uuid: `Image${Date.now()}`,
-   innerUrl: (this.images[0] || {}).url || '',
-   imgLibShow: false,
-   innerSelectList: [],
-   defaultStyle: {
-     width: 100,
-     height: 100,
-     backgroundColor: '#edfedf'
-}
-    };
-  },
-  })
+  window._pageDataFree =<%- JSON.stringify(pageDataFree) %>
+</script>
+<script>
 // 注册到全局// 等同于下面这种写法
   new Vue({
 	  el:"#app",
-    data: {
-    //通过ejs的语法转成变量，赋值给vue，让vue去管理
-    pageDataFree:<%- JSON.stringify(pageDataFree) %>
-    },
-    methods:{
-      getPointStyle(point) {
-      const { data } = this;
-      const { compStyle } = data;
-
-      const { height, width } = compStyle;
-
-      const leftPoint = /w/.test(point);
-      const topPoint = /n/.test(point);
-
-      const style = {
-        left: leftPoint ? -5 : width - 5,
-        top: topPoint ? -5 : height - 5,
-        marginLeft: ['n', 's'].includes(point) ? '-50%' : 0,
-        marginTop: ['w', 'e'].includes(point)
-          ? -(height / 2)
-          : 0,
-      };
-
-      return this.formatStyle(style);
-    },
-  formatStyle(style){
-    console.log(style)
-  const unitKeys = [
-    'width', 'height', 'top', 'left',
-    'paddingTop', 'paddingBottom', 'paddingLeft', 'paddingRight',
-    'marginTop', 'marginBottom', 'marginLeft', 'marginRight',
-    'borderWidth', 'borderRadius',
-    'fontSize', 'letterSpacing'
-  ];
-
-  return Object
-    .keys(style)
-    .reduce((obj, key) => {
-      const val = style[key];
-
-      // 如果是数字类型的值，默认添加'px'后缀
-      if (unitKeys.includes(key) && typeof val === 'number') {
-        obj[key] = `${val}px`;
-      } else if (key === 'rotate') {
-        obj.transform = `rotate(${val}deg)`;
-      } else if (key === 'backgroundImage') {
-        // 处理背景图片
-        obj[key] = `url(${(val[0] || {}).url})`;
-      } else {
-        obj[key] = val;
-      }
-
-      return obj;
-    }, {});
-}
-    }
   })
 </script>
 <!-- <script>

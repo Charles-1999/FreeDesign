@@ -14,7 +14,7 @@
     "dev-serve": "nodemon ./templete/app.js",
     "deploy:test": "npm run build && cross-env NODE_ENV=test node ./deploy",
     "deploy:prod": "npm run build && cross-env NODE_ENV=prod node ./deploy",
-    "lib:h5-swiper": "vue-cli-service build --target lib --name page-engine --dest server/public/engine_libs/h5-swiper engine-template/engine-h5-swiper/index.js"
+    "lib:h5-swiper": "vue-cli-service build --target lib --name page-engine --dest templete/public/engine_libs/h5-swiper engine-template/engine-h5-swiper/index.js"
   },
   "dependencies": {
     "@koa/cors": "^3.3.0",
