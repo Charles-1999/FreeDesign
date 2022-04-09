@@ -22,10 +22,8 @@
         drag
         multiple
         :show-file-list="false"
-        :action="$config.cos.uploadUrl"
-        :before-upload="beforeUpload"
-        :on-success="onSuccess"
-        :data="uploadData">
+        :http-request="upload"
+        :on-success="onSuccess">
         <i class="el-icon-upload"></i>
         <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
       </el-upload>
@@ -64,7 +62,7 @@
 
 <script>
 import EventBus from '@utils/eventBus';
-import { getUploadToken, uploadCos } from '@utils/cos.service';
+import { uploadCos } from '@utils/cos.service';
 
 export default {
   name: 'ImgLib',
@@ -113,7 +111,6 @@ export default {
     async getImageList() {
       const { images } = await this.$http.get('/resources/image/list');
       this.imagesList = images;
-      console.log(this.imagesList, 121);
     },
 
     /**
@@ -170,24 +167,22 @@ export default {
     },
 
     /**
-     * 上传前回调
+     * 上传cos
+     * @return {void}
      */
-    async beforeUpload(file) {
-      const uploadToken = await getUploadToken();
-      console.log(667);
-      uploadCos(file);
-      this.$set(this.uploadData, 'token', uploadToken);
+    async upload({ file }) {
+      return await uploadCos(file);
     },
 
     /**
      * 上传成功回调
      */
     async onSuccess(response, file, fileList) {
-      // const { key } = response;
       const { size, name } = file;
+      const { ETag } = response;
 
       const { id } = await this.$http.post('/resources/image', {
-        key_name: name,
+        key_name: JSON.parse(ETag),
         name,
         size
       });
