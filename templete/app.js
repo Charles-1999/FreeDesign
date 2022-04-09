@@ -17,14 +17,12 @@ const koaStatic = require('koa-static');
 
 // 初始化 Koa 应用实例
 const app = new Koa();
-console.log(logger);
 // 注册中间件
 app.use(logger());
 app.use(cors());
 app.use(bodyParser());
 app.use(koaStatic(path.resolve(__dirname, './public')));
 // 响应用户请求
-console.log(path.join(__dirname, 'views'));
 app.use(views(path.join(__dirname, 'views'), {
   extension: 'ejs'
 }));
