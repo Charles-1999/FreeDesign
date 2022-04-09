@@ -6,7 +6,7 @@ const defaultConfig = {
   // cos平台 七牛云
   cos: {
     uploadUrl: 'https://upload-z2.qiniup.com',
-    queryUrl: 'http://r1zff9ii3.hn-bkt.clouddn.com/'
+    queryUrl: 'https://cjztest-1302847834.cos.ap-nanjing.myqcloud.com/logos/'
   }
 };
 

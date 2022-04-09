@@ -39,7 +39,7 @@
         @click="handleImgClick(img)">
         <div class="image-inner">
           <el-image
-            :src="$config.cos.queryUrl + img.key_name"
+            :src="$config.cos.queryUrl + img.name"
             lazy
             fit="contain" />
           <div class="bar tool-bar">
@@ -64,7 +64,7 @@
 
 <script>
 import EventBus from '@utils/eventBus';
-import { getUploadToken } from '@utils/cos.service';
+import { getUploadToken, uploadCos } from '@utils/cos.service';
 
 export default {
   name: 'ImgLib',
@@ -113,6 +113,7 @@ export default {
     async getImageList() {
       const { images } = await this.$http.get('/resources/image/list');
       this.imagesList = images;
+      console.log(this.imagesList, 121);
     },
 
     /**
@@ -159,7 +160,7 @@ export default {
         .filter(img => selectList.map(_ => _.id).includes(img.id))
         .map(_ => {
           if (!_.url) {
-            _.url = this.$config.cos.queryUrl + _.key_name;
+            _.url = this.$config.cos.queryUrl + _.name;
           }
 
           return _;
@@ -171,9 +172,9 @@ export default {
     /**
      * 上传前回调
      */
-    async beforeUpload() {
+    async beforeUpload(file) {
       const uploadToken = await getUploadToken();
-
+      uploadCos(file);
       this.$set(this.uploadData, 'token', uploadToken);
     },
 
@@ -181,18 +182,18 @@ export default {
      * 上传成功回调
      */
     async onSuccess(response, file, fileList) {
-      const { key } = response;
+      // const { key } = response;
       const { size, name } = file;
 
       const { id } = await this.$http.post('/resources/image', {
-        key_name: key,
+        key_name: name,
         name,
         size
       });
 
       this.imagesList.unshift({
         id,
-        key_name: key,
+        key_name: name,
         name,
         size
       });

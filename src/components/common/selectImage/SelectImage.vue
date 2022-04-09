@@ -13,7 +13,7 @@
         :key="idx"
         shadow="never">
         <el-image
-          :src="$config.cos.queryUrl + img.key_name"
+          :src="$config.cos.queryUrl + img.name"
           fit="contain"
           @click="openImgLib" />
       </el-card>
