@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import { formatStyle } from '../../utils';
+import { formatStyle, animateCSS } from '../../utils';
 import FreeDesignComponent from '../../lib/index';
 
 export default {
@@ -38,12 +38,12 @@ export default {
     return {
       // 上北N 下南S 左西W 右东E
       pointList: ['nw', 'n', 'ne', 'e', 'w', 'sw', 's', 'se'],
-
       formatStyle
     };
   },
 
-  mounted() {
+  async mounted() {
+    await animateCSS(this.$el, this.data.animations[0]);
   },
 
   methods: {
