@@ -51,7 +51,8 @@ module.exports = {
       'vue-router': 'VueRouter',
       axios: 'axios',
       'element-ui': 'ELEMENT',
-      html2canvas: 'html2canvas'
+      html2canvas: 'html2canvas',
+      'cos-js-sdk-v5': 'COS'
     },
     plugins: [
       // new BundleAnalyzerPlugin({
