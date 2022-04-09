@@ -41,13 +41,8 @@ export const uploadCos = async (file) => {
       Region: 'ap-nanjing', // 区域 必须
       Key: `logos/${file.name}`, // 文件名必须
       StorageClass: 'STANDARD',
-      Body: file, // 上传文件对象
-      onProgress: function(progressData) {
-        console.log(JSON.stringify(progressData));// 上传成功的返回值
-      }
+      Body: file // 上传文件对象
     }, function(err, data) {
-      console.log(err || data);// 上传失败的返回值
-
       if (err) {
         reject(err);
         return;
