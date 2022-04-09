@@ -84,6 +84,10 @@ export default {
      * @param {object} e event
      */
     handleElementMouseDown(e) {
+      // 1. 设置当前选中的元素
+      this.$emit('activeChange', this.data.uuid, e.metaKey);
+
+      // 2. 获取当前选中元素的旧样式
       const { focusList, validMoveArea } = this;
       const eleStyleList = focusList
         .map(uuid => this.getElementByUUID(uuid).eleStyle);
@@ -127,10 +131,8 @@ export default {
         validMoveArea.removeEventListener('mouseup', up);
 
         // 如果没有移动，触发聚焦，不触发record操作记录
-        if (!hasMove) {
-          this.$emit('activeChange', this.data.uuid, e.metaKey);
-          return;
-        };
+        if (!hasMove) return;
+
         this.$store.dispatch('editor/history/record');
       };
 
