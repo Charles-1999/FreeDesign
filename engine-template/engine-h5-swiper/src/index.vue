@@ -1,10 +1,15 @@
 <template>
-  <div class="canvas">
-    <Element
-      v-for="comp in innerPage.elements"
-      :key="comp.uuid"
-      :data="comp"
-      :ref="`ele_${comp.uuid}`" />
+<div class="swiper-container">
+  <div class="swiper-wrapper">
+  <div class="swiper-slide  flat relative hidden" v-for="(inner,index) in innerPage" :key="index">
+      <Element
+        v-for="comp in inner.elements"
+        :key="comp.uuid"
+        :data="comp"
+        :ref="`ele_${comp.uuid}`" />
+    </div>
+  </div>
+   <div class="swiper-pagination"></div>
   </div>
 </template>
 
@@ -32,22 +37,58 @@ export default {
 
       formatStyle,
 
-      innerPage: {}
+      innerPage: []
     };
   },
 
   created() {
     const pageDataFree = window._pageDataFree;
     // 如果参数有传page则渲染参数的page
-    this.innerPage = pageDataFree.pages[0] || this.currPage;
-    console.log(this.innerPage, 133);
+    console.log(pageDataFree.pages);
+    this.innerPage = pageDataFree.pages || this.currPage;
+  },
+  mounted() {
+    const that = this;
+    // 判断翻页类型
+    var direction = 'vertical';
+    // var showSlideNumber = !!this.pageData.slideNumber;
+    // eslint-disable-next-line no-new
+    new window.Swiper('.swiper-container', {
+      direction: direction,
+      // loop: false,
+      // pagination: showSlideNumber ? { el: '.swiper-pagination' } : {},
+      // scrollbar: {
+      //   el: '.swiper-scrollbar'
+      // },
+      on: {
+        slideChange: function() {
+          console.log(777);
+          that.onSwipe();
+        }
+      }
+    });
   },
 
-  methods: {}
+  methods: {
+    onSwipe(index) {
+      console.log(777);
+      // this.activeIndex = index;
+      // this.pageData.pages[this.activeIndex].elements.forEach((e) => {
+      //   e._loaded = true;
+      // });
+    }
+  }
 };
 </script>
 
 <style lang="less" scoped>
+.swiper-slide{
+  width: 100vw;
+}
+.swiper-container{
+    width: 100vw;
+    height: 100vh;
+}
 .canvas {
   position: relative;
   width: 100%;
@@ -64,4 +105,10 @@ export default {
   background-color: #fff;
   z-index: 1000;
 }
+ .relative {
+    position: relative;
+  }
+  .hidden {
+    overflow: hidden;
+  }
 </style>

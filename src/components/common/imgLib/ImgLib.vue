@@ -174,6 +174,7 @@ export default {
      */
     async beforeUpload(file) {
       const uploadToken = await getUploadToken();
+      console.log(667);
       uploadCos(file);
       this.$set(this.uploadData, 'token', uploadToken);
     },

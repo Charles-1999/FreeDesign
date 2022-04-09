@@ -91,7 +91,6 @@ export const animateCSS = (el, animation, prefix = 'animate__') => {
 
     // 当动画结束，清掉动画的类
     function handleAnimationEnd(event) {
-      console.log(666);
       event.stopPropagation();
       el.classList.remove('animated', name);
       resolve('Animation ended');
