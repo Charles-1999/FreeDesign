@@ -43,7 +43,10 @@ export default {
   },
 
   async mounted() {
-    await animateCSS(this.$el, this.data.animations[0]);
+    console.log(this.data.animations);
+    for (const animation of this.data.animations) {
+      await animateCSS(this.$el, animation);
+    }
   },
 
   methods: {
