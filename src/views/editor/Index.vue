@@ -454,6 +454,27 @@ export default {
       height: 100%;
     }
   }
+
+  #pane-comp {
+    background-image: url('../../assets/images/bg-web.png');
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-position: bottom;
+  }
+
+  #pane-page {
+    background-image: url('../../assets/images/bg-page.png');
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-position: bottom;
+  }
+
+  #pane-material {
+    background-image: url('../../assets/images/bg-sc.png');
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-position: bottom;
+  }
 }
 
 .attr-editor-wrapper {
