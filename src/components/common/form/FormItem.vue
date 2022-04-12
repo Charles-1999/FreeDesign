@@ -1,5 +1,13 @@
 <template>
   <div class="form-item">
+    <!-- 文本输入框 -->
+    <el-input
+      v-if="config.type==='input'"
+      v-bind="config.config"
+      :size="(config.config || {}).size || 'mini'"
+      v-model="form[formKey]"
+      @change="handleChange(formKey, config, $event)" />
+
     <!-- 数字输入框 -->
     <el-input-number
       v-if="config.type === 'number'"

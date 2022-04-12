@@ -7,13 +7,13 @@
         <div
           class="tool-item"
           @click="history('undo')">
-          <i class="el-icon-refresh-left"></i>
+          <fd-icon name='icon-chexiao' :size="20" />
           <span>撤销</span>
         </div>
         <div
-          class="tool-item"
+          class="tool-item margin-right"
           @click="history('redo')">
-          <i class="el-icon-refresh-right"></i>
+          <fd-icon name='icon-redo' :size="20" />
           <span>重做</span>
         </div>
         <div
@@ -31,13 +31,13 @@
         <div
           class="tool-item"
           @click="save">
-          <i class="el-icon-document-checked"></i>
+          <i class="el-icon-upload"></i>
           <span>保存</span>
         </div>
         <div
           class="tool-item"
           @click="template">
-          <i class="el-icon-save"></i>
+          <i class="el-icon-document-checked"></i>
           <span>存为模版</span>
         </div>
         <div
@@ -92,6 +92,8 @@
             ref="canvas" />
         </div>
         <ComponentTool v-if="focusList.length === 1" />
+
+        <Shortcut />
       </div>
 
       <!-- 属性编辑区 -->
@@ -103,14 +105,16 @@
           <el-tab-pane label="属性" name="attr">
             <AttrEditor
               v-if="focusList.length === 1" />
-            <div v-else>
+            <div v-else class="empty-wrap">
+              <el-image class='empty' :src="require('@src/assets/images/img-empty.png')" />
               请选择要编辑的元素
             </div>
           </el-tab-pane>
           <el-tab-pane label="动画" name="animation">
             <AnimationEditor
               v-if="focusList.length === 1" />
-            <div v-else>
+            <div v-else class="empty-wrap">
+              <el-image class='empty' :src="require('@src/assets/images/img-empty.png')" />
               请选择要编辑的元素
             </div>
           </el-tab-pane>
@@ -120,10 +124,11 @@
 
     <!-- 图片库 -->
     <fd-imglib />
+
     <Preview
       :drawer="isPreview"
       :id="id"
-      @close="preview" />
+      @close="handlePreviewClose" />
   </div>
 </template>
 
@@ -141,6 +146,7 @@ import MaterialLib from './components/materialLib/MaterialLib.vue';
 import AttrEditor from './components/attrEditor/AttrEditor.vue';
 import AnimationEditor from './components/animationEditor/AnimationEditor.vue';
 import Preview from './components/preview/preview.vue';
+import Shortcut from './components/shortcut/Shortcut.vue';
 
 export default {
   name: 'Editor',
@@ -154,7 +160,8 @@ export default {
     MaterialLib,
     AttrEditor,
     AnimationEditor,
-    Preview
+    Preview,
+    Shortcut
   },
 
   data() {
@@ -231,10 +238,10 @@ export default {
      * 获取项目数据
      */
     async getProjectData() {
-      const { pages, width, height } = await this.$http.get('/page/' + this.id);
+      const { pages, width, height, title } = await this.$http.get('/page/' + this.id);
 
       this.$store.commit('editor/UPDATE_PROJECT_DATA', {
-        pages, width, height
+        pages, width, height, title
       });
 
       this.$store.commit('editor/history/CLEAR_SNAPSHOT');
@@ -300,31 +307,43 @@ export default {
       const { id, projectData } = this;
       const { pageMode, pages, title, height, width, scale } = projectData;
 
-      const requestData = {
-        page_mode: pageMode,
-        pages: JSON.stringify(pages),
-        title,
-        description: '',
-        width,
-        height,
-        scale,
-        cover_image: 'https://cjztest-1302847834.cos.ap-nanjing.myqcloud.com/logos/%E4%B8%8B%E8%BD%BD.jpeg'
-      };
+      // 1. 获取截图
+      const canvas = await html2canvas(this.$refs.canvasWrapper, {
+        useCORS: true
+      });
 
-      try {
+      // 2. 上传截图
+      canvas.toBlob(async (blob) => {
+        const file = new File([blob], 'project' + Date.now(), { type: 'image/png' });
+
+        await uploadCos(file);
+
+        const requestData = {
+          page_mode: pageMode,
+          pages: JSON.stringify(pages),
+          title: title || '草稿',
+          description: '',
+          width,
+          height,
+          scale,
+          cover_image: this.$config.cos.queryUrl + file.name
+        };
+
+        try {
         // 有id，就是修改
-        if (this.id) {
-          await this.$http.put('/page/' + id, requestData);
-          console.log(requestData, 131);
-        } else {
+          if (this.id) {
+            await this.$http.put('/page/' + id, requestData);
+          } else {
           // 没id，新建页面
-          await this.$http.post('/page', requestData);
-        }
+            const { id } = await this.$http.post('/page', requestData);
+            this.id = id;
+          }
 
-        this.$message({ message: '保存成功', type: 'success' });
-      } catch (err) {
-        this.$message({ message: '保存失败，请重新尝试', type: 'error' });
-      }
+          this.$message({ message: '保存成功', type: 'success' });
+        } catch (err) {
+          this.$message({ message: '保存失败，请重新尝试', type: 'error' });
+        }
+      });
     },
 
     async template() {
@@ -342,13 +361,7 @@ export default {
 
       // 2. 上传截图
       canvas.toBlob(async (blob) => {
-        // const uploadToken = await getUploadToken();
-
         const file = new File([blob], 'material' + Date.now(), { type: 'image/png' });
-
-        // const fd = new FormData();
-        // fd.append('file', file);
-        // fd.append('token', uploadToken);
 
         await uploadCos(file);
 
@@ -368,7 +381,7 @@ export default {
       });
     },
 
-    preview(val) {
+    handlePreviewClose(val) {
       this.isPreview = val === undefined ? true : val;
     }
   }
@@ -386,19 +399,25 @@ export default {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin: 0 5px;
+    margin: 0 10px;
     padding: 5px;
-    font-size: 13px;
+    font-size: 14px;
     cursor: pointer;
 
-    [class^=el-icon-] {
-      font-size: 18px;
+    [class^=el-icon-],
+    .iconfont {
+      font-size: 20px;
       font-weight: 700;
+      margin-bottom: 3px;
     }
   }
 
   .tool-item:hover {
     color: @primary-color;
+  }
+
+  .tool-item.margin-right {
+    margin-right: 80px;
   }
 }
 
@@ -497,6 +516,24 @@ export default {
     font-size: 16px;
     font-weight: 700;
     margin-bottom: 10px;
+  }
+
+  .empty-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    .empty {
+      width: 200px;
+    }
+  }
+
+  #pane-page {
+    background-image: url('../../assets/images/bg-setting.png');
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-position: bottom;
   }
 }
 </style>

@@ -17,6 +17,10 @@
           <span class="label">{{ comp.label }}</span>
         </div>
       </div>
+      <div class="more">
+        <el-image :src="require('../../../../assets/images/img-develop.png')"></el-image>
+        更多组件持续更新中...
+      </div>
      </div>
   </div>
 </template>
@@ -111,5 +115,16 @@ export default {
 
 .comp-wrap:nth-child(2n) {
   margin-right: 0;
+}
+
+.more {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+
+  ::v-deep.el-image {
+    width: 120px;
+  }
 }
 </style>

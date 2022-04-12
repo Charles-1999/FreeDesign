@@ -3,7 +3,7 @@
     class="image-wrap"
     @dblclick="openImgLib">
     <el-image
-      :src="innerUrl"
+      :src="innerUrl || require('../../../assets/images/logo.png')"
       fit="contain" />
   </div>
 </template>

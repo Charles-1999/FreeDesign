@@ -5,8 +5,8 @@
 // 默认样式
 export const defaultStyle = {
   width: 300,
-  height: 2,
-  backgroundColor: '#000000'
+  height: 1,
+  backgroundColor: '#ccc'
 };
 
 // 默认参数
