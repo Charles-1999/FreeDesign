@@ -6,14 +6,12 @@
     </el-radio-group>
     <div class="plist-container">
       <ProjectCard :mode="mode" />
-      <div
-        v-for="item of projectList"
-        :key="item.id">
-        <ProjectCard
-          :id="item.id"
-          :mode="mode" />
+      <div v-for="item of projectList" :key="item.id">
+        <ProjectCard :imgUrl="item.cover_image" :id="item.id" :mode="mode" />
       </div>
     </div>
+    <el-pagination background layout="prev, pager, next" :total="total" @current-change="changePage">
+    </el-pagination>
   </div>
 </template>
 
@@ -29,6 +27,7 @@ export default {
   data() {
     return {
       projectList: [],
+      total: 0,
       type: 'H5',
       mode: 1,
       typeList: [
@@ -54,16 +53,17 @@ export default {
   },
 
   methods: {
-    async getList() {
-      const { pages } = await this.$http.get('/page/list', {
+    async getList(id = 1) {
+      const { pages, total } = await this.$http.get('/page/list', {
         params: {
           page_mode: this.mode,
-          limit: 99
+          limit: 13,
+          page: id
         }
       });
 
       this.projectList = pages;
-      console.log(this.projectList, 131);
+      this.total = total;
     },
     changeType(value) {
       this.$router.replace({
@@ -73,6 +73,9 @@ export default {
         }
       });
       this.getList();
+    },
+    changePage(id) {
+      this.getList(id);
     }
   },
   watch: {
