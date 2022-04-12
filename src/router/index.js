@@ -19,6 +19,14 @@ const routes = [
     component: () => import(/* webpackChunkName: "login" */ '../views/login/Index.vue')
   },
   {
+    path: '/',
+    name: 'Index',
+    meta: {
+      title: '首页'
+    },
+    component: () => import(/* webpackChunkName: "Index" */ '../views/index/Index.vue')
+  },
+  {
     path: '/home',
     component: () => import('../views/home/Index.vue'),
     meta: {
@@ -64,10 +72,6 @@ const routes = [
       needLogin: true
     },
     component: () => import(/* webpackChunkName: "editor" */ '../views/editor/Index.vue')
-  },
-  {
-    path: '/',
-    redirect: '/login'
   },
   {
     path: '*',
