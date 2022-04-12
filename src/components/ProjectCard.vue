@@ -1,7 +1,11 @@
 <template>
   <div class="pcard-item-wrapper" @click="go">
-    <el-card class="pcard-item-container" shadow='hover' :body-style="{padding: 0}">
-      <i class="el-icon-circle-plus-outline" :style="{fontSize: '100px', fontWeight: '100'}" v-if="id === undefined" />
+    <el-card
+      class="pcard-item-container"
+      :class="id === undefined && 'add'"
+      shadow='hover'
+      :body-style="{padding: 0}">
+      <fd-icon name='icon-xinjianmoban' :size="80" v-if="id === undefined" />
       <el-image
         v-else
         fit="cover"
@@ -50,6 +54,16 @@ export default {
 .pcard-item-wrapper {
   margin: 2rem 1.5rem;
   cursor: pointer;
+
+  .add {
+    &.pcard-item-container {
+      border: 1px dashed @primary-color;
+    }
+
+    .iconfont {
+      color: @primary-color;
+    }
+  }
 
   .pcard-item-container {
     display: flex;
