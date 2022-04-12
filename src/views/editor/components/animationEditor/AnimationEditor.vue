@@ -8,7 +8,6 @@
         添加动画
       </el-button>
       <el-button
-        type="primary"
         size="small"
         @click="previewAnimation()">
         预览动画

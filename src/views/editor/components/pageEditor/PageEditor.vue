@@ -1,5 +1,5 @@
 <template>
-  <div class="attr-editor">
+  <div class="page-editor">
     <div class="title">页面通用属性</div>
     <fd-form
       :form-field-config="commonPageStyleFormConfig"
@@ -63,3 +63,11 @@ export default {
   }
 };
 </script>
+
+<style lang="less" scoped>
+  .page-editor {
+    .form-wrapper {
+      margin-bottom: 20px;
+    }
+  }
+</style>

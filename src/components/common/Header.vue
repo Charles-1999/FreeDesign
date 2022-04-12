@@ -81,7 +81,7 @@ export default {
       //   cursor: pointer;
       // }
       .page-header-logo-txt {
-        color: #32ca99;
+        color: @primary-color;
         font-size: 2.4rem;
         font-family: "Noto Serif SC", "Source Han Serif SC", "Source Han Serif",
           source-han-serif-sc, "PT Serif", "SongTi SC", "MicroSoft Yahei",

@@ -54,6 +54,7 @@ export default {
      */
     handleChange() {
       const text = this.$refs.span.innerHTML;
+      this.$refs.span.contentEditable = false;
 
       this.innerText = text;
 

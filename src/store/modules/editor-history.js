@@ -24,6 +24,14 @@ export default {
     },
 
     /**
+     * 清空快照
+     * @param state state
+     */
+    CLEAR_SNAPSHOT(state) {
+      state.snapshots = [];
+    },
+
+    /**
      * 设置当前索引
      * @param state   state
      * @param cursor  cursor

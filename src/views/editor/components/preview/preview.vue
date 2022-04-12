@@ -1,28 +1,28 @@
 <template>
- <el-drawer
-  @close="closeDrawer"
-  :wrapperClosable="false"
-  title="预览"
-  :visible.sync="drawer">
-  <div class="preview-container">
-          <el-form label-width="90px" label-position="left">
+  <el-drawer
+    @close="closeDrawer"
+    :wrapperClosable="true"
+    title="预览"
+    :visible.sync="innerDrawer">
+    <div class="preview-container">
+      <el-form label-width="90px" label-position="left">
         <el-form-item label="页面二维码:">
-       <QrcodeVue  :value="pageLink" :size="140" level="H"></QrcodeVue>
+          <QrcodeVue  :value="pageLink" :size="140" level="H"></QrcodeVue>
         </el-form-item>
         <el-form-item label="页面链接:">
-            <div class="share-wx-config-wrapper">{{'http://175.178.86.231:3007/auth/view/' + this.id}}</div>
+          <div class="share-wx-config-wrapper">{{'http://175.178.86.231:3007/auth/view/' + this.id}}</div>
           <div><el-button type="primary">复制链接</el-button></div>
         </el-form-item>
       </el-form>
-  </div>
-</el-drawer>
+    </div>
+  </el-drawer>
 </template>
 
 <script>
 import QrcodeVue from 'qrcode.vue';
+
 export default {
   components: {
-    // previewWrapper,
     QrcodeVue
   },
   computed: {
@@ -41,21 +41,23 @@ export default {
       required: true,
       default: 0
     }
-    // pageLink: {
-    //   type: String,
-    //   require: false,
-    //   default: ''
-    // }
   },
   data() {
     return {
-      // drawer: false
+      innerDrawer: this.drawer
     };
   },
+
+  watch: {
+    drawer(val) {
+      this.innerDrawer = val;
+    }
+  },
+
   methods: {
     closeDrawer() {
-      console.log(121);
-      this.$emit('close');
+      this.innerDrawer = false;
+      this.$emit('close', false);
     }
   }
 };

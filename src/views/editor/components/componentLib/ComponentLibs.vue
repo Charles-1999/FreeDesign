@@ -4,7 +4,7 @@
       class="comp-group"
       v-for="(type, idx) in compList"
       :key="idx">
-      {{ type.label }}
+      <div class="group-title">{{ type.label }}</div>
       <div class="comp-list">
         <div
           class="comp-wrap"
@@ -63,10 +63,18 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.group-title {
+  margin: 10px;
+  padding-bottom: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  border-bottom: 1px solid @color-shadow;
+}
+
 .comp-list {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: space-around;
   padding: 10px;
 }
 
@@ -76,12 +84,11 @@ export default {
   align-items: center;
   justify-content: center;
   width: 80px;
-  height: 50px;
-  margin-right: 20px;
+  height: 60px;
   margin-bottom: 20px;
   border: 1px solid #ebeef5;
   border-radius: 6px;
-  font-size: 12px;
+  font-size: 14px;
   overflow: hidden;
   cursor: pointer;
 

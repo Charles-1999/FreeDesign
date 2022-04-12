@@ -83,9 +83,11 @@ export default {
      * 主要处理元素的拖拽移动、触发聚焦
      * @param {object} e event
      */
-    handleElementMouseDown(e) {
-      // 1. 设置当前选中的元素
-      this.$emit('activeChange', this.data.uuid, e.metaKey);
+    async handleElementMouseDown(e) {
+      // 1. 如果非多选情况下，设置当前选中的元素
+      if (this.focusList.length <= 1) {
+        this.$emit('activeChange', this.data.uuid, e.metaKey);
+      }
 
       // 2. 获取当前选中元素的旧样式
       const { focusList, validMoveArea } = this;

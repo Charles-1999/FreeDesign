@@ -19,8 +19,14 @@
         <div
           class="tool-item"
           @click="playAnimation">
-          <i class="el-icon-refresh-right"></i>
+          <i class="el-icon-video-play"></i>
           <span>播放</span>
+        </div>
+        <div
+          class="tool-item"
+          @click="isPreview = true">
+          <i class="el-icon-data-board"></i>
+          <span>预览</span>
         </div>
         <div
           class="tool-item"
@@ -40,14 +46,9 @@
           <i class="el-icon-save"></i>
           <span>存为素材</span>
         </div>
-          <div
-          class="tool-item"
-          @click="preview">
-          <i class="el-icon-save"></i>
-          <span>预览</span>
-        </div>
       </div>
     </fd-header>
+
     <div class="middle">
       <!-- 侧边栏 -->
       <el-tabs
@@ -55,20 +56,20 @@
         tab-position="left"
         value="comp">
         <el-tab-pane name="comp">
-          <span slot="label">
-            <i></i> 组件
+          <span slot="label" class="side-bar__item">
+            <i class="el-icon-menu" /> 组件
           </span>
           <ComponentLib />
         </el-tab-pane>
         <el-tab-pane name="page">
-          <span slot="label">
-            <i></i> 页面
+          <span slot="label" class="side-bar__item">
+            <i class="el-icon-document-copy" /> 页面
           </span>
           <PageList />
         </el-tab-pane>
         <el-tab-pane name="material">
-          <span slot="label">
-            <i></i> 素材
+          <span slot="label" class="side-bar__item">
+            <i class="el-icon-magic-stick" /> 素材
           </span>
           <MaterialLib />
         </el-tab-pane>
@@ -119,7 +120,10 @@
 
     <!-- 图片库 -->
     <fd-imglib />
-    <Preview :drawer="isPreview" :id="id"  @close="preview" />
+    <Preview
+      :drawer="isPreview"
+      :id="id"
+      @close="preview" />
   </div>
 </template>
 
@@ -232,6 +236,9 @@ export default {
       this.$store.commit('editor/UPDATE_PROJECT_DATA', {
         pages, width, height
       });
+
+      this.$store.commit('editor/history/CLEAR_SNAPSHOT');
+      this.$store.dispatch('editor/history/record');
     },
 
     /**
@@ -361,8 +368,8 @@ export default {
       });
     },
 
-    preview() {
-      this.isPreview = !this.isPreview;
+    preview(val) {
+      this.isPreview = val === undefined ? true : val;
     }
   }
 };
@@ -420,7 +427,22 @@ export default {
 
 .side-bar {
   ::v-deep.el-tabs__item{
-    padding: 0 10px;
+    height: auto;
+    padding: 15px 20px;
+    font-size: 16px;
+    line-height: 20px;
+
+    .side-bar__item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+
+      [class^='el-icon'] {
+        font-size: 20px;
+        margin-bottom: 5px;
+      }
+    }
   }
 
   ::v-deep.el-tabs__content {

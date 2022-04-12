@@ -110,14 +110,14 @@ export default {
      * @return {Object} 缩放点的样式
      */
     getPointStyle(point) {
-      const { focusList, currPage: { elements }, data } = this;
+      const { focusList, currPage: { elements }, projectData } = this;
       const focusElements = elements.filter(_ => focusList.includes(_.uuid));
 
       // TODO-1 这部分计算提取到computed，避免重复计算
       let maxWidth = 0;
       let maxHeight = 0;
-      let minLeft = data.width;
-      let minTop = data.height;
+      let minLeft = projectData.width;
+      let minTop = projectData.height;
       focusElements.forEach(element => {
         const { compStyle, eleStyle } = element;
         const totalWidth = compStyle.width + eleStyle.left;

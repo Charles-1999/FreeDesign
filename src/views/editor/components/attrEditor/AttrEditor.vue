@@ -64,6 +64,7 @@ export default {
 
     currElement() {
       this.getCompAttrFormConfig();
+      this.attrForm = this.currElement;
     }
   },
 
@@ -134,6 +135,10 @@ export default {
   height: 100%;
   overflow: auto;
   padding: 0 10px;
+
+  .form-wrapper {
+    margin-bottom: 20px;
+  }
 
   ::v-deep.el-textarea__inner {
     width: auto;
