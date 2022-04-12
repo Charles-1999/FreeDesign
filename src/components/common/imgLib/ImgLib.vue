@@ -113,7 +113,6 @@ export default {
     async getImageList() {
       const { images } = await this.$http.get('/resources/image/list');
       this.imagesList = images;
-      console.log(this.imagesList, 121);
     },
 
     /**
@@ -174,7 +173,6 @@ export default {
      */
     async beforeUpload(file) {
       const uploadToken = await getUploadToken();
-      console.log(667);
       uploadCos(file);
       this.$set(this.uploadData, 'token', uploadToken);
     },

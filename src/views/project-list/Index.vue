@@ -57,11 +57,13 @@ export default {
     async getList() {
       const { pages } = await this.$http.get('/page/list', {
         params: {
-          page_mode: this.mode
+          page_mode: this.mode,
+          limit: 99
         }
       });
 
       this.projectList = pages;
+      console.log(this.projectList, 131);
     },
     changeType(value) {
       this.$router.replace({

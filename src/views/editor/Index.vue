@@ -300,13 +300,15 @@ export default {
         description: '',
         width,
         height,
-        scale
+        scale,
+        cover_image: 'https://cjztest-1302847834.cos.ap-nanjing.myqcloud.com/logos/%E4%B8%8B%E8%BD%BD.jpeg'
       };
 
       try {
         // 有id，就是修改
         if (this.id) {
           await this.$http.put('/page/' + id, requestData);
+          console.log(requestData, 131);
         } else {
           // 没id，新建页面
           await this.$http.post('/page', requestData);
