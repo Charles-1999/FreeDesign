@@ -25,7 +25,7 @@
         <div
           class="tool-item"
           @click="save">
-          <i class="el-icon-save"></i>
+          <i class="el-icon-document-checked"></i>
           <span>保存</span>
         </div>
         <div
@@ -389,7 +389,7 @@ export default {
   }
 
   .tool-item:hover {
-    color: #409EFF;
+    color: @primary-color;
   }
 }
 

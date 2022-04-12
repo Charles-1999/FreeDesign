@@ -59,7 +59,15 @@ module.exports = {
       //   analyzerMode: 'server',
       //   openAnalyzer: false
       // })
-    ]
+    ],
+    pluginOptions: {
+      'style-resources-loader': {
+        preProcessor: 'less',
+        patterns: [
+          path.resolve(__dirname, './src/assets/styles/variables.less')
+        ]
+      }
+    }
   },
   chainWebpack: config => {
     config.resolve.alias

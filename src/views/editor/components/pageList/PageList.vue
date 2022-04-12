@@ -209,7 +209,7 @@ export default {
 
     .el-button:hover {
       background-color: #fff;
-      color: #409EFF;
+      color: @primary-color;
     }
   }
 
@@ -228,11 +228,11 @@ export default {
 
 .page-wrap.curr-page {
   .index {
-    background-color: #409EFF;
+    background-color: @primary-color;
   }
 
   .canvas {
-    border: 1px solid #409EFF;
+    border: 1px solid @primary-color;
   }
 }
 

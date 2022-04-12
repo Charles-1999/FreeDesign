@@ -290,7 +290,7 @@ export default {
 
       .el-button--text:hover {
         .el-icon-folder {
-          color: #409EFF;
+          color: @primary-color;
         }
         .el-icon-delete {
           color: rgb(210, 24, 24);
@@ -301,7 +301,7 @@ export default {
     // 选中条
     .selected-bar {
       bottom: 0;
-      color: #409EFF;
+      color: @primary-color;
       font-size: 22px;
       font-weight: 700;
       background-color: rgba(0, 0, 0, 0.2);
