@@ -57,7 +57,7 @@ export default {
       const { pages, total } = await this.$http.get('/page/list', {
         params: {
           page_mode: this.mode,
-          limit: 13,
+          limit: 17,
           page: id
         }
       });
