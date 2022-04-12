@@ -9,7 +9,10 @@
         <h1 class="wow animate__zoomInDown">FreeDesign</h1>
         <h2 class="wow animate__zoomInLeft">让H5制作，更方便。</h2>
         <p class="wow animate__zoomInUp">一个功能强大的H5可视化搭建平台。</p>
-        <el-button>开始体验</el-button>
+        <el-button
+          class="wow animate__zoomInUp animate__tada"
+          data-wow-delay="1.2s"
+          @click="$router.push({ path: '/home' })">开始体验</el-button>
       </div>
       <div class="pic wow animate__zoomInRight">
         <img :src="require('../../assets/images/img-phone.png')" alt="">
