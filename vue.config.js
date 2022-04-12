@@ -1,4 +1,5 @@
 const path = require('path');
+const webpack = require('webpack');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
 module.exports = {
@@ -43,6 +44,14 @@ module.exports = {
       }
     }
   },
+  pluginOptions: {
+    'style-resources-loader': {
+      preProcessor: 'less',
+      patterns: [
+        path.resolve(__dirname, './src/assets/styles/variables.less')
+      ]
+    }
+  },
   // 扩展 webpack 配置
   configureWebpack: {
     externals: {
@@ -59,15 +68,7 @@ module.exports = {
       //   analyzerMode: 'server',
       //   openAnalyzer: false
       // })
-    ],
-    pluginOptions: {
-      'style-resources-loader': {
-        preProcessor: 'less',
-        patterns: [
-          path.resolve(__dirname, './src/assets/styles/variables.less')
-        ]
-      }
-    }
+    ]
   },
   chainWebpack: config => {
     config.resolve.alias
