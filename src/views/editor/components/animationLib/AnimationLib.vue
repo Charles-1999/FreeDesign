@@ -96,21 +96,21 @@ export default {
 
 .animation-item {
   .animate__animated {
-    background-color: #409EFF;
+    background-color: @primary-color;
   }
 
   .curr__animation {
-    color: #409EFF;
+    color: @primary-color;
   }
 }
 
 .acitve__animation {
   .animation-item_inner {
-    background-color: #409EFF;
+    background-color: @primary-color;
   }
 
   .animation-item_label {
-    color: #409EFF;
+    color: @primary-color;
   }
 }
 </style>

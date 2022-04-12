@@ -51,15 +51,23 @@ module.exports = {
       'vue-router': 'VueRouter',
       axios: 'axios',
       'element-ui': 'ELEMENT',
-      html2canvas: 'html2canvas'
-      // 'cos-js-sdk-v5': 'COS'
+      html2canvas: 'html2canvas',
+      'cos-js-sdk-v5': 'COS'
     },
     plugins: [
       // new BundleAnalyzerPlugin({
       //   analyzerMode: 'server',
       //   openAnalyzer: false
       // })
-    ]
+    ],
+    pluginOptions: {
+      'style-resources-loader': {
+        preProcessor: 'less',
+        patterns: [
+          path.resolve(__dirname, './src/assets/styles/variables.less')
+        ]
+      }
+    }
   },
   chainWebpack: config => {
     config.resolve.alias

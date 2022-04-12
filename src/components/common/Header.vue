@@ -15,7 +15,7 @@
     <div class="page-header-right">
       <el-dropdown placement="bottom">
         <el-button type="text" :style="{ fontSize: '16px' }">
-          Hi, {{ auth }}
+          Hi, {{ $store.state.auth.user.nickname }}
         </el-button>
         <el-dropdown-menu
           slot="dropdown"
@@ -42,11 +42,13 @@
 import { ACCOUNT } from '@apis/login';
 export default {
   name: 'FdHeader',
+
   data() {
     return {
-      auth: 'admin'
+      auth: 'user'
     };
   },
+
   methods: {
     async handleLogout() {
       await this.$http.post(ACCOUNT.LOGOUT);

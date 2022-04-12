@@ -98,8 +98,8 @@ export default {
 }
 
 .comp-wrap:hover {
-  border-color: #409EFF;
-  color: #409EFF;
+  border-color: @primary-color;
+  color: @primary-color;
 }
 
 .comp-wrap:nth-child(2n) {
