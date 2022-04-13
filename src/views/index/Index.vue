@@ -69,6 +69,47 @@
         </el-link>
       </div>
     </div>
+
+    <!-- 介绍 -->
+    <div class="intro-container-2 wow animate__bounceInUp">
+      <h1>拖拉拽，简单操作</h1>
+      <h2>完全零代码，高度可配置，所见即所得</h2>
+
+      <div class="img-wrap">
+        <img :src="require('../../assets/images/img-demo.png')" alt="">
+      </div>
+    </div>
+    <div class="intro-container-2 wow animate__bounceInUp">
+      <h1>加动画，栩栩如生</h1>
+      <h2>数十种动画效果，并且可以配置时长、延迟和循环</h2>
+
+      <div class="img-wrap mid">
+        <img :src="require('../../assets/images/img-demo-animate.png')" alt="">
+      </div>
+    </div>
+    <div class="intro-container-2 wow animate__bounceInUp">
+      <h1>数据可视化</h1>
+      <h2>多维度分析数据，助你落地数据驱动战略</h2>
+
+      <div class="img-wrap">
+        <img :src="require('../../assets/images/img-demo-data.png')" alt="">
+      </div>
+    </div>
+
+    <!-- slogan -->
+    <div class="intro-container-2">
+      <h1>FreeDesign</h1>
+      <h2>让H5制作，更Free，更方便。</h2>
+       <el-button
+        type="primary"
+        @click="$router.push({ path: '/home' })">
+        立即进入FreeDesign
+      </el-button>
+    </div>
+
+    <div class="footer">
+      仅供学习使用，非商业用途。
+    </div>
   </div>
 </template>
 
@@ -239,7 +280,7 @@ export default {
         align-items: center;
         margin-bottom: 10px;
         color: @primary-color;
-        font-size: 25px;
+        font-size: 30px;
         font-weight: 500;
 
         img {
@@ -248,7 +289,7 @@ export default {
       }
 
       &__content {
-        font-size: 18px;
+        font-size: 20px;
       }
     }
   }
@@ -292,5 +333,58 @@ export default {
         margin-right: 10px;
       }
     }
+  }
+
+  .intro-container-2 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 40px 0;
+    font-family: tencent;
+
+    h1 {
+      font-size: 40px;
+    }
+
+    h2 {
+      font-size: 25px;
+      color: @font-color-gray;
+    }
+
+    ::v-deep.el-button {
+      height: 80px;
+      margin: 20px 0;
+      padding: 10px 80px 15px;
+      font-size: 22px;
+      font-family: tencent;
+    }
+
+    .img-wrap {
+      width: 50%;
+      margin: 40px 0;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 2px 10px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
+
+      &.mid {
+        width: 40%;
+      }
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  .footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 200px;
+    margin-top: 200px;
+    background-color: @primary-color;
+    color: #fff;
   }
 </style>

@@ -360,6 +360,9 @@ export default {
     },
 
     async material() {
+      // 0. 清掉focusList
+      this.$store.commit('editor/SET_FOCUSLIST', []);
+
       // 1. 获取截图
       const canvas = await html2canvas(this.$refs.canvasWrapper, {
         useCORS: true
