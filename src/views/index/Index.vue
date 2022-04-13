@@ -219,6 +219,7 @@ export default {
     background-size: 100% 100%;
 
     .desc {
+      width: 430px;
       margin-top: -@header-height;
       color: #fff;
       font-family: tencent;
@@ -242,8 +243,8 @@ export default {
     .pic {
       flex-shrink: 0;
       width: 300px;
-      margin-left: 200px;
-      margin-right: 100px;
+      margin-left: 100px;
+      // margin-right: 100px;
       animation-delay: 0.9s;
 
       img {
