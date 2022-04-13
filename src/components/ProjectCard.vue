@@ -20,7 +20,7 @@
         <div class="thumbnail-panel-btn">
           <div class="btn-wrapper"><el-button size="mini">编辑</el-button></div>
           <div class="btn-wrapper"><el-button size="mini">预览</el-button></div>
-          <div class="btn-wrapper"><el-button size="mini">删除</el-button></div>
+          <div class="btn-wrapper"><el-button size="mini" @click="deletePage($event,id)">删除</el-button></div>
         </div>
       </div>
     </el-card>
@@ -54,6 +54,21 @@ export default {
         query: {
           id: this.id,
           page_mode: this.mode
+        }
+      });
+    },
+    deletePage(e, ids) {
+      // console.log(id);
+      e.stopPropagation();
+      e.preventDefault();
+      this.$alert('确定删除改页面吗', 'free design', {
+        confirmButtonText: '确定',
+        callback: async (ids) => {
+          await this.$http.delete('/api/page/', {
+            params: {
+              pid: 30
+            }
+          });
         }
       });
     }
