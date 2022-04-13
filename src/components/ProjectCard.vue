@@ -63,12 +63,9 @@ export default {
       e.preventDefault();
       this.$alert('确定删除改页面吗', 'free design', {
         confirmButtonText: '确定',
-        callback: async (ids) => {
-          await this.$http.delete('/api/page/', {
-            params: {
-              pid: 30
-            }
-          });
+        callback: async (ids, item) => {
+          console.log(item);
+          await this.$http.delete(`/page/${30}`);
         }
       });
     }
@@ -80,6 +77,16 @@ export default {
 .pcard-item-wrapper {
   margin: 2rem 1.5rem;
   cursor: pointer;
+
+  .add {
+    &.pcard-item-container {
+      border: 1px dashed @primary-color;
+    }
+
+    .iconfont {
+      color: @primary-color;
+    }
+  }
 
   .pcard-item-container {
     display: flex;

@@ -1,5 +1,5 @@
 <template>
-  <el-aside class="home-aside-wrapper" :width="this.isCollapse ? '6.4rem' : '20rem'">
+  <el-aside class="home-aside-wrapper" :width="this.isCollapse ? '6.4rem' : '250px'">
     <el-menu
       class="home-aside-menu"
       :default-active="activeIndex"
@@ -73,6 +73,11 @@ export default {
   .home-aside-menu {
     height: 100%;
     text-align: left;
+    background-image: url('../../../assets/images/bg-list.png');
+    background-repeat: no-repeat;
+    background-size: 100%;
+    background-position: bottom;
+
     > :first-child {
       margin-top: 0.8rem;
     }

@@ -26,6 +26,7 @@ export default {
   display: grid;
   grid-template-rows: 6rem 1fr;
   height: 100vh;
+
   .home-body {
     overflow: hidden;
   }
