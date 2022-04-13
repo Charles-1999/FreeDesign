@@ -2,18 +2,19 @@
   <el-header class="page-header-wrapper" height="6rem">
     <!-- 头部左边logo -->
     <div class="page-header-left">
-      <router-link to="/home">
+      <router-link to="/">
         <div class="page-header-logo">
           <div class="page-header-logo-txt">FreeDesign</div>
-          <!-- <img src="../../assets/logo.png" alt="logo" /> -->
         </div>
       </router-link>
     </div>
+
     <!-- 头部中间插槽 -->
     <slot name="page-header-middle" />
+
     <!-- 头部右边用户头像或者名称 -->
     <div class="page-header-right">
-      <el-dropdown placement="bottom">
+      <el-dropdown placement="bottom" v-if="$store.state.auth.logged">
         <el-button type="text" :style="{ fontSize: '16px' }">
           Hi, {{ $store.state.auth.user.nickname }}
         </el-button>
@@ -34,6 +35,11 @@
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
+
+      <div class="btn-wrap" v-else>
+        <el-button type="primary" @click="$router.push({ name: 'Login' })">登录</el-button>
+        <el-button @click="$router.push({ name: 'Login' })">注册</el-button>
+      </div>
     </div>
   </el-header>
 </template>
@@ -52,6 +58,8 @@ export default {
   methods: {
     async handleLogout() {
       await this.$http.post(ACCOUNT.LOGOUT);
+      this.$store.commit('auth/SET_LOGGER', false);
+      this.$store.commit('auth/SET_USER', {});
       this.$router.push('/');
     }
   }
@@ -68,24 +76,17 @@ export default {
   padding: 3rem;
   box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.1);
   z-index: 1;
+
   .page-header-left {
     display: flex;
     align-items: center;
+
     .page-header-logo {
-      // line-height: 4rem;
-      // width: 3.6rem;
-      // img {
-      //   display: inline-block;
-      //   height: 3.6rem;
-      //   vertical-align: middle;
-      //   cursor: pointer;
-      // }
+
       .page-header-logo-txt {
         color: @primary-color;
         font-size: 2.4rem;
-        font-family: "Noto Serif SC", "Source Han Serif SC", "Source Han Serif",
-          source-han-serif-sc, "PT Serif", "SongTi SC", "MicroSoft Yahei",
-          Georgia, serif;
+        font-family: tencent;
       }
     }
   }

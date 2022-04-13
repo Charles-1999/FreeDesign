@@ -5,22 +5,24 @@
       :default-active="activeIndex"
       :collapse="isCollapse"
       :router="true">
-      <el-menu-item index="/home">
-        <i class="el-icon-document menu-icon" />
-        <span class="text" slot="title">我的作品</span>
+      <el-menu-item index="/home/template-list">
+        <fd-icon name='icon-huiyuan' :size="24" />
+        <span class="text" slot="title">精选推荐</span>
       </el-menu-item>
-      <el-submenu index="/home/template">
+      <el-menu-item index="/home/projectList">
+        <fd-icon name='icon-bianji' :size="24" />
+        <span class="text" slot="title">工作台</span>
+      </el-menu-item>
+      <el-menu-item index="/home/my-template">
+        <fd-icon name='icon-shoucang' :size="24" />
+        <span class="text" slot="title">我的模板</span>
+      </el-menu-item>
+      <!-- <el-submenu index="/home/template">
         <template slot="title">
           <i class="el-icon-edit-outline menu-icon" />
           <span class="text" slot="title">模板库</span>
         </template>
-        <el-menu-item index="/home/my-template">
-          <span class="text" slot="title">我的模板</span>
-        </el-menu-item>
-        <el-menu-item index="/home/template-list">
-          <span class="text" slot="title">模板市场</span>
-        </el-menu-item>
-      </el-submenu>
+      </el-submenu> -->
     </el-menu>
   </el-aside>
 </template>
@@ -73,19 +75,29 @@ export default {
   .home-aside-menu {
     height: 100%;
     text-align: left;
+    border-right: 0;
     background-image: url('../../../assets/images/bg-list.png');
     background-repeat: no-repeat;
     background-size: 100%;
     background-position: bottom;
 
+    ::v-deep .el-menu-item {
+      display: flex;
+      align-items: center;
+      font-size: 15px;
+
+      .iconfont {
+        margin-right: 10px;
+      }
+
+      &.is-active {
+        font-weight: 500;
+        background-color: #e6edfb;
+      }
+    }
+
     > :first-child {
-      margin-top: 0.8rem;
-    }
-    .menu-icon {
-      font-size: 16px;
-    }
-    span {
-      font-size: 16px;
+      margin-top: 10px;
     }
   }
 }

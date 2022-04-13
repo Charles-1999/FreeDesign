@@ -3,21 +3,29 @@
     <div class="header">
       <div class="title">FreeDesign</div>
     </div>
+
     <!-- banner -->
-    <div class="banner-container">
-      <div class="desc">
-        <h1 class="wow animate__zoomInDown">FreeDesign</h1>
-        <h2 class="wow animate__zoomInLeft">让H5制作，更方便。</h2>
-        <p class="wow animate__zoomInUp">一个功能强大的H5可视化搭建平台。</p>
-        <el-button
-          class="wow animate__zoomInUp animate__tada"
-          data-wow-delay="1.2s"
-          @click="$router.push({ path: '/home' })">开始体验</el-button>
-      </div>
-      <div class="pic wow animate__zoomInRight">
-        <img :src="require('../../assets/images/img-phone.png')" alt="">
-      </div>
-    </div>
+    <el-carousel
+      class="swiper-container"
+      height="100%">
+      <el-carousel-item
+        :key="idx"
+        v-for="(item, idx) in banner"
+        class="banner-container">
+        <div class="desc">
+          <h1 class="wow animate__zoomInDown">{{ item.h1 }}</h1>
+          <h2 class="wow animate__zoomInLeft">{{ item.h2 }}</h2>
+          <p class="wow animate__zoomInUp">{{ item.content }}</p>
+          <el-button
+            class="wow animate__zoomInUp"
+            data-wow-delay="1.8s"
+            @click="$router.push({ path: '/home' })">开始体验</el-button>
+        </div>
+        <div class="pic wow animate__zoomInRight">
+          <img :src="item.pic" alt="">
+        </div>
+      </el-carousel-item>
+    </el-carousel>
 
     <!-- 介绍 -->
     <div class="intro-container">
@@ -38,13 +46,94 @@
       <div class="intro-item wow animate__fadeInRightBig" data-wow-delay="0.6s">
         <div class="intro-item__title">
           <img :src="require('../../assets/images/img-h5.png')" alt="">
-          简单易上手
+          数据可监控
         </div>
-        <div class="intro-item__content">无需编写代码，仅需拖拉拽组件，即可搭建出精美H5页面</div>
+        <div class="intro-item__content">发布后可以实时查看作品的浏览量、转发量等维度数据，助你分析流量。</div>
+      </div>
+    </div>
+
+    <!-- 搜索 -->
+    <div class="search-container">
+      <div class="search-comp">
+        <el-input placeholder="快速搜索场景模板" v-model="keyword" />
+        <el-button type="primary">搜索模板</el-button>
+      </div>
+      <div class="hot-search">
+        <span>热门搜索：</span>
+        <el-link
+        :key="idx"
+        v-for="(link, idx) in hotSearch"
+        :underline="false"
+        :href="link.url">
+          {{ link.label }}
+        </el-link>
       </div>
     </div>
   </div>
 </template>
+
+<script>
+export default {
+  name: 'IndexPage',
+
+  data() {
+    return {
+      keyword: '',
+
+      banner: [{
+        h1: 'FreeDesign',
+        h2: '让H5制作，更方便。',
+        content: '一个功能强大的H5可视化搭建平台。',
+        pic: require('../../assets/images/img-phone.png')
+      }, {
+        h1: 'FreeDesign',
+        h2: '简单易上手',
+        content: '无需编写代码，简单拖拉拽操作，即可搭建出精美H5页面。',
+        pic: require('../../assets/images/img-drag.png')
+      }, {
+        h1: 'FreeDesign',
+        h2: '发布零成本',
+        content: '创作完作品后，无需自己部署，一键快速发布生成链接和二维码。',
+        pic: require('../../assets/images/img-qrcode.png')
+      }, {
+        h1: 'FreeDesign',
+        h2: '数据可监控',
+        content: '发布后可以实时查看作品的浏览量、转发量等维度数据，助你分析流量。',
+        pic: require('../../assets/images/img-h5.png')
+      }],
+
+      hotSearch: [{
+        url: '',
+        label: '企业招聘h5'
+      }, {
+        url: '',
+        label: '婚礼请柬'
+      }, {
+        url: '',
+        label: '百日宴'
+      }, {
+        url: '',
+        label: '开业邀请'
+      }, {
+        url: '',
+        label: '产品介绍'
+      }, {
+        url: '',
+        label: '招商'
+      }, {
+        url: '',
+        label: '电子贺卡'
+      }, {
+        url: '',
+        label: '劳动节'
+      }, {
+        url: '',
+        label: '抗疫'
+      }]
+    };
+  }
+};
+</script>
 
 <style lang="less" scoped>
   @header-height: 80px;
@@ -64,12 +153,18 @@
     background-color: @primary-color;
     z-index: 99;
     box-sizing: border-box;
+    box-shadow: 0px 13px 35px -12px rgba(0, 0, 0, 15%);
 
     .title {
       font-family: tencent;
       font-size: 30px;
       color: #fff;
     }
+  }
+
+  .swiper-container {
+    height: calc(100vh - @header-height);
+    min-height: 500px;
   }
 
   .banner-container {
@@ -132,6 +227,7 @@
     font-family: tencent;
 
     .intro-item {
+      flex-shrink: 0;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -153,6 +249,47 @@
 
       &__content {
         font-size: 18px;
+      }
+    }
+  }
+
+  .search-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    ::v-deep.search-comp {
+      display: flex;
+      width: 600px;
+      margin: 40px 0 20px;
+      border: 1px solid @primary-color;
+      border-radius: 50px;
+      overflow: hidden;
+
+      .el-input__inner {
+        height: 100%;
+        border: 0;
+      }
+
+      .el-button {
+        padding: 15px 60px;
+        border-radius: 50px;
+        font-size: 18px;
+      }
+    }
+
+    .hot-search {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+
+      span {
+        margin-right: 15px;
+      }
+
+      a {
+        margin-right: 10px;
       }
     }
   }

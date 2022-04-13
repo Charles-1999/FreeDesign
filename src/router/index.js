@@ -29,16 +29,13 @@ const routes = [
   {
     path: '/home',
     component: () => import('../views/home/Index.vue'),
-    meta: {
-      needLogin: true
-    },
     children: [
-      // 项目列表
+      // 工作台
       {
-        path: '/home',
+        path: 'projectList',
         name: 'ProjectList',
         meta: {
-          title: '项目列表',
+          title: '工作台',
           needLogin: true
         },
         component: () => import('../views/project-list/Index.vue')
@@ -58,8 +55,7 @@ const routes = [
         path: 'template-list',
         name: 'TemplateList',
         meta: {
-          title: '模板市场',
-          needLogin: true
+          title: '模板市场'
         },
         component: () => import('../views/template-list/Index.vue')
       }
