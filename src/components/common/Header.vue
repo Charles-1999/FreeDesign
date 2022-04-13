@@ -14,7 +14,8 @@
 
     <!-- 头部右边用户头像或者名称 -->
     <div class="page-header-right">
-      <el-dropdown placement="bottom" v-if="$store.state.auth.logged">
+      <fd-icon name='icon-tongzhi' :size="25" />
+      <el-dropdown placement="bottom" v-if="$store.state.auth.user.id">
         <el-button type="text" :style="{ fontSize: '16px' }">
           Hi, {{ $store.state.auth.user.nickname }}
         </el-button>
@@ -88,6 +89,15 @@ export default {
         font-size: 2.4rem;
         font-family: tencent;
       }
+    }
+  }
+
+  .page-header-right {
+    display: flex;
+    align-items: center;
+
+    .iconfont {
+      margin-right: 20px;
     }
   }
 }

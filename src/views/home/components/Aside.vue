@@ -6,23 +6,30 @@
       :collapse="isCollapse"
       :router="true">
       <el-menu-item index="/home/template-list">
-        <fd-icon name='icon-huiyuan' :size="24" />
+        <fd-icon name='icon-rongyu' :size="30" />
         <span class="text" slot="title">精选推荐</span>
       </el-menu-item>
-      <el-menu-item index="/home/projectList">
-        <fd-icon name='icon-bianji' :size="24" />
-        <span class="text" slot="title">工作台</span>
-      </el-menu-item>
+
+      <el-submenu index="/home/dashboard">
+        <template slot="title">
+          <fd-icon name='icon-yuangongfuwutai' :size="30" />
+          <span class="text" slot="title">工作台</span>
+        </template>
+        <el-menu-item index="/home/dashboard">
+          <fd-icon name='icon-zhinengbaobiao' :size="30" />
+          <span class="text" slot="title">个人中心</span>
+        </el-menu-item>
+
+        <el-menu-item index="/home/projectList">
+          <fd-icon name='icon-sheji' :size="30" />
+          <span class="text" slot="title">我的作品</span>
+        </el-menu-item>
+      </el-submenu>
+
       <el-menu-item index="/home/my-template">
-        <fd-icon name='icon-shoucang' :size="24" />
+        <fd-icon name='icon-zhiliangguanli' :size="30" />
         <span class="text" slot="title">我的模板</span>
       </el-menu-item>
-      <!-- <el-submenu index="/home/template">
-        <template slot="title">
-          <i class="el-icon-edit-outline menu-icon" />
-          <span class="text" slot="title">模板库</span>
-        </template>
-      </el-submenu> -->
     </el-menu>
   </el-aside>
 </template>
@@ -81,7 +88,8 @@ export default {
     background-size: 100%;
     background-position: bottom;
 
-    ::v-deep .el-menu-item {
+    ::v-deep .el-menu-item,
+    ::v-deep .el-submenu__title {
       display: flex;
       align-items: center;
       font-size: 15px;
