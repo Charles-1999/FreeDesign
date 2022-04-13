@@ -94,6 +94,8 @@
         <ComponentTool v-if="focusList.length === 1" />
 
         <Shortcut />
+
+        <Tips />
       </div>
 
       <!-- 属性编辑区 -->
@@ -147,6 +149,7 @@ import AttrEditor from './components/attrEditor/AttrEditor.vue';
 import AnimationEditor from './components/animationEditor/AnimationEditor.vue';
 import Preview from './components/preview/preview.vue';
 import Shortcut from './components/shortcut/Shortcut.vue';
+import Tips from './components/tips/Tips.vue';
 
 export default {
   name: 'Editor',
@@ -161,7 +164,8 @@ export default {
     AttrEditor,
     AnimationEditor,
     Preview,
-    Shortcut
+    Shortcut,
+    Tips
   },
 
   data() {
@@ -266,10 +270,34 @@ export default {
           this.history('undo');
         } else if (key === 'y' && metaKey) {
           this.history('redo');
+        } else if (key === 'c' && metaKey) {
+          const { focusList, getElementByUUID } = this;
+
+          if (!focusList.length) return;
+
+          focusList.forEach(uuid => {
+            const currElement = getElementByUUID(uuid);
+            const { eleStyle } = currElement;
+
+            const element = {
+              ...currElement,
+              uuid: Date.now(),
+              eleStyle: {
+                top: eleStyle.top + 20,
+                left: eleStyle.left + 20
+              }
+            };
+
+            this.$store.dispatch('editor/addElement', { element });
+          });
+
+          this.$store.dispatch('editor/history/record');
         } else if (key === 'Delete') {
           this.focusList.forEach(uuid => {
             this.$store.dispatch('editor/removeElement', { uuid });
           });
+        } else if (key === 'Escape') {
+          this.$store.commit('editor/SET_FOCUSLIST', []);
         }
       };
     },
@@ -354,6 +382,9 @@ export default {
     },
 
     async material() {
+      // 0. 清掉focusList
+      this.$store.commit('editor/SET_FOCUSLIST', []);
+
       // 1. 获取截图
       const canvas = await html2canvas(this.$refs.canvasWrapper, {
         useCORS: true

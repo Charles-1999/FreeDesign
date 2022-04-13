@@ -22,12 +22,13 @@ const routes = [
     path: '/',
     name: 'Index',
     meta: {
-      title: '首页'
+      title: 'Free Design'
     },
     component: () => import(/* webpackChunkName: "Index" */ '../views/index/Index.vue')
   },
   {
     path: '/home',
+    redirect: '/home/template-list',
     component: () => import('../views/home/Index.vue'),
     children: [
       // 工作台
