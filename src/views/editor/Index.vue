@@ -270,6 +270,28 @@ export default {
           this.history('undo');
         } else if (key === 'y' && metaKey) {
           this.history('redo');
+        } else if (key === 'c' && metaKey) {
+          const { focusList, getElementByUUID } = this;
+
+          if (!focusList.length) return;
+
+          focusList.forEach(uuid => {
+            const currElement = getElementByUUID(uuid);
+            const { eleStyle } = currElement;
+
+            const element = {
+              ...currElement,
+              uuid: Date.now(),
+              eleStyle: {
+                top: eleStyle.top + 20,
+                left: eleStyle.left + 20
+              }
+            };
+
+            this.$store.dispatch('editor/addElement', { element });
+          });
+
+          this.$store.dispatch('editor/history/record');
         } else if (key === 'Delete') {
           this.focusList.forEach(uuid => {
             this.$store.dispatch('editor/removeElement', { uuid });

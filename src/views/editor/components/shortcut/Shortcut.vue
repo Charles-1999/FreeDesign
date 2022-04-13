@@ -51,6 +51,10 @@ export default {
           label: '删除元素'
         },
         {
+          keys: ['command', 'c'],
+          label: '复制元素'
+        },
+        {
           keys: ['command', 'a'],
           label: '全选'
         },
