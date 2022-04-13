@@ -1,29 +1,21 @@
 <template>
   <!-- 快捷键tips -->
   <el-popover
-    popper-class="shortcut-wrap"
-    class="shortcut-wrap"
+    popper-class="tips-wrap"
+    class="tips-wrap"
     trigger="manual"
     v-model="shortcutVisible"
-    placement="bottom-start">
+    placement="bottom-end">
     <el-tag slot="reference" @click="shortcutVisible = !shortcutVisible">
       <fd-icon name="icon-jianpan" :size="20" />
-      快捷键指南
+      使用小Tips
     </el-tag>
     <div class="shortcut-container">
       <div
         class="shortcut"
         :key="idx"
         v-for="(item, idx) in config">
-        <!-- 遍历code -->
-        <span
-          class="code-wrap"
-          :key="index"
-          v-for="(key, index) in item.keys">
-          <span v-if="index >= 1">+</span>
-          <code>{{ item.keys[index] }}</code>
-        </span>
-        <span class="label">{{ item.label }}</span>
+        <span class="label">{{ idx + 1 }}.{{ item }}</span>
       </div>
     </div>
   </el-popover>
@@ -42,26 +34,8 @@ export default {
       shortcutVisible: false,
 
       config: [
-        {
-          keys: ['esc'],
-          label: '取消选中'
-        },
-        {
-          keys: ['delete'],
-          label: '删除元素'
-        },
-        {
-          keys: ['command', 'a'],
-          label: '全选'
-        },
-        {
-          keys: ['command', 'z'],
-          label: '撤销'
-        },
-        {
-          keys: ['command', 'y'],
-          label: '重做'
-        }
+        '按着command键的同时选择元素可以多选',
+        '可以多选元素进行同时移动'
       ]
     };
   }
@@ -69,10 +43,10 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.shortcut-wrap {
+.tips-wrap {
   position: absolute;
-  top: 20px;
-  left: 20px;
+  bottom: 20px;
+  right: 20px;
 
   ::v-deep.el-tag {
     cursor: pointer;
@@ -86,8 +60,7 @@ export default {
 
 <style lang="less">
 /* 快捷键tips */
-.el-popover.shortcut-wrap {
-  min-width: 200px;
+.el-popover.tips-wrap {
   .shortcut {
     display: flex;
     margin-bottom: 10px;
@@ -104,7 +77,6 @@ export default {
 
     .label {
       flex: 1;
-      text-align: right;
     }
   }
 

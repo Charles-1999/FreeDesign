@@ -94,6 +94,8 @@
         <ComponentTool v-if="focusList.length === 1" />
 
         <Shortcut />
+
+        <Tips />
       </div>
 
       <!-- 属性编辑区 -->
@@ -147,6 +149,7 @@ import AttrEditor from './components/attrEditor/AttrEditor.vue';
 import AnimationEditor from './components/animationEditor/AnimationEditor.vue';
 import Preview from './components/preview/preview.vue';
 import Shortcut from './components/shortcut/Shortcut.vue';
+import Tips from './components/tips/Tips.vue';
 
 export default {
   name: 'Editor',
@@ -161,7 +164,8 @@ export default {
     AttrEditor,
     AnimationEditor,
     Preview,
-    Shortcut
+    Shortcut,
+    Tips
   },
 
   data() {
@@ -270,6 +274,8 @@ export default {
           this.focusList.forEach(uuid => {
             this.$store.dispatch('editor/removeElement', { uuid });
           });
+        } else if (key === 'Escape') {
+          this.$store.commit('editor/SET_FOCUSLIST', []);
         }
       };
     },
