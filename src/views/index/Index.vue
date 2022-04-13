@@ -19,7 +19,7 @@
           <el-button
             class="wow animate__zoomInUp"
             data-wow-delay="1.8s"
-            @click="$router.push({ path: '/home' })">开始体验</el-button>
+            @click="$router.push({ path: '/home/template-list' })">开始体验</el-button>
         </div>
         <div class="pic wow animate__zoomInRight">
           <img :src="item.pic" alt="">

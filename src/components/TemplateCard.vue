@@ -1,10 +1,12 @@
 <template>
+<div>
   <div class="pcard-item-wrapper" @click="go">
     <el-card class="pcard-item-container" shadow='hover' :body-style="{padding: 0}">
       <i class="el-icon-circle-plus-outline" :style="{fontSize: '100px', fontWeight: '100'}" v-if="id === undefined" />
       <img v-else :src="imgUrl ? imgUrl : defaultCover" alt="cover" />
     </el-card>
   </div>
+</div>
 </template>
 
 <script>
@@ -47,11 +49,11 @@ export default {
 
 <style lang="less" scoped>
 .pcard-item-wrapper {
-  margin: 4px;
+  margin: 10px;
   cursor: pointer;
   .pcard-item-container {
-    width: 160px;
-    height: 240px;
+    width: 210px;
+    height: 340px;
     display: flex;
     justify-content: center;
     align-items: center;

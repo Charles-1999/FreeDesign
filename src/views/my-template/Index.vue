@@ -34,7 +34,11 @@
         <TemplateCard :imgUrl="item.cover_image" :id="item.id" />
       </div>
     </div>
-
+    <el-pagination
+  background
+  layout="prev, pager, next"
+  :total="total">
+</el-pagination>
     <Dialog :show="showDialog" @closeDialog="closeDialog" />
   </div>
 </template>
@@ -52,6 +56,7 @@ export default {
   data() {
     return {
       category: undefined,
+      total: 0,
       type: '1',
       typeList: [
         {
@@ -110,8 +115,9 @@ export default {
     // 获取类别
     async getCategory() {
       const list = await this.$http.get(CATEGORY.LIST);
-      const { categories } = list;
-      this.categoryList = categories;
+      const { categories, total } = list;
+      this.total = total;
+      this.categoryList = categories.filter(item => item.name);
     },
     // 获取数据
     async getList() {
