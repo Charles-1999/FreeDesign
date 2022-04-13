@@ -11,6 +11,7 @@
 <script>
 import HomeAside from './components/Aside.vue';
 import HomeMain from './components/Main.vue';
+
 export default {
   name: 'Home',
   components: {
