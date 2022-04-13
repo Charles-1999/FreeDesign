@@ -26,6 +26,10 @@ import libComponents from './components/lib';
 // common components
 import commonComponents from './components/common';
 
+import VueClipboard from 'vue-clipboard2';
+
+Vue.use(VueClipboard);
+
 Vue.use(libComponents);
 Vue.use(commonComponents);
 
