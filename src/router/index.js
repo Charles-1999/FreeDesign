@@ -32,10 +32,20 @@ const routes = [
     children: [
       // 工作台
       {
+        path: 'dashboard',
+        name: 'Dashboard',
+        meta: {
+          title: '工作台',
+          needLogin: true
+        },
+        component: () => import('../views/dashboard/Index.vue')
+      },
+      // 我的作品
+      {
         path: 'projectList',
         name: 'ProjectList',
         meta: {
-          title: '工作台',
+          title: '我的作品',
           needLogin: true
         },
         component: () => import('../views/project-list/Index.vue')
