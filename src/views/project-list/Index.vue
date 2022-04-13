@@ -7,7 +7,7 @@
     <div class="plist-container">
       <ProjectCard :mode="mode" />
       <div v-for="item of projectList" :key="item.id">
-        <ProjectCard :imgUrl="item.cover_image" :id="item.id" :mode="mode" />
+        <ProjectCard :data="item" :imgUrl="item.cover_image" :id="item.id" :mode="mode" />
       </div>
     </div>
     <el-pagination background layout="prev, pager, next" :total="total" @current-change="changePage">

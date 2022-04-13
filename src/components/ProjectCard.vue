@@ -2,17 +2,15 @@
   <div class="pcard-item-wrapper" @click="go">
     <el-card
       class="pcard-item-container"
-      shadow="hover"
-      :body-style="{ padding: 0 }">
-      <i
-        class="el-icon-circle-plus-outline"
-        :style="{ fontSize: '100px', fontWeight: '100', marginTop: '110px' }"
-        v-if="id === undefined" />
+      :class="id === undefined && 'add'"
+      shadow='hover'
+      :body-style="{padding: 0}">
+      <fd-icon name='icon-xinjianmoban' :size="80" v-if="id === undefined" />
       <div class="items-container" v-else>
         <div class="pic-container">
           <el-image
             style="width: 100%; height: 220px"
-            fit="container"
+            fit="cover"
             :src="
               imgUrl ||
               'https://cjztest-1302847834.cos.ap-nanjing.myqcloud.com/logos/v2-7f567cba4f40593f5bf288155a15aec7_720w.jpeg'
@@ -25,7 +23,7 @@
             <el-tag size="mini" type="success" style="margin-left: 5px">已发布</el-tag>
           </div>
           <div class="text">未命名场景</div>
-          <div class="date">2022-4-13</div>
+          <div class="date">{{ format(data.update_time * 1000, 'yyyy-MM-dd') }}</div>
         </section>
         <div>
           <div class="data-footer">
@@ -40,19 +38,15 @@
           <div class="func-section">
             <div>
               <img
-                src="https://cdn.jsdelivr.net/gh/Lavieenrose99/IvanPictureHouse/ivan-pic编辑 (1).png
-" />编辑
+                src="https://cdn.jsdelivr.net/gh/Lavieenrose99/IvanPictureHouse/ivan-pic编辑 (1).png" />编辑
             </div>
             <div @click="copyData">
               <img
-                src="https://cdn.jsdelivr.net/gh/Lavieenrose99/IvanPictureHouse/ivan-pic分享 (2).png
-" />分享
+                src="https://cdn.jsdelivr.net/gh/Lavieenrose99/IvanPictureHouse/ivan-pic分享 (2).png" />分享
             </div>
             <div @click="deletePage($event,id)">
               <img
-                src="https://cdn.jsdelivr.net/gh/Lavieenrose99/IvanPictureHouse/ivan-pic删除.png
-
-" />删除
+                src="https://cdn.jsdelivr.net/gh/Lavieenrose99/IvanPictureHouse/ivan-pic删除.png" />删除
             </div>
           </div>
         </div>
@@ -62,13 +56,20 @@
 </template>
 
 <script>
-import Image from '../../engine-template/lib/Image/Image.vue';
 import QrcodeVue from 'qrcode.vue';
+import format from 'date-fns/format';
+
 export default {
-  components: { Image, QrcodeVue },
+  components: { QrcodeVue },
+
   name: 'ProjectCard',
 
   props: {
+    data: {
+      type: Object,
+      required: false,
+      default: () => ({})
+    },
     imgUrl: {
       type: String,
       required: false,
@@ -84,6 +85,13 @@ export default {
       required: true
     }
   },
+
+  data() {
+    return {
+      format
+    };
+  },
+
   computed: {
     pageLink() {
       return 'http://175.178.86.231:3007/auth/view/' + this.id;
@@ -134,6 +142,18 @@ export default {
   margin: 2rem 1.5rem;
   cursor: pointer;
   overflow: hidden;
+
+  .add {
+    &.pcard-item-container {
+      align-items: center;
+      border: 1px dashed @primary-color;
+    }
+
+    .iconfont {
+      color: @primary-color;
+    }
+  }
+
   .container-footer {
     width: 40%;
     display: flex;
