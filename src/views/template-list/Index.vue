@@ -69,10 +69,7 @@ export default {
   methods: {
     async go() {
       this.$router.push({
-        name: 'Editor',
-        query: {
-          id: 42
-        }
+        name: 'Editor'
       });
     },
     async getList() {
