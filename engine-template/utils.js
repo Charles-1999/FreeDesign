@@ -1,6 +1,8 @@
 /**
  * 页面基础样式
  */
+
+import COS from 'cos-js-sdk-v5';
 export const pageCommonStyle = {
   // 背景
   backgroundColor: undefined,
@@ -99,10 +101,33 @@ export const animateCSS = (el, animation, prefix = 'animate__') => {
     el.addEventListener('animationend', handleAnimationEnd, { once: true });
   });
 };
+export const uploadCos = async (file) => {
+  const cos = new COS({
+    SecretId: 'AKIDCEzUigNnvmMgiTzFF3cvxiDRO4SaR1KO', // 密钥id
+    SecretKey: 'oNgjV0ECtJUQ6VdU5OQCguruhETR8j48'// 密钥的key
+  });
+  // var file = document.getElementById('videoFile').files[0];
+  return new Promise((resolve, reject) => {
+    return cos.putObject({
+      Bucket: 'cjztest-1302847834', // 桶名-APPID  必须
+      Region: 'ap-nanjing', // 区域 必须
+      Key: `logos/${file.name}`, // 文件名必须
+      StorageClass: 'STANDARD',
+      Body: file // 上传文件对象
+    }, function(err, data) {
+      if (err) {
+        reject(err);
+        return;
+      }
 
+      resolve(data);
+    });
+  });
+};
 export default {
   compCommonStyle,
   eleCommonStyle,
   formatStyle,
-  animateCSS
+  animateCSS,
+  uploadCos
 };

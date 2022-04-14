@@ -13,6 +13,11 @@ export const baseComp = {
     label: '分割线',
     icon: 'icon-fengexian2',
     size: 26
+  },
+  qrcode: {
+    label: '二维码',
+    icon: 'icon-erweima',
+    size: 26
   }
 };
 

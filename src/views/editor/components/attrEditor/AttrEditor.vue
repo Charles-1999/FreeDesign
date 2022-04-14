@@ -89,6 +89,7 @@ export default {
     handlePropsChange(...args) {
       // 触发record操作记录
       this.$store.dispatch('editor/history/record');
+      console.log(121);
     },
 
     getForm(key) {

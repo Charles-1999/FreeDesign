@@ -7,6 +7,7 @@ import Button from './Button/index';
 import Input from './Input/index';
 import Video from './Video/index';
 import Iframe from './Iframe/index';
+import Qrcode from './Qrcode/index';
 
 const component = [
   Image,
@@ -17,7 +18,8 @@ const component = [
   Button,
   Iframe,
   Input,
-  Video
+  Video,
+  Qrcode
 ];
 const freeDesignComponent = {};
 component.forEach(item => {

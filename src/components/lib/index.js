@@ -35,7 +35,6 @@ const install = (Vue, opts = {}) => {
         .pop()
         .replace(/\.\w+$/, ''))
         .toLowerCase();
-
       // 全局注册组件
       Vue.component(
         `lib-${componentName}`,
