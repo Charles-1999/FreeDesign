@@ -11,7 +11,7 @@ const libComponents = require.context(
   // 是否查询其子目录
   true,
   // 匹配基础组件文件名的正则表达式
-  /\.\/([A-Z]\w+\.vue$)|(\w+\/index\.js$)/
+  /([A-Z]\w+\.vue$)/
 );
 
 /**

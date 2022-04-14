@@ -8,8 +8,12 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
+    inEditor: false
   },
   mutations: {
+    SET_INEDITOR(state, payload) {
+      state.inEditor = payload;
+    }
   },
   actions: {
   },

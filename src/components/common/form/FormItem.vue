@@ -17,6 +17,22 @@
       v-model="form[formKey]"
       @change="handleChange(formKey, config, $event)" />
 
+    <!-- 单选项 -->
+    <el-radio-group
+      v-if="config.type === 'radio'"
+      v-bind="config.config"
+      :size="(config.config || {}).size || 'mini'"
+      :controls-position="(config.config || {}).controlsPosition || 'right'"
+      v-model="form[formKey]"
+      @change="handleChange(formKey, config, $event)">
+      <el-radio
+        :label="_.value"
+        v-for="_ in config.options"
+        :key="_.value">
+        {{ _.label }}
+      </el-radio>
+    </el-radio-group>
+
     <!-- 颜色选择器 -->
     <el-color-picker
       v-if="config.type === 'color'"
@@ -130,6 +146,10 @@ export default {
 
   ::v-deep.el-slider__input {
     width: 100px;
+  }
+
+  .el-input--mini {
+    width: 200px;
   }
 
   .el-input-number--mini {

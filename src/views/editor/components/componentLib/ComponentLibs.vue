@@ -17,10 +17,6 @@
           <span class="label">{{ comp.label }}</span>
         </div>
       </div>
-      <div class="more">
-        <el-image :src="require('../../../../assets/images/img-develop.png')"></el-image>
-        更多组件持续更新中...
-      </div>
      </div>
   </div>
 </template>
@@ -78,7 +74,7 @@ export default {
 .comp-list {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-around;
+  justify-content: space-between;
   padding: 10px;
 }
 
@@ -89,7 +85,7 @@ export default {
   justify-content: center;
   width: 80px;
   height: 60px;
-  margin-bottom: 20px;
+  margin: 0 10px 20px;
   border: 1px solid #ebeef5;
   border-radius: 6px;
   font-size: 14px;
@@ -111,10 +107,6 @@ export default {
 .comp-wrap:hover {
   border-color: @primary-color;
   color: @primary-color;
-}
-
-.comp-wrap:nth-child(2n) {
-  margin-right: 0;
 }
 
 .more {

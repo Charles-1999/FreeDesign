@@ -223,6 +223,8 @@ export default {
     init() {
       const { id } = this;
 
+      this.$store.commit('SET_INEDITOR', true);
+
       // 默认打开第一个页面
       this.$store.commit('editor/SET_CURR_PAGE_IDX', 0);
       // 清空选中的元素
