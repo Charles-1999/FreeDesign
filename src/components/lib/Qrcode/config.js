@@ -22,7 +22,7 @@ export const defaultProps = {
 
 export const attrFormConfig = {
   qrcodeText: {
-    label: 'QRcodeText',
+    label: '二维码链接',
     type: 'input'
   }
 };
