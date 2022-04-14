@@ -1,7 +1,6 @@
 <template>
   <input
-    :placeholder="placeholder"
-    :disabled="$store.state.inEditor" />
+    :placeholder="placeholder" />
 </template>
 
 <script>
