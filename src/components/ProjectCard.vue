@@ -22,7 +22,7 @@
             <el-tag size="mini">H5</el-tag>
             <el-tag size="mini" type="success" style="margin-left: 5px">已发布</el-tag>
           </div>
-          <div class="text">未命名场景</div>
+          <div class="text">{{data.title || '未命名场景'}}</div>
           <div class="date">{{ format(data.update_time * 1000, 'yyyy-MM-dd') }}</div>
         </section>
         <div>

@@ -51,12 +51,12 @@ export default {
     const that = this;
     // 判断翻页类型
     var direction = 'vertical';
-    var showSlideNumber = !!this.pageData.slideNumber;
+    // var showSlideNumber = !!this.pageData.slideNumber;
     // eslint-disable-next-line no-new
     new window.Swiper('.swiper-container', {
       direction: direction,
-      loop: false,
-      pagination: showSlideNumber ? { el: '.swiper-pagination' } : {},
+      // loop: false,
+      // pagination: showSlideNumber ? { el: '.swiper-pagination' } : {},
       scrollbar: {
         el: '.swiper-scrollbar'
       },

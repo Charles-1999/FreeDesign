@@ -2,12 +2,22 @@ import Image from './Image/index';
 import Line from './Line/index';
 import Rect from './Rect/index';
 import Text from './Text/index';
+import Audio from './Audio/index';
+import Button from './Button/index';
+import Input from './Input/index';
+import Video from './Video/index';
+import Iframe from './Iframe/index';
 
 const component = [
   Image,
   Line,
   Rect,
-  Text
+  Text,
+  Audio,
+  Button,
+  Iframe,
+  Input,
+  Video
 ];
 const freeDesignComponent = {};
 component.forEach(item => {

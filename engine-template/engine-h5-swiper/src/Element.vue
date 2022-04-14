@@ -43,7 +43,7 @@ export default {
   },
 
   async mounted() {
-    console.log(this.data.animations);
+    console.log(this.data.component, 121, FreeDesignComponent);
     for (const animation of this.data.animations) {
       await animateCSS(this.$el, animation);
     }
